@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.next/
+
+# Environment
+.env
+.env.local
+
+# Legacy Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+
+# Database (legacy SQLite)
+instance/
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# PWA files
+public/sw.js
+public/sw.js.map
+public/workbox-*.js
+public/fallback-*

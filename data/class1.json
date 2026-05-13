@@ -1,0 +1,4289 @@
+{
+  "meanings": [
+    [
+      "Apple",
+      "A round fruit",
+      "A vegetable",
+      "A bird",
+      "A toy"
+    ],
+    [
+      "Ball",
+      "A round object for games",
+      "A food item",
+      "A plant",
+      "A tool"
+    ],
+    [
+      "Cat",
+      "A small pet animal",
+      "A big animal",
+      "A fruit",
+      "A vehicle"
+    ],
+    [
+      "Dog",
+      "A loyal pet animal",
+      "A bird",
+      "A fish",
+      "An insect"
+    ],
+    [
+      "Egg",
+      "Laid by a hen",
+      "A fruit",
+      "A flower",
+      "A toy"
+    ],
+    [
+      "Fish",
+      "Lives in water",
+      "Lives on land",
+      "A bird",
+      "A plant"
+    ],
+    [
+      "Garden",
+      "Where plants grow",
+      "A kitchen",
+      "A school",
+      "A shop"
+    ],
+    [
+      "House",
+      "Where people live",
+      "A vehicle",
+      "A toy",
+      "A tree"
+    ],
+    [
+      "Ice",
+      "Frozen water",
+      "Hot water",
+      "Milk",
+      "Juice"
+    ],
+    [
+      "Jug",
+      "A container for liquids",
+      "A fruit",
+      "A toy",
+      "A book"
+    ],
+    [
+      "Kite",
+      "A toy that flies",
+      "A fruit",
+      "An animal",
+      "A tool"
+    ],
+    [
+      "Lamp",
+      "Gives us light",
+      "Gives food",
+      "Gives water",
+      "Gives air"
+    ],
+    [
+      "Moon",
+      "Shines at night",
+      "Shines in morning",
+      "A fruit",
+      "A toy"
+    ],
+    [
+      "Nest",
+      "A home for birds",
+      "Home for fish",
+      "A food",
+      "A vehicle"
+    ],
+    [
+      "Orange",
+      "A citrus fruit",
+      "A vegetable",
+      "A toy",
+      "A bird"
+    ],
+    [
+      "Pen",
+      "Used to write",
+      "Used to eat",
+      "Used to play",
+      "Used to sleep"
+    ],
+    [
+      "Queen",
+      "A female ruler",
+      "A male ruler",
+      "A bird",
+      "A flower"
+    ],
+    [
+      "Rain",
+      "Water from clouds",
+      "Snow",
+      "Wind",
+      "Sunshine"
+    ],
+    [
+      "Sun",
+      "Gives light and heat",
+      "Gives rain",
+      "A fruit",
+      "A toy"
+    ],
+    [
+      "Tree",
+      "A tall plant",
+      "A small insect",
+      "A toy",
+      "A vehicle"
+    ],
+    [
+      "Umbrella",
+      "Protects from rain",
+      "A food item",
+      "A bird",
+      "A toy"
+    ],
+    [
+      "Van",
+      "A type of vehicle",
+      "A fruit",
+      "A flower",
+      "A book"
+    ],
+    [
+      "Water",
+      "A liquid we drink",
+      "A solid",
+      "A gas",
+      "A food"
+    ],
+    [
+      "Yak",
+      "A large hairy animal",
+      "A small bird",
+      "A fruit",
+      "A toy"
+    ],
+    [
+      "Zebra",
+      "Animal with black and white stripes",
+      "A bird",
+      "A fish",
+      "A reptile"
+    ],
+    [
+      "Book",
+      "Has pages to read",
+      "A food item",
+      "An animal",
+      "A vehicle"
+    ],
+    [
+      "Chair",
+      "We sit on it",
+      "We eat it",
+      "We drink it",
+      "We wear it"
+    ],
+    [
+      "Door",
+      "Opens and closes a room",
+      "A fruit",
+      "A toy",
+      "An animal"
+    ],
+    [
+      "Fan",
+      "Gives cool air",
+      "Gives hot air",
+      "Gives water",
+      "Gives food"
+    ],
+    [
+      "Glass",
+      "Used to drink water",
+      "Used to write",
+      "Used to sleep",
+      "Used to run"
+    ],
+    [
+      "Hen",
+      "A female chicken",
+      "A male chicken",
+      "A fish",
+      "A reptile"
+    ],
+    [
+      "Ink",
+      "Used in pens",
+      "Used in cooking",
+      "Used in bathing",
+      "Used in sleeping"
+    ],
+    [
+      "Jar",
+      "A glass container",
+      "A metal tool",
+      "A wooden toy",
+      "A cloth"
+    ],
+    [
+      "Key",
+      "Opens a lock",
+      "Opens a book",
+      "Opens water",
+      "Opens food"
+    ],
+    [
+      "Lion",
+      "King of the jungle",
+      "King of the sea",
+      "King of the sky",
+      "King of the farm"
+    ],
+    [
+      "Mango",
+      "A sweet fruit",
+      "A sour vegetable",
+      "A bitter leaf",
+      "A salty nut"
+    ],
+    [
+      "Nail",
+      "Used to join wood",
+      "Used to join paper",
+      "Used to join water",
+      "Used to join air"
+    ],
+    [
+      "Owl",
+      "A bird that sees at night",
+      "A bird that sees in day",
+      "A fish",
+      "A reptile"
+    ],
+    [
+      "Parrot",
+      "A green talking bird",
+      "A silent bird",
+      "A fish",
+      "A mammal"
+    ],
+    [
+      "Ring",
+      "Worn on a finger",
+      "Worn on head",
+      "Worn on feet",
+      "Worn on ears"
+    ],
+    [
+      "Soap",
+      "Used to clean body",
+      "Used to eat",
+      "Used to write",
+      "Used to play"
+    ],
+    [
+      "Table",
+      "We keep things on it",
+      "We wear it",
+      "We eat it",
+      "We drink it"
+    ],
+    [
+      "Rose",
+      "A beautiful flower",
+      "A vegetable",
+      "A fruit",
+      "An animal"
+    ],
+    [
+      "Cow",
+      "Gives us milk",
+      "Gives us eggs",
+      "Gives us wool",
+      "Gives us honey"
+    ],
+    [
+      "Boat",
+      "Floats on water",
+      "Flies in air",
+      "Runs on land",
+      "Goes underground"
+    ],
+    [
+      "Clock",
+      "Shows us time",
+      "Shows us weight",
+      "Shows us height",
+      "Shows us colour"
+    ],
+    [
+      "Drum",
+      "A musical instrument",
+      "A writing tool",
+      "A cooking item",
+      "A cleaning tool"
+    ],
+    [
+      "Ear",
+      "We hear with it",
+      "We see with it",
+      "We smell with it",
+      "We taste with it"
+    ],
+    [
+      "Flag",
+      "Symbol of a country",
+      "Symbol of a family",
+      "A fruit",
+      "A toy"
+    ],
+    [
+      "Goat",
+      "Gives us milk and wool",
+      "Gives us eggs",
+      "Gives us honey",
+      "Gives us silk"
+    ],
+    [
+      "Hat",
+      "Worn on the head",
+      "Worn on hands",
+      "Worn on feet",
+      "Worn on neck"
+    ],
+    [
+      "Island",
+      "Land surrounded by water",
+      "Water surrounded by land",
+      "A mountain",
+      "A desert"
+    ],
+    [
+      "Jewel",
+      "A precious stone",
+      "A common rock",
+      "A plant",
+      "An animal"
+    ],
+    [
+      "Kangaroo",
+      "Carries baby in pouch",
+      "Carries baby on back",
+      "Lays eggs",
+      "Flies"
+    ],
+    [
+      "Leaf",
+      "Part of a plant",
+      "Part of an animal",
+      "Part of a building",
+      "Part of a vehicle"
+    ],
+    [
+      "Map",
+      "Shows places and directions",
+      "Shows time",
+      "Shows weight",
+      "Shows temperature"
+    ],
+    [
+      "Nurse",
+      "Takes care of sick people",
+      "Builds houses",
+      "Drives cars",
+      "Cooks food"
+    ],
+    [
+      "Onion",
+      "A vegetable that makes you cry",
+      "A fruit",
+      "A flower",
+      "A grain"
+    ],
+    [
+      "Pencil",
+      "Used to draw and write",
+      "Used to cut",
+      "Used to stitch",
+      "Used to cook"
+    ],
+    [
+      "Rabbit",
+      "A small furry animal",
+      "A large scaly animal",
+      "A bird",
+      "A fish"
+    ],
+    [
+      "Star",
+      "Shines in the night sky",
+      "Shines in the day",
+      "A fruit",
+      "A toy"
+    ],
+    [
+      "Tiger",
+      "A striped wild animal",
+      "A spotted wild animal",
+      "A pet animal",
+      "A farm animal"
+    ],
+    [
+      "Violin",
+      "A stringed instrument",
+      "A wind instrument",
+      "A drum",
+      "A keyboard"
+    ],
+    [
+      "Whale",
+      "Largest animal in the sea",
+      "Smallest animal",
+      "A bird",
+      "An insect"
+    ],
+    [
+      "Window",
+      "Lets light and air in",
+      "Lets water in",
+      "A food item",
+      "A toy"
+    ],
+    [
+      "Xylophone",
+      "A musical instrument with bars",
+      "A cooking tool",
+      "A writing tool",
+      "A toy car"
+    ],
+    [
+      "Yarn",
+      "Thread used for knitting",
+      "Paper used for writing",
+      "Wood used for building",
+      "Metal used for cutting"
+    ],
+    [
+      "Zoo",
+      "Where animals are kept",
+      "Where plants are kept",
+      "Where cars are kept",
+      "Where books are kept"
+    ],
+    [
+      "Bed",
+      "We sleep on it",
+      "We eat on it",
+      "We write on it",
+      "We drive it"
+    ],
+    [
+      "Cup",
+      "We drink from it",
+      "We eat from it",
+      "We write in it",
+      "We sit on it"
+    ],
+    [
+      "Frog",
+      "An amphibian",
+      "A mammal",
+      "A bird",
+      "A reptile"
+    ],
+    [
+      "Grass",
+      "Green plants on ground",
+      "Blue plants",
+      "Red plants",
+      "Yellow plants"
+    ],
+    [
+      "Hill",
+      "A small mountain",
+      "A large lake",
+      "A deep valley",
+      "A wide river"
+    ],
+    [
+      "Igloo",
+      "Ice house",
+      "Wooden house",
+      "Brick house",
+      "Mud house"
+    ],
+    [
+      "Jacket",
+      "Keeps us warm",
+      "Keeps us cool",
+      "Keeps us wet",
+      "Keeps us hungry"
+    ],
+    [
+      "King",
+      "A male ruler",
+      "A female ruler",
+      "A soldier",
+      "A farmer"
+    ],
+    [
+      "Lemon",
+      "A sour yellow fruit",
+      "A sweet red fruit",
+      "A bitter green fruit",
+      "A salty fruit"
+    ],
+    [
+      "Monkey",
+      "Swings on trees",
+      "Swims in water",
+      "Flies in sky",
+      "Digs underground"
+    ],
+    [
+      "Needle",
+      "Used for sewing",
+      "Used for cooking",
+      "Used for painting",
+      "Used for singing"
+    ],
+    [
+      "Ox",
+      "A strong farm animal",
+      "A small pet",
+      "A wild cat",
+      "A sea animal"
+    ],
+    [
+      "Pillow",
+      "We rest our head on it",
+      "We walk on it",
+      "We eat from it",
+      "We write on it"
+    ],
+    [
+      "Quilt",
+      "A warm blanket",
+      "A cold drink",
+      "A hot food",
+      "A sharp tool"
+    ],
+    [
+      "Rope",
+      "Used for tying things",
+      "Used for eating",
+      "Used for writing",
+      "Used for sleeping"
+    ],
+    [
+      "Shoe",
+      "Worn on feet",
+      "Worn on head",
+      "Worn on hands",
+      "Worn on waist"
+    ],
+    [
+      "Tooth",
+      "Used for chewing food",
+      "Used for seeing",
+      "Used for hearing",
+      "Used for smelling"
+    ],
+    [
+      "Uniform",
+      "Clothes worn to school",
+      "Clothes worn to bed",
+      "Clothes worn to swim",
+      "Clothes worn to cook"
+    ],
+    [
+      "Vase",
+      "Holds flowers",
+      "Holds food",
+      "Holds shoes",
+      "Holds books"
+    ],
+    [
+      "Well",
+      "Source of water underground",
+      "Source of fire",
+      "Source of wind",
+      "Source of light"
+    ],
+    [
+      "Box",
+      "Used to store things",
+      "Used to cook",
+      "Used to fly",
+      "Used to swim"
+    ],
+    [
+      "Cake",
+      "A sweet baked food",
+      "A sour drink",
+      "A bitter medicine",
+      "A salty snack"
+    ],
+    [
+      "Duck",
+      "A bird that swims",
+      "A bird that runs",
+      "A fish",
+      "A reptile"
+    ],
+    [
+      "Elephant",
+      "Largest land animal",
+      "Smallest land animal",
+      "A bird",
+      "A fish"
+    ],
+    [
+      "Feather",
+      "Covers a bird body",
+      "Covers a fish body",
+      "Covers a snake",
+      "A plant part"
+    ],
+    [
+      "Gift",
+      "Something given with love",
+      "Something taken",
+      "Something broken",
+      "Something lost"
+    ],
+    [
+      "Honey",
+      "Sweet food made by bees",
+      "Sour food made by ants",
+      "Bitter food",
+      "Salty food"
+    ],
+    [
+      "Juice",
+      "Liquid from fruits",
+      "Solid from fruits",
+      "Gas from fruits",
+      "Powder from fruits"
+    ],
+    [
+      "Kitchen",
+      "Where food is cooked",
+      "Where cars are parked",
+      "Where animals live",
+      "Where books are kept"
+    ],
+    [
+      "Lunch",
+      "Midday meal",
+      "Morning meal",
+      "Night meal",
+      "Snack"
+    ],
+    [
+      "Mirror",
+      "Shows our reflection",
+      "Shows the future",
+      "Shows the past",
+      "Shows nothing"
+    ],
+    [
+      "Net",
+      "Used to catch fish",
+      "Used to catch air",
+      "Used to catch light",
+      "Used to catch sound"
+    ]
+  ],
+  "synonyms": [
+    [
+      "Big",
+      "Large",
+      "Small",
+      "Tiny",
+      "Short"
+    ],
+    [
+      "Happy",
+      "Glad",
+      "Sad",
+      "Angry",
+      "Tired"
+    ],
+    [
+      "Fast",
+      "Quick",
+      "Slow",
+      "Lazy",
+      "Heavy"
+    ],
+    [
+      "Small",
+      "Little",
+      "Big",
+      "Huge",
+      "Tall"
+    ],
+    [
+      "Pretty",
+      "Beautiful",
+      "Ugly",
+      "Dark",
+      "Rough"
+    ],
+    [
+      "Sad",
+      "Unhappy",
+      "Joyful",
+      "Excited",
+      "Calm"
+    ],
+    [
+      "Start",
+      "Begin",
+      "End",
+      "Stop",
+      "Finish"
+    ],
+    [
+      "Angry",
+      "Mad",
+      "Happy",
+      "Calm",
+      "Gentle"
+    ],
+    [
+      "Cold",
+      "Cool",
+      "Hot",
+      "Warm",
+      "Burning"
+    ],
+    [
+      "Loud",
+      "Noisy",
+      "Quiet",
+      "Silent",
+      "Soft"
+    ],
+    [
+      "Brave",
+      "Courageous",
+      "Scared",
+      "Shy",
+      "Weak"
+    ],
+    [
+      "Clean",
+      "Tidy",
+      "Dirty",
+      "Messy",
+      "Dusty"
+    ],
+    [
+      "Clever",
+      "Smart",
+      "Dull",
+      "Slow",
+      "Foolish"
+    ],
+    [
+      "Kind",
+      "Nice",
+      "Mean",
+      "Rude",
+      "Cruel"
+    ],
+    [
+      "Shut",
+      "Close",
+      "Open",
+      "Break",
+      "Lock"
+    ],
+    [
+      "End",
+      "Finish",
+      "Start",
+      "Begin",
+      "Open"
+    ],
+    [
+      "Fat",
+      "Plump",
+      "Thin",
+      "Slim",
+      "Lean"
+    ],
+    [
+      "Fear",
+      "Fright",
+      "Joy",
+      "Calm",
+      "Peace"
+    ],
+    [
+      "Gift",
+      "Present",
+      "Loss",
+      "Debt",
+      "Theft"
+    ],
+    [
+      "Glad",
+      "Joyful",
+      "Sad",
+      "Gloomy",
+      "Angry"
+    ],
+    [
+      "Hard",
+      "Tough",
+      "Soft",
+      "Easy",
+      "Simple"
+    ],
+    [
+      "Help",
+      "Assist",
+      "Harm",
+      "Hurt",
+      "Block"
+    ],
+    [
+      "Ill",
+      "Sick",
+      "Well",
+      "Fit",
+      "Strong"
+    ],
+    [
+      "Jump",
+      "Leap",
+      "Sit",
+      "Stand",
+      "Sleep"
+    ],
+    [
+      "Keep",
+      "Hold",
+      "Drop",
+      "Lose",
+      "Throw"
+    ],
+    [
+      "Late",
+      "Delayed",
+      "Early",
+      "Quick",
+      "Fast"
+    ],
+    [
+      "Look",
+      "See",
+      "Ignore",
+      "Miss",
+      "Skip"
+    ],
+    [
+      "Make",
+      "Build",
+      "Break",
+      "Destroy",
+      "Ruin"
+    ],
+    [
+      "Near",
+      "Close",
+      "Far",
+      "Distant",
+      "Away"
+    ],
+    [
+      "Old",
+      "Aged",
+      "Young",
+      "New",
+      "Fresh"
+    ],
+    [
+      "Pick",
+      "Choose",
+      "Drop",
+      "Leave",
+      "Reject"
+    ],
+    [
+      "Rest",
+      "Relax",
+      "Work",
+      "Run",
+      "Play"
+    ],
+    [
+      "Rich",
+      "Wealthy",
+      "Poor",
+      "Needy",
+      "Broke"
+    ],
+    [
+      "Run",
+      "Sprint",
+      "Walk",
+      "Stand",
+      "Sit"
+    ],
+    [
+      "Shy",
+      "Timid",
+      "Bold",
+      "Brave",
+      "Loud"
+    ],
+    [
+      "Speak",
+      "Talk",
+      "Listen",
+      "Hear",
+      "Silence"
+    ],
+    [
+      "Stop",
+      "Halt",
+      "Go",
+      "Start",
+      "Move"
+    ],
+    [
+      "Thin",
+      "Slim",
+      "Fat",
+      "Wide",
+      "Thick"
+    ],
+    [
+      "Tiny",
+      "Very small",
+      "Huge",
+      "Big",
+      "Large"
+    ],
+    [
+      "True",
+      "Correct",
+      "False",
+      "Wrong",
+      "Fake"
+    ],
+    [
+      "Walk",
+      "Stroll",
+      "Run",
+      "Sprint",
+      "Dash"
+    ],
+    [
+      "Warm",
+      "Hot",
+      "Cold",
+      "Cool",
+      "Chilly"
+    ],
+    [
+      "Weak",
+      "Feeble",
+      "Strong",
+      "Tough",
+      "Hard"
+    ],
+    [
+      "Wide",
+      "Broad",
+      "Narrow",
+      "Thin",
+      "Slim"
+    ],
+    [
+      "Yell",
+      "Shout",
+      "Whisper",
+      "Murmur",
+      "Hum"
+    ],
+    [
+      "Amusing",
+      "Funny",
+      "Boring",
+      "Dull",
+      "Sad"
+    ],
+    [
+      "Below",
+      "Under",
+      "Above",
+      "Over",
+      "Top"
+    ],
+    [
+      "Calm",
+      "Peaceful",
+      "Angry",
+      "Noisy",
+      "Wild"
+    ],
+    [
+      "Damp",
+      "Wet",
+      "Dry",
+      "Hot",
+      "Warm"
+    ],
+    [
+      "Easy",
+      "Simple",
+      "Hard",
+      "Tough",
+      "Difficult"
+    ],
+    [
+      "Fall",
+      "Drop",
+      "Rise",
+      "Climb",
+      "Fly"
+    ],
+    [
+      "Glow",
+      "Shine",
+      "Dim",
+      "Dark",
+      "Fade"
+    ],
+    [
+      "Home",
+      "House",
+      "School",
+      "Office",
+      "Market"
+    ],
+    [
+      "Idea",
+      "Thought",
+      "Action",
+      "Thing",
+      "Object"
+    ],
+    [
+      "Jog",
+      "Run slowly",
+      "Sprint",
+      "Sit",
+      "Sleep"
+    ],
+    [
+      "Laugh",
+      "Giggle",
+      "Cry",
+      "Weep",
+      "Sob"
+    ],
+    [
+      "Mend",
+      "Fix",
+      "Break",
+      "Tear",
+      "Ruin"
+    ],
+    [
+      "Nice",
+      "Pleasant",
+      "Nasty",
+      "Mean",
+      "Bad"
+    ],
+    [
+      "Own",
+      "Possess",
+      "Lose",
+      "Give",
+      "Lend"
+    ],
+    [
+      "Path",
+      "Trail",
+      "Wall",
+      "Roof",
+      "Floor"
+    ],
+    [
+      "Quick",
+      "Rapid",
+      "Slow",
+      "Late",
+      "Lazy"
+    ],
+    [
+      "Rare",
+      "Uncommon",
+      "Common",
+      "Usual",
+      "Normal"
+    ],
+    [
+      "Safe",
+      "Secure",
+      "Risky",
+      "Harmful",
+      "Danger"
+    ],
+    [
+      "Tell",
+      "Inform",
+      "Hide",
+      "Secret",
+      "Cover"
+    ],
+    [
+      "Use",
+      "Employ",
+      "Waste",
+      "Throw",
+      "Drop"
+    ],
+    [
+      "View",
+      "See",
+      "Miss",
+      "Ignore",
+      "Hide"
+    ],
+    [
+      "Wish",
+      "Desire",
+      "Hate",
+      "Reject",
+      "Refuse"
+    ],
+    [
+      "Zone",
+      "Area",
+      "Point",
+      "Dot",
+      "Spot"
+    ],
+    [
+      "Above",
+      "Over",
+      "Below",
+      "Under",
+      "Down"
+    ],
+    [
+      "Angry",
+      "Furious",
+      "Calm",
+      "Happy",
+      "Peaceful"
+    ],
+    [
+      "Begin",
+      "Commence",
+      "End",
+      "Finish",
+      "Stop"
+    ],
+    [
+      "Bright",
+      "Shining",
+      "Dark",
+      "Dim",
+      "Dull"
+    ],
+    [
+      "Buy",
+      "Purchase",
+      "Sell",
+      "Give",
+      "Throw"
+    ],
+    [
+      "Centre",
+      "Middle",
+      "Edge",
+      "Side",
+      "Corner"
+    ],
+    [
+      "Create",
+      "Make",
+      "Destroy",
+      "Break",
+      "Ruin"
+    ],
+    [
+      "Dawn",
+      "Sunrise",
+      "Sunset",
+      "Night",
+      "Dark"
+    ],
+    [
+      "Discover",
+      "Find",
+      "Lose",
+      "Miss",
+      "Hide"
+    ],
+    [
+      "Dull",
+      "Boring",
+      "Fun",
+      "Exciting",
+      "Bright"
+    ],
+    [
+      "Earth",
+      "Ground",
+      "Sky",
+      "Air",
+      "Cloud"
+    ],
+    [
+      "Empty",
+      "Vacant",
+      "Full",
+      "Packed",
+      "Filled"
+    ],
+    [
+      "Enjoy",
+      "Like",
+      "Hate",
+      "Dislike",
+      "Loathe"
+    ],
+    [
+      "Error",
+      "Mistake",
+      "Right",
+      "Correct",
+      "True"
+    ],
+    [
+      "Firm",
+      "Solid",
+      "Soft",
+      "Loose",
+      "Weak"
+    ],
+    [
+      "Forgive",
+      "Pardon",
+      "Punish",
+      "Blame",
+      "Scold"
+    ],
+    [
+      "Gather",
+      "Collect",
+      "Scatter",
+      "Spread",
+      "Throw"
+    ],
+    [
+      "Gentle",
+      "Soft",
+      "Rough",
+      "Harsh",
+      "Hard"
+    ],
+    [
+      "Harm",
+      "Hurt",
+      "Help",
+      "Heal",
+      "Cure"
+    ],
+    [
+      "Honest",
+      "Truthful",
+      "Lying",
+      "Fake",
+      "False"
+    ],
+    [
+      "Huge",
+      "Enormous",
+      "Tiny",
+      "Small",
+      "Little"
+    ],
+    [
+      "Icy",
+      "Freezing",
+      "Hot",
+      "Warm",
+      "Boiling"
+    ],
+    [
+      "Instant",
+      "Immediate",
+      "Slow",
+      "Late",
+      "Delayed"
+    ],
+    [
+      "Join",
+      "Connect",
+      "Separate",
+      "Split",
+      "Break"
+    ],
+    [
+      "Keen",
+      "Eager",
+      "Lazy",
+      "Bored",
+      "Tired"
+    ],
+    [
+      "Last",
+      "Final",
+      "First",
+      "Initial",
+      "Start"
+    ],
+    [
+      "Loyal",
+      "Faithful",
+      "Disloyal",
+      "False",
+      "Fake"
+    ],
+    [
+      "Method",
+      "Way",
+      "Chaos",
+      "Mess",
+      "Random"
+    ],
+    [
+      "Moist",
+      "Damp",
+      "Dry",
+      "Arid",
+      "Dusty"
+    ],
+    [
+      "Neat",
+      "Orderly",
+      "Messy",
+      "Dirty",
+      "Untidy"
+    ],
+    [
+      "Noble",
+      "Great",
+      "Mean",
+      "Low",
+      "Common"
+    ],
+    [
+      "Odd",
+      "Strange",
+      "Normal",
+      "Usual",
+      "Common"
+    ]
+  ],
+  "antonyms": [
+    [
+      "Big",
+      "Small",
+      "Large",
+      "Huge",
+      "Tall"
+    ],
+    [
+      "Happy",
+      "Sad",
+      "Glad",
+      "Joyful",
+      "Excited"
+    ],
+    [
+      "Hot",
+      "Cold",
+      "Warm",
+      "Burning",
+      "Boiling"
+    ],
+    [
+      "Up",
+      "Down",
+      "High",
+      "Above",
+      "Over"
+    ],
+    [
+      "Day",
+      "Night",
+      "Morning",
+      "Afternoon",
+      "Evening"
+    ],
+    [
+      "Fast",
+      "Slow",
+      "Quick",
+      "Rapid",
+      "Swift"
+    ],
+    [
+      "Good",
+      "Bad",
+      "Nice",
+      "Fine",
+      "Great"
+    ],
+    [
+      "Old",
+      "New",
+      "Ancient",
+      "Aged",
+      "Worn"
+    ],
+    [
+      "Open",
+      "Close",
+      "Wide",
+      "Unlock",
+      "Free"
+    ],
+    [
+      "Tall",
+      "Short",
+      "High",
+      "Long",
+      "Big"
+    ],
+    [
+      "Light",
+      "Dark",
+      "Bright",
+      "Shiny",
+      "Glowing"
+    ],
+    [
+      "Clean",
+      "Dirty",
+      "Tidy",
+      "Neat",
+      "Fresh"
+    ],
+    [
+      "Hard",
+      "Soft",
+      "Tough",
+      "Strong",
+      "Firm"
+    ],
+    [
+      "Wet",
+      "Dry",
+      "Moist",
+      "Damp",
+      "Soaked"
+    ],
+    [
+      "Loud",
+      "Quiet",
+      "Noisy",
+      "Harsh",
+      "Shrill"
+    ],
+    [
+      "Black",
+      "White",
+      "Dark",
+      "Grey",
+      "Brown"
+    ],
+    [
+      "Come",
+      "Go",
+      "Arrive",
+      "Reach",
+      "Enter"
+    ],
+    [
+      "Early",
+      "Late",
+      "Soon",
+      "Quick",
+      "Fast"
+    ],
+    [
+      "Empty",
+      "Full",
+      "Vacant",
+      "Hollow",
+      "Bare"
+    ],
+    [
+      "Far",
+      "Near",
+      "Distant",
+      "Remote",
+      "Away"
+    ],
+    [
+      "Give",
+      "Take",
+      "Share",
+      "Offer",
+      "Donate"
+    ],
+    [
+      "In",
+      "Out",
+      "Inside",
+      "Within",
+      "Into"
+    ],
+    [
+      "Left",
+      "Right",
+      "Side",
+      "Turn",
+      "Way"
+    ],
+    [
+      "Long",
+      "Short",
+      "Tall",
+      "High",
+      "Extended"
+    ],
+    [
+      "Many",
+      "Few",
+      "Much",
+      "Lots",
+      "Several"
+    ],
+    [
+      "More",
+      "Less",
+      "Extra",
+      "Plus",
+      "Additional"
+    ],
+    [
+      "North",
+      "South",
+      "East",
+      "West",
+      "Up"
+    ],
+    [
+      "Over",
+      "Under",
+      "Above",
+      "Top",
+      "High"
+    ],
+    [
+      "Rich",
+      "Poor",
+      "Wealthy",
+      "Affluent",
+      "Prosperous"
+    ],
+    [
+      "Safe",
+      "Dangerous",
+      "Secure",
+      "Protected",
+      "Guarded"
+    ],
+    [
+      "Thick",
+      "Thin",
+      "Wide",
+      "Dense",
+      "Heavy"
+    ],
+    [
+      "True",
+      "False",
+      "Real",
+      "Genuine",
+      "Honest"
+    ],
+    [
+      "Win",
+      "Lose",
+      "Gain",
+      "Victory",
+      "Success"
+    ],
+    [
+      "Young",
+      "Old",
+      "Junior",
+      "New",
+      "Fresh"
+    ],
+    [
+      "Above",
+      "Below",
+      "Over",
+      "Up",
+      "High"
+    ],
+    [
+      "Add",
+      "Subtract",
+      "Plus",
+      "Increase",
+      "More"
+    ],
+    [
+      "Asleep",
+      "Awake",
+      "Resting",
+      "Sleeping",
+      "Dozing"
+    ],
+    [
+      "Before",
+      "After",
+      "Prior",
+      "Earlier",
+      "First"
+    ],
+    [
+      "Begin",
+      "End",
+      "Start",
+      "Open",
+      "Launch"
+    ],
+    [
+      "Brave",
+      "Cowardly",
+      "Bold",
+      "Strong",
+      "Fearless"
+    ],
+    [
+      "Buy",
+      "Sell",
+      "Purchase",
+      "Get",
+      "Acquire"
+    ],
+    [
+      "Cry",
+      "Laugh",
+      "Weep",
+      "Sob",
+      "Wail"
+    ],
+    [
+      "Deep",
+      "Shallow",
+      "Low",
+      "Down",
+      "Under"
+    ],
+    [
+      "East",
+      "West",
+      "Right",
+      "Front",
+      "Side"
+    ],
+    [
+      "Even",
+      "Odd",
+      "Flat",
+      "Level",
+      "Equal"
+    ],
+    [
+      "First",
+      "Last",
+      "Start",
+      "Begin",
+      "Opening"
+    ],
+    [
+      "Float",
+      "Sink",
+      "Swim",
+      "Drift",
+      "Glide"
+    ],
+    [
+      "Forget",
+      "Remember",
+      "Miss",
+      "Lose",
+      "Drop"
+    ],
+    [
+      "Friend",
+      "Enemy",
+      "Buddy",
+      "Pal",
+      "Mate"
+    ],
+    [
+      "Front",
+      "Back",
+      "Face",
+      "Head",
+      "Start"
+    ],
+    [
+      "Gentle",
+      "Rough",
+      "Soft",
+      "Kind",
+      "Mild"
+    ],
+    [
+      "Happy",
+      "Miserable",
+      "Glad",
+      "Joyful",
+      "Cheerful"
+    ],
+    [
+      "Here",
+      "There",
+      "This",
+      "Near",
+      "Close"
+    ],
+    [
+      "Inside",
+      "Outside",
+      "In",
+      "Within",
+      "Inner"
+    ],
+    [
+      "Joy",
+      "Sorrow",
+      "Fun",
+      "Cheer",
+      "Delight"
+    ],
+    [
+      "Kind",
+      "Cruel",
+      "Nice",
+      "Sweet",
+      "Gentle"
+    ],
+    [
+      "Laugh",
+      "Cry",
+      "Giggle",
+      "Chuckle",
+      "Smile"
+    ],
+    [
+      "Love",
+      "Hate",
+      "Like",
+      "Adore",
+      "Care"
+    ],
+    [
+      "Morning",
+      "Evening",
+      "Dawn",
+      "Sunrise",
+      "Early"
+    ],
+    [
+      "Narrow",
+      "Wide",
+      "Thin",
+      "Slim",
+      "Small"
+    ],
+    [
+      "Noisy",
+      "Silent",
+      "Loud",
+      "Harsh",
+      "Shrill"
+    ],
+    [
+      "Peace",
+      "War",
+      "Calm",
+      "Quiet",
+      "Rest"
+    ],
+    [
+      "Pull",
+      "Push",
+      "Drag",
+      "Tug",
+      "Yank"
+    ],
+    [
+      "Question",
+      "Answer",
+      "Ask",
+      "Query",
+      "Doubt"
+    ],
+    [
+      "Rise",
+      "Fall",
+      "Climb",
+      "Grow",
+      "Increase"
+    ],
+    [
+      "Same",
+      "Different",
+      "Equal",
+      "Like",
+      "Match"
+    ],
+    [
+      "Sharp",
+      "Blunt",
+      "Keen",
+      "Pointed",
+      "Fine"
+    ],
+    [
+      "Sit",
+      "Stand",
+      "Rest",
+      "Squat",
+      "Settle"
+    ],
+    [
+      "Smile",
+      "Frown",
+      "Grin",
+      "Beam",
+      "Laugh"
+    ],
+    [
+      "Start",
+      "Finish",
+      "Begin",
+      "Open",
+      "Launch"
+    ],
+    [
+      "Strong",
+      "Weak",
+      "Tough",
+      "Hard",
+      "Firm"
+    ],
+    [
+      "Summer",
+      "Winter",
+      "Hot",
+      "Warm",
+      "Sunny"
+    ],
+    [
+      "Sweet",
+      "Bitter",
+      "Sugary",
+      "Nice",
+      "Tasty"
+    ],
+    [
+      "Teach",
+      "Learn",
+      "Train",
+      "Guide",
+      "Show"
+    ],
+    [
+      "Top",
+      "Bottom",
+      "High",
+      "Peak",
+      "Upper"
+    ],
+    [
+      "Ugly",
+      "Beautiful",
+      "Plain",
+      "Dull",
+      "Rough"
+    ],
+    [
+      "Visible",
+      "Invisible",
+      "Seen",
+      "Clear",
+      "Obvious"
+    ],
+    [
+      "Wake",
+      "Sleep",
+      "Rise",
+      "Get up",
+      "Stir"
+    ],
+    [
+      "Warm",
+      "Cool",
+      "Hot",
+      "Heated",
+      "Mild"
+    ],
+    [
+      "Work",
+      "Play",
+      "Labour",
+      "Toil",
+      "Job"
+    ],
+    [
+      "Yes",
+      "No",
+      "Sure",
+      "OK",
+      "Right"
+    ],
+    [
+      "Accept",
+      "Reject",
+      "Take",
+      "Receive",
+      "Get"
+    ],
+    [
+      "Allow",
+      "Forbid",
+      "Let",
+      "Permit",
+      "Grant"
+    ],
+    [
+      "Arrive",
+      "Depart",
+      "Come",
+      "Reach",
+      "Enter"
+    ],
+    [
+      "Attack",
+      "Defend",
+      "Hit",
+      "Strike",
+      "Fight"
+    ],
+    [
+      "Borrow",
+      "Lend",
+      "Take",
+      "Get",
+      "Receive"
+    ],
+    [
+      "Catch",
+      "Throw",
+      "Grab",
+      "Hold",
+      "Seize"
+    ],
+    [
+      "Cheap",
+      "Expensive",
+      "Low",
+      "Budget",
+      "Free"
+    ],
+    [
+      "Clever",
+      "Foolish",
+      "Smart",
+      "Wise",
+      "Bright"
+    ],
+    [
+      "Common",
+      "Rare",
+      "Usual",
+      "Normal",
+      "Regular"
+    ],
+    [
+      "Continue",
+      "Stop",
+      "Go on",
+      "Carry on",
+      "Keep"
+    ],
+    [
+      "Correct",
+      "Wrong",
+      "Right",
+      "True",
+      "Accurate"
+    ],
+    [
+      "Create",
+      "Destroy",
+      "Make",
+      "Build",
+      "Form"
+    ],
+    [
+      "Dark",
+      "Bright",
+      "Dim",
+      "Black",
+      "Gloomy"
+    ],
+    [
+      "Divide",
+      "Multiply",
+      "Split",
+      "Separate",
+      "Cut"
+    ],
+    [
+      "Dry",
+      "Wet",
+      "Arid",
+      "Parched",
+      "Dusty"
+    ],
+    [
+      "Dull",
+      "Interesting",
+      "Boring",
+      "Plain",
+      "Flat"
+    ],
+    [
+      "Easy",
+      "Difficult",
+      "Simple",
+      "Clear",
+      "Plain"
+    ],
+    [
+      "Export",
+      "Import",
+      "Send",
+      "Ship",
+      "Sell"
+    ],
+    [
+      "Fail",
+      "Pass",
+      "Lose",
+      "Miss",
+      "Drop"
+    ]
+  ],
+  "grammar": [
+    {
+      "t": "Nouns (CBSE)",
+      "c": "A noun is a naming word.",
+      "q": "Which word is a noun?",
+      "o": [
+        "Run",
+        "Cat",
+        "Quickly",
+        "Under"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (CBSE)",
+      "c": "Nouns name people, places, animals, things.",
+      "q": "Which is a naming word?",
+      "o": [
+        "Beautiful",
+        "School",
+        "Happily",
+        "Jump"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (CBSE)",
+      "c": "Person nouns name people.",
+      "q": "Which names a person?",
+      "o": [
+        "Table",
+        "Chair",
+        "Teacher",
+        "Book"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Nouns (CBSE)",
+      "c": "Place nouns name places.",
+      "q": "Which names a place?",
+      "o": [
+        "Dog",
+        "Market",
+        "Pen",
+        "Mango"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (CBSE)",
+      "c": "Animal nouns name animals.",
+      "q": "Which names an animal?",
+      "o": [
+        "River",
+        "Parrot",
+        "Rose",
+        "Table"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (CBSE)",
+      "c": "Thing nouns name objects.",
+      "q": "Which names a thing?",
+      "o": [
+        "Swim",
+        "Red",
+        "Pencil",
+        "Slowly"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Nouns (ICSE)",
+      "c": "Proper nouns name specific things.",
+      "q": "Which is a proper noun?",
+      "o": [
+        "boy",
+        "Delhi",
+        "city",
+        "river"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (ICSE)",
+      "c": "Common nouns are general names.",
+      "q": "Which is a common noun?",
+      "o": [
+        "Ravi",
+        "Mumbai",
+        "book",
+        "Ganga"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Nouns (ICSE)",
+      "c": "Proper nouns start with capital letters.",
+      "q": "Which is a proper noun?",
+      "o": [
+        "cat",
+        "India",
+        "dog",
+        "tree"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (ICSE)",
+      "c": "Common nouns don't need capitals.",
+      "q": "Which is common?",
+      "o": [
+        "Monday",
+        "girl",
+        "Ravi",
+        "March"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Nouns (State Board)",
+      "c": "Name words tell us who or what.",
+      "q": "Pick the name word:",
+      "o": [
+        "mango",
+        "eat",
+        "red",
+        "slowly"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Nouns (State Board)",
+      "c": "Everything has a name.",
+      "q": "Which is a name word?",
+      "o": [
+        "quickly",
+        "river",
+        "run",
+        "happy"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Verbs (CBSE)",
+      "c": "A verb is a doing word.",
+      "q": "Which shows action?",
+      "o": [
+        "Table",
+        "Runs",
+        "Blue",
+        "Happy"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Verbs (CBSE)",
+      "c": "Verbs tell what someone does.",
+      "q": "Find the action word:",
+      "o": [
+        "Eat",
+        "Chair",
+        "Pretty",
+        "Tall"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Verbs (CBSE)",
+      "c": "Action words describe movement.",
+      "q": "Which is an action word?",
+      "o": [
+        "Book",
+        "Pen",
+        "Write",
+        "Red"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Verbs (CBSE)",
+      "c": "Every sentence needs a verb.",
+      "q": "Pick the verb:",
+      "o": [
+        "Sleep",
+        "Pillow",
+        "Soft",
+        "Night"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Verbs (ICSE)",
+      "c": "Doing words are verbs.",
+      "q": "Which is a doing word?",
+      "o": [
+        "Flower",
+        "Sings",
+        "Red",
+        "Big"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Verbs (ICSE)",
+      "c": "Verbs show what we do.",
+      "q": "Find the verb:",
+      "o": [
+        "Dance",
+        "Chair",
+        "Book",
+        "Pen"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Verbs (ICSE)",
+      "c": "Action tells us what happens.",
+      "q": "Pick the doing word:",
+      "o": [
+        "Tree",
+        "Green",
+        "Climb",
+        "Tall"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Verbs (State Board)",
+      "c": "Action words tell what we do.",
+      "q": "Pick the action word:",
+      "o": [
+        "play",
+        "book",
+        "green",
+        "soft"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Verbs (State Board)",
+      "c": "Doing words show activities.",
+      "q": "Which is doing word?",
+      "o": [
+        "table",
+        "read",
+        "yellow",
+        "round"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Adjectives (CBSE)",
+      "c": "An adjective describes a noun.",
+      "q": "Which describes 'ball'?",
+      "o": [
+        "Big",
+        "Run",
+        "Under",
+        "And"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Adjectives (CBSE)",
+      "c": "Describing words tell how things look.",
+      "q": "Find the describing word:",
+      "o": [
+        "Walk",
+        "Tall",
+        "Jump",
+        "Eat"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Adjectives (CBSE)",
+      "c": "Adjectives tell size, colour, shape.",
+      "q": "Which describes the flower?",
+      "o": [
+        "run",
+        "beautiful",
+        "jump",
+        "eat"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Adjectives (CBSE)",
+      "c": "Colour words are adjectives.",
+      "q": "Which is a colour word?",
+      "o": [
+        "Run",
+        "Eat",
+        "Blue",
+        "Sit"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Adjectives (ICSE)",
+      "c": "Describing words tell more about nouns.",
+      "q": "Find describing word: The red rose",
+      "o": [
+        "rose",
+        "is",
+        "red",
+        "pretty"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Adjectives (ICSE)",
+      "c": "Size words describe nouns.",
+      "q": "Which tells size?",
+      "o": [
+        "Small",
+        "Run",
+        "Eat",
+        "And"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Adjectives (State Board)",
+      "c": "Describing words say how things look or taste.",
+      "q": "Which describes the mango?",
+      "o": [
+        "sweet",
+        "eat",
+        "tree",
+        "plant"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Articles (CBSE)",
+      "c": "A, An, The are articles.",
+      "q": "Fill: ___ apple is red.",
+      "o": [
+        "A",
+        "An",
+        "The",
+        "Is"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Articles (CBSE)",
+      "c": "Use 'a' before consonant sounds.",
+      "q": "Fill: I have ___ bat.",
+      "o": [
+        "a",
+        "an",
+        "the",
+        "is"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Articles (CBSE)",
+      "c": "Use 'an' before vowel sounds.",
+      "q": "Fill: ___ egg is on the table.",
+      "o": [
+        "A",
+        "An",
+        "The",
+        "Is"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Articles (CBSE)",
+      "c": "'The' is used for specific things.",
+      "q": "Fill: ___ sun is bright.",
+      "o": [
+        "A",
+        "An",
+        "The",
+        "Is"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Articles (ICSE)",
+      "c": "Use 'an' before vowel sounds.",
+      "q": "Fill: ___ elephant is big.",
+      "o": [
+        "A",
+        "An",
+        "The",
+        "Is"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Articles (ICSE)",
+      "c": "Use 'a' before consonants.",
+      "q": "Fill: She has ___ pen.",
+      "o": [
+        "a",
+        "an",
+        "the",
+        "is"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Articles (State Board)",
+      "c": "Articles come before nouns.",
+      "q": "Choose: He ate ___ orange.",
+      "o": [
+        "a",
+        "an",
+        "the",
+        "is"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Prepositions (CBSE)",
+      "c": "Prepositions tell where.",
+      "q": "The cat is ___ the table.",
+      "o": [
+        "under",
+        "run",
+        "big",
+        "eat"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Prepositions (CBSE)",
+      "c": "In, on, under are position words.",
+      "q": "The ball is ___ the box.",
+      "o": [
+        "eat",
+        "in",
+        "run",
+        "tall"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Prepositions (CBSE)",
+      "c": "Behind means at the back.",
+      "q": "The dog is ___ the door.",
+      "o": [
+        "behind",
+        "above",
+        "eat",
+        "run"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Prepositions (ICSE)",
+      "c": "On means on top of.",
+      "q": "The book is ___ the shelf.",
+      "o": [
+        "under",
+        "on",
+        "in",
+        "at"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Prepositions (ICSE)",
+      "c": "At tells a specific place.",
+      "q": "I am ___ home.",
+      "o": [
+        "on",
+        "in",
+        "at",
+        "under"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Prepositions (State Board)",
+      "c": "Near means close to.",
+      "q": "The shop is ___ my house.",
+      "o": [
+        "near",
+        "far",
+        "above",
+        "below"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Singular & Plural (CBSE)",
+      "c": "One = singular, many = plural.",
+      "q": "Plural of 'cat'?",
+      "o": [
+        "cat",
+        "cats",
+        "cates",
+        "catis"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Singular & Plural (CBSE)",
+      "c": "Add -s to most words.",
+      "q": "Plural of 'dog'?",
+      "o": [
+        "dog",
+        "doges",
+        "dogs",
+        "doggs"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Singular & Plural (CBSE)",
+      "c": "Add -es to s,sh,ch,x words.",
+      "q": "Plural of 'bus'?",
+      "o": [
+        "buss",
+        "bues",
+        "buses",
+        "busis"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Singular & Plural (ICSE)",
+      "c": "Add -es to words ending in x.",
+      "q": "Plural of 'box'?",
+      "o": [
+        "boxs",
+        "boxies",
+        "boxes",
+        "boxen"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Singular & Plural (ICSE)",
+      "c": "Some plurals change the word.",
+      "q": "Plural of 'man'?",
+      "o": [
+        "mans",
+        "men",
+        "manes",
+        "manned"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Singular & Plural (State Board)",
+      "c": "One is singular, more is plural.",
+      "q": "Plural of 'ball'?",
+      "o": [
+        "ball",
+        "balls",
+        "balles",
+        "balling"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Sentences (CBSE)",
+      "c": "Sentences start with capital, end with full stop.",
+      "q": "Which is correct?",
+      "o": [
+        "the cat sits",
+        "The cat sits.",
+        "cat the sits.",
+        "Sits cat the."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Sentences (CBSE)",
+      "c": "A sentence must make sense.",
+      "q": "Which makes sense?",
+      "o": [
+        "Dog the big is.",
+        "The dog is big.",
+        "Is big dog the.",
+        "Big the is dog."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Sentences (ICSE)",
+      "c": "Questions end with ?",
+      "q": "Which is a question?",
+      "o": [
+        "I like mangoes.",
+        "She runs fast.",
+        "Where is the ball?",
+        "The sun is bright."
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Sentences (ICSE)",
+      "c": "Exclamations show surprise.",
+      "q": "Which shows surprise?",
+      "o": [
+        "I am going.",
+        "What a beautiful day!",
+        "She is tall.",
+        "The cat sat."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Pronouns (CBSE)",
+      "c": "Pronouns replace nouns: he, she, it, they.",
+      "q": "Ravi is a boy. ___ plays cricket.",
+      "o": [
+        "She",
+        "He",
+        "It",
+        "They"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Pronouns (CBSE)",
+      "c": "She replaces a girl's name.",
+      "q": "Sita sings. ___ sings well.",
+      "o": [
+        "He",
+        "She",
+        "It",
+        "They"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Pronouns (ICSE)",
+      "c": "It replaces a thing or animal.",
+      "q": "The dog ran. ___ is fast.",
+      "o": [
+        "He",
+        "She",
+        "It",
+        "We"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Pronouns (ICSE)",
+      "c": "They replaces many people.",
+      "q": "The boys play. ___ are happy.",
+      "o": [
+        "He",
+        "She",
+        "It",
+        "They"
+      ],
+      "a": "3"
+    },
+    {
+      "t": "Pronouns (State Board)",
+      "c": "We means me and others.",
+      "q": "Ram and I study. ___ are friends.",
+      "o": [
+        "He",
+        "She",
+        "They",
+        "We"
+      ],
+      "a": "3"
+    },
+    {
+      "t": "Tenses (CBSE)",
+      "c": "Present tense: happening now.",
+      "q": "Which is present tense?",
+      "o": [
+        "She played.",
+        "She plays.",
+        "She will play.",
+        "She had played."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Tenses (CBSE)",
+      "c": "Past tense: already happened.",
+      "q": "Which is past tense?",
+      "o": [
+        "He runs.",
+        "He ran.",
+        "He will run.",
+        "He is running."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Tenses (ICSE)",
+      "c": "Future tense: will happen.",
+      "q": "Which is future tense?",
+      "o": [
+        "I eat.",
+        "I ate.",
+        "I will eat.",
+        "I am eating."
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Conjunctions (CBSE)",
+      "c": "And, but, or join words/sentences.",
+      "q": "I like tea ___ coffee.",
+      "o": [
+        "but",
+        "or",
+        "and",
+        "so"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Conjunctions (ICSE)",
+      "c": "But shows contrast.",
+      "q": "She is small ___ strong.",
+      "o": [
+        "and",
+        "but",
+        "or",
+        "so"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Opposites (CBSE)",
+      "c": "Some words mean the opposite.",
+      "q": "Opposite of 'happy'?",
+      "o": [
+        "glad",
+        "sad",
+        "joyful",
+        "excited"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Opposites (ICSE)",
+      "c": "Hot and cold are opposites.",
+      "q": "Opposite of 'hot'?",
+      "o": [
+        "warm",
+        "cold",
+        "cool",
+        "boiling"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Rhyming (CBSE)",
+      "c": "Rhyming words sound alike at the end.",
+      "q": "Which rhymes with 'cat'?",
+      "o": [
+        "Dog",
+        "Bat",
+        "Sun",
+        "Pen"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Rhyming (CBSE)",
+      "c": "Fun and sun rhyme.",
+      "q": "Which rhymes with 'ball'?",
+      "o": [
+        "Bat",
+        "Tall",
+        "Run",
+        "Cat"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Rhyming (ICSE)",
+      "c": "Words ending with same sound rhyme.",
+      "q": "Which rhymes with 'top'?",
+      "o": [
+        "Tap",
+        "Tip",
+        "Hop",
+        "Cup"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Vowels (CBSE)",
+      "c": "Vowels are A, E, I, O, U.",
+      "q": "How many vowels?",
+      "o": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Vowels (ICSE)",
+      "c": "All other letters are consonants.",
+      "q": "Which is a vowel?",
+      "o": [
+        "B",
+        "C",
+        "E",
+        "D"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Vowels (State Board)",
+      "c": "Every word has at least one vowel.",
+      "q": "Which is NOT a vowel?",
+      "o": [
+        "A",
+        "E",
+        "B",
+        "I"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Gender (CBSE)",
+      "c": "Boy is masculine, Girl is feminine.",
+      "q": "What is the feminine of 'king'?",
+      "o": [
+        "prince",
+        "king",
+        "queen",
+        "princess"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Gender (ICSE)",
+      "c": "He is masculine, She is feminine.",
+      "q": "Feminine of 'lion'?",
+      "o": [
+        "lioness",
+        "lion",
+        "cub",
+        "kitten"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Gender (State Board)",
+      "c": "Male and female words.",
+      "q": "Feminine of 'brother'?",
+      "o": [
+        "mother",
+        "sister",
+        "aunt",
+        "niece"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "This/That (CBSE)",
+      "c": "This = near, That = far.",
+      "q": "___ is my book. (near)",
+      "o": [
+        "That",
+        "This",
+        "Those",
+        "These"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "These/Those (ICSE)",
+      "c": "These = near many, Those = far many.",
+      "q": "___ are my toys. (near)",
+      "o": [
+        "That",
+        "This",
+        "Those",
+        "These"
+      ],
+      "a": "3"
+    },
+    {
+      "t": "Is/Am/Are (CBSE)",
+      "c": "I am, He/She is, They are.",
+      "q": "I ___ a student.",
+      "o": [
+        "is",
+        "am",
+        "are",
+        "was"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Is/Am/Are (CBSE)",
+      "c": "He is, She is, It is.",
+      "q": "She ___ my friend.",
+      "o": [
+        "am",
+        "is",
+        "are",
+        "were"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Is/Am/Are (ICSE)",
+      "c": "We are, They are, You are.",
+      "q": "They ___ playing.",
+      "o": [
+        "is",
+        "am",
+        "are",
+        "was"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Has/Have (CBSE)",
+      "c": "He has, I have, They have.",
+      "q": "I ___ a pen.",
+      "o": [
+        "has",
+        "have",
+        "had",
+        "having"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Has/Have (ICSE)",
+      "c": "She has, He has, It has.",
+      "q": "She ___ a doll.",
+      "o": [
+        "have",
+        "has",
+        "had",
+        "having"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Punctuation (CBSE)",
+      "c": "Full stop ends a sentence.",
+      "q": "Which punctuation ends a sentence?",
+      "o": [
+        "?",
+        "!",
+        ",",
+        "."
+      ],
+      "a": "3"
+    },
+    {
+      "t": "Punctuation (ICSE)",
+      "c": "Question mark for questions.",
+      "q": "Which ends a question?",
+      "o": [
+        ".",
+        "!",
+        "?",
+        ","
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Capital Letters (CBSE)",
+      "c": "Names start with capitals.",
+      "q": "Which is correctly written?",
+      "o": [
+        "ravi",
+        "Ravi",
+        "RAVI",
+        "rAVI"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Capital Letters (ICSE)",
+      "c": "First word of sentence is capital.",
+      "q": "Which is correct?",
+      "o": [
+        "the cat is big.",
+        "The cat is big.",
+        "the Cat is big.",
+        "the cat Is big."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Greetings (State Board)",
+      "c": "Good morning, Good night.",
+      "q": "We say ___ at night.",
+      "o": [
+        "Good morning",
+        "Good afternoon",
+        "Good night",
+        "Good evening"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Manners (State Board)",
+      "c": "Please, Thank you, Sorry.",
+      "q": "What do we say when we want help?",
+      "o": [
+        "Sorry",
+        "Thank you",
+        "Please",
+        "Excuse me"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Days (CBSE)",
+      "c": "7 days in a week.",
+      "q": "How many days in a week?",
+      "o": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Days (ICSE)",
+      "c": "Days of the week.",
+      "q": "Which comes after Monday?",
+      "o": [
+        "Sunday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Months (CBSE)",
+      "c": "12 months in a year.",
+      "q": "How many months in a year?",
+      "o": [
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Colours (State Board)",
+      "c": "Basic colours: red, blue, green, yellow.",
+      "q": "What colour is the sky?",
+      "o": [
+        "Red",
+        "Green",
+        "Blue",
+        "Yellow"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Colours (CBSE)",
+      "c": "Leaves are green, sky is blue.",
+      "q": "What colour are leaves?",
+      "o": [
+        "Blue",
+        "Red",
+        "Yellow",
+        "Green"
+      ],
+      "a": "3"
+    },
+    {
+      "t": "Shapes (CBSE)",
+      "c": "Circle, square, triangle, rectangle.",
+      "q": "How many sides does a triangle have?",
+      "o": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Shapes (ICSE)",
+      "c": "A circle has no corners.",
+      "q": "Which shape has no corners?",
+      "o": [
+        "Square",
+        "Triangle",
+        "Circle",
+        "Rectangle"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Numbers (State Board)",
+      "c": "1-one, 2-two, 3-three.",
+      "q": "Spell the number 5:",
+      "o": [
+        "four",
+        "five",
+        "six",
+        "seven"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Numbers (CBSE)",
+      "c": "Number words.",
+      "q": "Spell 10:",
+      "o": [
+        "nine",
+        "ten",
+        "eleven",
+        "twelve"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Body Parts (CBSE)",
+      "c": "Eyes, ears, nose, mouth, hands, legs.",
+      "q": "We see with our ___",
+      "o": [
+        "ears",
+        "eyes",
+        "nose",
+        "mouth"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Body Parts (ICSE)",
+      "c": "We have 5 senses.",
+      "q": "We hear with our ___",
+      "o": [
+        "eyes",
+        "ears",
+        "nose",
+        "hands"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Family (CBSE)",
+      "c": "Mother, father, brother, sister.",
+      "q": "Your mother's mother is your ___",
+      "o": [
+        "aunt",
+        "grandmother",
+        "sister",
+        "cousin"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Family (ICSE)",
+      "c": "Grandfather, grandmother, uncle, aunt.",
+      "q": "Your father's brother is your ___",
+      "o": [
+        "uncle",
+        "brother",
+        "cousin",
+        "nephew"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Animals (CBSE)",
+      "c": "Pet: dog, cat. Wild: lion, tiger.",
+      "q": "Which is a pet?",
+      "o": [
+        "Lion",
+        "Dog",
+        "Tiger",
+        "Bear"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Animals (ICSE)",
+      "c": "Farm animals: cow, hen, goat.",
+      "q": "Which gives us eggs?",
+      "o": [
+        "Cow",
+        "Hen",
+        "Goat",
+        "Dog"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Animals (State Board)",
+      "c": "Water animals: fish, frog, whale.",
+      "q": "Which lives in water?",
+      "o": [
+        "Cat",
+        "Dog",
+        "Fish",
+        "Hen"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Fruits (CBSE)",
+      "c": "Apple, banana, mango, grapes, orange.",
+      "q": "Which is a fruit?",
+      "o": [
+        "Carrot",
+        "Potato",
+        "Mango",
+        "Onion"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Vegetables (ICSE)",
+      "c": "Carrot, potato, tomato, onion.",
+      "q": "Which is a vegetable?",
+      "o": [
+        "Apple",
+        "Banana",
+        "Carrot",
+        "Grapes"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Transport (CBSE)",
+      "c": "Car, bus, train, bicycle, aeroplane.",
+      "q": "Which flies in the sky?",
+      "o": [
+        "Car",
+        "Bus",
+        "Aeroplane",
+        "Ship"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Transport (State Board)",
+      "c": "Bus, car, bicycle, train.",
+      "q": "Which runs on tracks?",
+      "o": [
+        "Car",
+        "Bus",
+        "Train",
+        "Bicycle"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Helpers (State Board)",
+      "c": "Doctor, teacher, policeman, farmer.",
+      "q": "Who grows food?",
+      "o": [
+        "Doctor",
+        "Farmer",
+        "Teacher",
+        "Pilot"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Helpers (CBSE)",
+      "c": "Postman, milkman, doctor.",
+      "q": "Who delivers letters?",
+      "o": [
+        "Milkman",
+        "Postman",
+        "Doctor",
+        "Teacher"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Seasons (CBSE)",
+      "c": "Summer, winter, rainy, spring.",
+      "q": "When is it very hot?",
+      "o": [
+        "Winter",
+        "Rainy",
+        "Summer",
+        "Spring"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Seasons (ICSE)",
+      "c": "We wear warm clothes in winter.",
+      "q": "When do we wear sweaters?",
+      "o": [
+        "Summer",
+        "Winter",
+        "Rainy",
+        "Spring"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Food (CBSE)",
+      "c": "Breakfast, lunch, dinner.",
+      "q": "Morning meal is called ___",
+      "o": [
+        "Lunch",
+        "Dinner",
+        "Breakfast",
+        "Snack"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Food (State Board)",
+      "c": "Healthy food: fruits, vegetables, milk.",
+      "q": "Which is healthy?",
+      "o": [
+        "Chips",
+        "Candy",
+        "Milk",
+        "Soda"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Clothes (CBSE)",
+      "c": "Shirt, pants, dress, frock.",
+      "q": "We wear ___ on our feet.",
+      "o": [
+        "Hat",
+        "Shoes",
+        "Gloves",
+        "Scarf"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Senses (ICSE)",
+      "c": "5 senses: see, hear, smell, taste, touch.",
+      "q": "We taste with our ___",
+      "o": [
+        "Eyes",
+        "Ears",
+        "Tongue",
+        "Nose"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Directions (State Board)",
+      "c": "Left, right, up, down.",
+      "q": "The sun rises in the ___",
+      "o": [
+        "West",
+        "North",
+        "East",
+        "South"
+      ],
+      "a": "2"
+    }
+  ],
+  "syllabus": [
+    {
+      "t": "Nouns (CBSE)",
+      "c": "A noun is a naming word.",
+      "q": "Which word is a noun?",
+      "o": [
+        "Run",
+        "Cat",
+        "Quickly",
+        "Under"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Verbs (CBSE)",
+      "c": "A verb is a doing word.",
+      "q": "Which shows action?",
+      "o": [
+        "Table",
+        "Runs",
+        "Blue",
+        "Happy"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Adjectives (CBSE)",
+      "c": "An adjective describes a noun.",
+      "q": "Which describes 'ball'?",
+      "o": [
+        "Big",
+        "Run",
+        "Under",
+        "And"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Articles (CBSE)",
+      "c": "A, An, The are articles.",
+      "q": "Fill: ___ apple is red.",
+      "o": [
+        "A",
+        "An",
+        "The",
+        "Is"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Prepositions (CBSE)",
+      "c": "Prepositions tell where.",
+      "q": "The cat is ___ the table.",
+      "o": [
+        "under",
+        "run",
+        "big",
+        "eat"
+      ],
+      "a": "0"
+    },
+    {
+      "t": "Singular & Plural (CBSE)",
+      "c": "One = singular, many = plural.",
+      "q": "Plural of 'cat'?",
+      "o": [
+        "cat",
+        "cats",
+        "cates",
+        "catis"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Sentences (CBSE)",
+      "c": "Sentences start with capital, end with full stop.",
+      "q": "Which is correct?",
+      "o": [
+        "the cat sits",
+        "The cat sits.",
+        "cat the sits.",
+        "Sits cat the."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Pronouns (CBSE)",
+      "c": "Pronouns replace nouns: he, she, it, they.",
+      "q": "Ravi is a boy. ___ plays cricket.",
+      "o": [
+        "She",
+        "He",
+        "It",
+        "They"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Tenses (CBSE)",
+      "c": "Present tense: happening now.",
+      "q": "Which is present tense?",
+      "o": [
+        "She played.",
+        "She plays.",
+        "She will play.",
+        "She had played."
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Conjunctions (CBSE)",
+      "c": "And, but, or join words/sentences.",
+      "q": "I like tea ___ coffee.",
+      "o": [
+        "but",
+        "or",
+        "and",
+        "so"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "Opposites (CBSE)",
+      "c": "Some words mean the opposite.",
+      "q": "Opposite of 'happy'?",
+      "o": [
+        "glad",
+        "sad",
+        "joyful",
+        "excited"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Rhyming (CBSE)",
+      "c": "Rhyming words sound alike at the end.",
+      "q": "Which rhymes with 'cat'?",
+      "o": [
+        "Dog",
+        "Bat",
+        "Sun",
+        "Pen"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Vowels (CBSE)",
+      "c": "Vowels are A, E, I, O, U.",
+      "q": "How many vowels?",
+      "o": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Gender (CBSE)",
+      "c": "Boy is masculine, Girl is feminine.",
+      "q": "What is the feminine of 'king'?",
+      "o": [
+        "prince",
+        "king",
+        "queen",
+        "princess"
+      ],
+      "a": "2"
+    },
+    {
+      "t": "This/That (CBSE)",
+      "c": "This = near, That = far.",
+      "q": "___ is my book. (near)",
+      "o": [
+        "That",
+        "This",
+        "Those",
+        "These"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Is/Am/Are (CBSE)",
+      "c": "I am, He/She is, They are.",
+      "q": "I ___ a student.",
+      "o": [
+        "is",
+        "am",
+        "are",
+        "was"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Has/Have (CBSE)",
+      "c": "He has, I have, They have.",
+      "q": "I ___ a pen.",
+      "o": [
+        "has",
+        "have",
+        "had",
+        "having"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Punctuation (CBSE)",
+      "c": "Full stop ends a sentence.",
+      "q": "Which punctuation ends a sentence?",
+      "o": [
+        "?",
+        "!",
+        ",",
+        "."
+      ],
+      "a": "3"
+    },
+    {
+      "t": "Capital Letters (CBSE)",
+      "c": "Names start with capitals.",
+      "q": "Which is correctly written?",
+      "o": [
+        "ravi",
+        "Ravi",
+        "RAVI",
+        "rAVI"
+      ],
+      "a": "1"
+    },
+    {
+      "t": "Greetings (State Board)",
+      "c": "Good morning, Good night.",
+      "q": "We say ___ at night.",
+      "o": [
+        "Good morning",
+        "Good afternoon",
+        "Good night",
+        "Good evening"
+      ],
+      "a": "2"
+    }
+  ],
+  "sentences": [
+    {
+      "s": "The cat sat on the mat.",
+      "w": [
+        "mat.",
+        "sat",
+        "The",
+        "on",
+        "cat",
+        "the"
+      ]
+    },
+    {
+      "s": "I love my mother.",
+      "w": [
+        "mother.",
+        "my",
+        "I",
+        "love"
+      ]
+    },
+    {
+      "s": "The sun is bright.",
+      "w": [
+        "bright.",
+        "The",
+        "is",
+        "sun"
+      ]
+    },
+    {
+      "s": "Birds fly in the sky.",
+      "w": [
+        "the",
+        "Birds",
+        "in",
+        "fly",
+        "sky."
+      ]
+    },
+    {
+      "s": "I go to school.",
+      "w": [
+        "school.",
+        "go",
+        "I",
+        "to"
+      ]
+    },
+    {
+      "s": "She has a red ball.",
+      "w": [
+        "ball.",
+        "red",
+        "has",
+        "She",
+        "a"
+      ]
+    },
+    {
+      "s": "The dog is big.",
+      "w": [
+        "big.",
+        "dog",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "We play in the park.",
+      "w": [
+        "park.",
+        "in",
+        "play",
+        "the",
+        "We"
+      ]
+    },
+    {
+      "s": "My father reads a book.",
+      "w": [
+        "book.",
+        "reads",
+        "My",
+        "a",
+        "father"
+      ]
+    },
+    {
+      "s": "The fish swims in water.",
+      "w": [
+        "water.",
+        "swims",
+        "The",
+        "in",
+        "fish"
+      ]
+    },
+    {
+      "s": "I drink milk every day.",
+      "w": [
+        "day.",
+        "drink",
+        "every",
+        "I",
+        "milk"
+      ]
+    },
+    {
+      "s": "The flower is beautiful.",
+      "w": [
+        "beautiful.",
+        "flower",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "He runs very fast.",
+      "w": [
+        "fast.",
+        "runs",
+        "He",
+        "very"
+      ]
+    },
+    {
+      "s": "The moon shines at night.",
+      "w": [
+        "night.",
+        "at",
+        "shines",
+        "The",
+        "moon"
+      ]
+    },
+    {
+      "s": "I like to eat mangoes.",
+      "w": [
+        "mangoes.",
+        "eat",
+        "I",
+        "to",
+        "like"
+      ]
+    },
+    {
+      "s": "She is my best friend.",
+      "w": [
+        "friend.",
+        "best",
+        "She",
+        "my",
+        "is"
+      ]
+    },
+    {
+      "s": "The baby is sleeping.",
+      "w": [
+        "sleeping.",
+        "baby",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "We eat lunch at noon.",
+      "w": [
+        "noon.",
+        "eat",
+        "at",
+        "We",
+        "lunch"
+      ]
+    },
+    {
+      "s": "The cow gives us milk.",
+      "w": [
+        "milk.",
+        "gives",
+        "The",
+        "us",
+        "cow"
+      ]
+    },
+    {
+      "s": "He goes to the market.",
+      "w": [
+        "market.",
+        "goes",
+        "the",
+        "He",
+        "to"
+      ]
+    },
+    {
+      "s": "The bird sits on the tree.",
+      "w": [
+        "tree.",
+        "sits",
+        "The",
+        "on",
+        "bird",
+        "the"
+      ]
+    },
+    {
+      "s": "I wash my hands.",
+      "w": [
+        "hands.",
+        "wash",
+        "my",
+        "I"
+      ]
+    },
+    {
+      "s": "She sings a sweet song.",
+      "w": [
+        "song.",
+        "sings",
+        "sweet",
+        "She",
+        "a"
+      ]
+    },
+    {
+      "s": "The train runs on tracks.",
+      "w": [
+        "tracks.",
+        "runs",
+        "The",
+        "on",
+        "train"
+      ]
+    },
+    {
+      "s": "We go to bed at night.",
+      "w": [
+        "night.",
+        "go",
+        "at",
+        "We",
+        "bed",
+        "to"
+      ]
+    },
+    {
+      "s": "The sky is blue.",
+      "w": [
+        "blue.",
+        "sky",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "My bag is heavy.",
+      "w": [
+        "heavy.",
+        "bag",
+        "My",
+        "is"
+      ]
+    },
+    {
+      "s": "He plays with his toys.",
+      "w": [
+        "toys.",
+        "plays",
+        "with",
+        "He",
+        "his"
+      ]
+    },
+    {
+      "s": "The mango is sweet.",
+      "w": [
+        "sweet.",
+        "mango",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "I read a story book.",
+      "w": [
+        "book.",
+        "read",
+        "story",
+        "I",
+        "a"
+      ]
+    },
+    {
+      "s": "She draws a picture.",
+      "w": [
+        "picture.",
+        "draws",
+        "a",
+        "She"
+      ]
+    },
+    {
+      "s": "The frog jumps in water.",
+      "w": [
+        "water.",
+        "jumps",
+        "The",
+        "in",
+        "frog"
+      ]
+    },
+    {
+      "s": "We love our teacher.",
+      "w": [
+        "teacher.",
+        "love",
+        "our",
+        "We"
+      ]
+    },
+    {
+      "s": "The rose is red.",
+      "w": [
+        "red.",
+        "rose",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "I brush my teeth.",
+      "w": [
+        "teeth.",
+        "brush",
+        "my",
+        "I"
+      ]
+    },
+    {
+      "s": "He flies a kite.",
+      "w": [
+        "kite.",
+        "flies",
+        "a",
+        "He"
+      ]
+    },
+    {
+      "s": "The apple is sweet.",
+      "w": [
+        "sweet.",
+        "apple",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "She wears a hat.",
+      "w": [
+        "hat.",
+        "wears",
+        "a",
+        "She"
+      ]
+    },
+    {
+      "s": "I see a rainbow.",
+      "w": [
+        "rainbow.",
+        "see",
+        "a",
+        "I"
+      ]
+    },
+    {
+      "s": "The hen lays eggs.",
+      "w": [
+        "eggs.",
+        "lays",
+        "The",
+        "hen"
+      ]
+    },
+    {
+      "s": "We clap our hands.",
+      "w": [
+        "hands.",
+        "clap",
+        "our",
+        "We"
+      ]
+    },
+    {
+      "s": "He rides a bicycle.",
+      "w": [
+        "bicycle.",
+        "rides",
+        "a",
+        "He"
+      ]
+    },
+    {
+      "s": "The river flows fast.",
+      "w": [
+        "fast.",
+        "river",
+        "The",
+        "flows"
+      ]
+    },
+    {
+      "s": "I help my mother.",
+      "w": [
+        "mother.",
+        "help",
+        "my",
+        "I"
+      ]
+    },
+    {
+      "s": "She plants a seed.",
+      "w": [
+        "seed.",
+        "plants",
+        "a",
+        "She"
+      ]
+    },
+    {
+      "s": "The elephant is huge.",
+      "w": [
+        "huge.",
+        "elephant",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "We sing a song together.",
+      "w": [
+        "together.",
+        "sing",
+        "song",
+        "We",
+        "a"
+      ]
+    },
+    {
+      "s": "He eats rice for lunch.",
+      "w": [
+        "lunch.",
+        "eats",
+        "for",
+        "He",
+        "rice"
+      ]
+    },
+    {
+      "s": "The rabbit hops fast.",
+      "w": [
+        "fast.",
+        "rabbit",
+        "The",
+        "hops"
+      ]
+    },
+    {
+      "s": "I water the plants.",
+      "w": [
+        "plants.",
+        "water",
+        "the",
+        "I"
+      ]
+    },
+    {
+      "s": "She opens the door.",
+      "w": [
+        "door.",
+        "opens",
+        "the",
+        "She"
+      ]
+    },
+    {
+      "s": "The stars twinkle at night.",
+      "w": [
+        "night.",
+        "twinkle",
+        "at",
+        "The",
+        "stars"
+      ]
+    },
+    {
+      "s": "We drink clean water.",
+      "w": [
+        "water.",
+        "drink",
+        "clean",
+        "We"
+      ]
+    },
+    {
+      "s": "He catches the ball.",
+      "w": [
+        "ball.",
+        "catches",
+        "the",
+        "He"
+      ]
+    },
+    {
+      "s": "The parrot is green.",
+      "w": [
+        "green.",
+        "parrot",
+        "The",
+        "is"
+      ]
+    },
+    {
+      "s": "I comb my hair.",
+      "w": [
+        "hair.",
+        "comb",
+        "my",
+        "I"
+      ]
+    },
+    {
+      "s": "She feeds the cat.",
+      "w": [
+        "cat.",
+        "feeds",
+        "the",
+        "She"
+      ]
+    },
+    {
+      "s": "The clock shows time.",
+      "w": [
+        "time.",
+        "clock",
+        "The",
+        "shows"
+      ]
+    },
+    {
+      "s": "We play with friends.",
+      "w": [
+        "friends.",
+        "play",
+        "with",
+        "We"
+      ]
+    },
+    {
+      "s": "He writes with a pen.",
+      "w": [
+        "pen.",
+        "writes",
+        "with",
+        "He",
+        "a"
+      ]
+    }
+  ]
+}

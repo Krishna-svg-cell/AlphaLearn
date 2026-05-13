@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphalearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: 1px solid #e2e8f0;
+            --primary-cyan: #3b82f6; 
+            --primary-cyan-hover: #2563eb;
+            --text-white: #0f172a; 
+            --text-body: #475569; 
+            --input-bg: #f1f5f9;
+        }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-color);
+            background-image: none;
+            min-height: 100vh; 
+            color: var(--text-white);
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+        h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+        .text-cyan { color: var(--primary-cyan) !important; }
+        .text-white-forced { color: #ffffff !important; }
+        .text-light-forced { color: #e2e8f0 !important; }
+        .text-white { color: #0f172a !important; } 
+        .text-white-50 { color: #64748b !important; } 
+
+        .glass-panel {
+            background: var(--card-bg);
+            border: var(--card-border);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            color: #0f172a;
+        }
+
+        .btn-cyan {
+            background-color: var(--primary-cyan);
+            color: #ffffff;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 30px;
+            transition: all 0.2s ease;
+        }
+        .btn-cyan:hover { background-color: var(--primary-cyan-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); color: white;}
+
+        .btn-logout {
+            position: fixed; top: 20px; right: 20px;
+            background: #ef4444; color: white; border: none; border-radius: 12px;
+            padding: 8px 16px; font-weight: 600; z-index: 1000; transition: 0.2s; font-size: 0.85rem;
+        }
+        .btn-logout:hover { background: #dc2626; }
+
+        .btn-feedback-float {
+            position: fixed; bottom: 90px; left: 20px;
+            background: #f59e0b; color: #fff; border: none; border-radius: 12px;
+            padding: 10px 20px; font-weight: 600; z-index: 100; transition: 0.2s;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-back {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: transparent; border: 1px solid #cbd5e1;
+            color: #475569; padding: 8px 24px; border-radius: 30px;
+            font-size: 0.9rem; text-decoration: none; transition: 0.2s; margin-bottom: 20px; font-weight: 600;
+        }
+        .btn-back:hover { background: #f1f5f9; border-color: #94a3b8; color: #0f172a; }
+
+        .app-header { padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem;}
+        .brand { font-size: 1.5rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 1px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 44px; height: 44px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 1.2rem; }
+        .role-badge { background: #e2e8f0; color: #475569; font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; vertical-align: middle; margin-left: 5px; font-weight: 600; }
+
+        .login-card { max-width: 420px; padding: 3rem; text-align: center; }
+        .form-control-dark { background: var(--input-bg); border: 1px solid #cbd5e1; color: #0f172a; padding: 12px 16px; border-radius: 12px; margin-bottom: 1rem; }
+        .form-control-dark:focus { background: #ffffff; border-color: var(--primary-cyan); box-shadow: 0 0 0 3px rgba(59,130,246,0.2); color: #0f172a; }
+
+        .table-dark { color: #0f172a; background: white; }
+        .table-dark th { color: #475569; border-bottom: 2px solid #e2e8f0; background: #f8fafc; }
+        .table-dark td { border-bottom: 1px solid #e2e8f0; }
+        .bg-dark { background-color: #ffffff !important; color: #0f172a !important; border: 1px solid #e2e8f0 !important; }
+        .border-secondary { border-color: #e2e8f0 !important; }
+        
+        .modal-dark .modal-content { background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 20px;}
+        .modal-dark .modal-header, .modal-dark .modal-footer { border-color: #e2e8f0; }
+        .btn-close-white { filter: invert(0); } 
+        
+        .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: #0f172a; }
+        .stat-label { font-size: 0.9rem; color: #64748b; font-weight: 600;}
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 0.8rem 0; z-index: 1000; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05);}
+        .nav-item-btn { background: none; border: none; color: #94a3b8; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 600; width: 25%; }
+        .nav-item-btn.active { color: var(--primary-cyan); }
+        .nav-item-icon { font-size: 1.5rem; margin-bottom: 2px; }
+        
+        .mission-card { background: #0f172a; color: white; border-radius: 20px; padding: 1.5rem; position: relative; overflow: hidden; margin-bottom: 2rem; }
+        .mission-card .text-white { color: white !important; }
+        .mission-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .mission-item:last-child { border-bottom: none; }
+        .mission-btn { width: 100%; background: #4f46e5; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1.1rem; margin-top: 1rem; transition: 0.2s;}
+        .mission-btn:hover { background: #4338ca; transform: translateY(-2px); }
+
+        .fade-in { animation: fadeInUp 0.4s ease forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .list-group-item.bg-dark { background: white !important; color: #0f172a !important; border-color: #e2e8f0; }
+        .student-row:hover td { background: #f8fafc; color: #0f172a; }
+
+        /* Quiz styles */
+        .quiz-opt { padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; font-weight: 500; }
+        .quiz-opt:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .quiz-opt.selected { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
+        
+        .progress-bar-bg { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin: 20px 0; }
+        .progress-bar-fill { height: 100%; background: #3b82f6; transition: width 0.3s; }
+        
+        .badge-gamified { display: inline-block; padding: 8px 16px; background: #fef3c7; color: #d97706; border-radius: 20px; font-weight: bold; font-size: 0.9rem; margin-top: 10px; }
+
+        /* Sentence Formation Styles */
+        .word-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; min-height: 60px; padding: 16px; }
+        .word-btn { padding: 12px 20px; border-radius: 30px; border: 2px solid #e2e8f0; background: white; font-weight: 600; font-size: 1.05rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+        .word-btn:hover { background: #eff6ff; border-color: #3b82f6; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(59,130,246,0.15); }
+        .word-btn.used { opacity: 0.25; pointer-events: none; transform: scale(0.95); }
+        .answer-area { display: flex; flex-wrap: wrap; gap: 8px; min-height: 56px; padding: 16px; border: 2px dashed #cbd5e1; border-radius: 16px; margin-bottom: 20px; background: #fafbfc; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .answer-area.has-words { justify-content: flex-start; }
+        .answer-area-placeholder { color: #94a3b8; font-weight: 500; font-size: 0.95rem; }
+        .answer-word { padding: 10px 16px; background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #1d4ed8; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: 1px solid #bfdbfe; }
+        .answer-word:hover { background: linear-gradient(135deg, #dbeafe, #bfdbfe); transform: scale(1.05); }
+        .sentence-correct { border-color: #22c55e !important; background: #f0fdf4 !important; }
+        .sentence-wrong { border-color: #ef4444 !important; animation: shake 0.5s ease; }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-8px); } 40%,80% { transform: translateX(8px); } }
+
+        /* Attempt History Styles */
+        .attempt-btn { padding: 14px 20px; border: 1px solid #e2e8f0; border-radius: 14px; background: white; cursor: pointer; transition: all 0.2s ease; width: 100%; text-align: left; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .attempt-btn:hover { border-color: #3b82f6; background: #f8fafc; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(59,130,246,0.1); }
+        .attempt-btn.active { border-color: #3b82f6; background: #eff6ff; }
+        .attempt-date { font-weight: 700; color: #0f172a; font-size: 0.95rem; }
+        .attempt-time { font-size: 0.8rem; color: #64748b; font-weight: 600; }
+        .category-score { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: #f1f5f9; border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: #334155; }
+        .category-score.good { background: #dcfce7; color: #166534; }
+        .category-score.avg { background: #fef9c3; color: #854d0e; }
+        .category-score.low { background: #fee2e2; color: #991b1b; }
+
+        .nav-card { padding: 2rem 1rem; border-radius: 16px; cursor: pointer; transition: all 0.2s; border: 1px solid #e2e8f0; background: white; text-align: center; }
+        .nav-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(59,130,246,0.15); border-color: #3b82f6; }
+        .nav-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 1055;"></div>
+
+<div class="modal fade modal-dark" id="userEditModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Manage User</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="userEditForm">
+                    <input type="hidden" id="edit-user-id">
+                    <div class="mb-3"><label>Username</label><input type="text" class="form-control form-control-dark" id="edit-username"></div>
+                    <div class="mb-3"><label>USN</label><input type="text" class="form-control form-control-dark" id="edit-usn"></div>
+                    <div class="mb-3"><label>Role</label><select class="form-select form-control-dark" id="edit-role"><option value="STUDENT">Student</option><option value="STAFF">Staff</option><option value="ADMIN">Admin</option><option value="PARENT">Parent</option><option value="PRINCIPAL">Principal</option></select></div>
+                    <div class="mb-3" id="edit-school-container"><label>School</label><select class="form-select form-control-dark" id="edit-school"></select></div>
+                    <div class="mb-3"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="edit-class"></div>
+                    <div class="mb-3"><label>Section Name</label><input type="text" class="form-control form-control-dark" id="edit-section"></div>
+                    <div class="mb-3"><label>Mapped Student USNs (comma-separated)</label><input type="text" class="form-control form-control-dark" id="edit-mapped-usns" placeholder="e.g. STD001, STD002"></div>
+                    <div class="mb-3" id="edit-password-group"><label>Password</label><input type="password" class="form-control form-control-dark" id="edit-password"></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveUser()">Save</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="schoolEditModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Manage School</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="schoolEditForm">
+                    <div class="mb-3"><label>School Name</label><input type="text" class="form-control form-control-dark" id="edit-school-name" required></div>
+                    <div class="mb-3"><label>Address</label><input type="text" class="form-control form-control-dark" id="edit-school-address"></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveSchool()">Save</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="syllabusEditModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Manage Syllabus</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="syllabusEditForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3" id="syl-school-container"><label>School</label><select class="form-select form-control-dark" id="syl-school" required></select></div>
+                        <div class="col-md-6 mb-3"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="syl-class" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label>Subject</label><input type="text" class="form-control form-control-dark" id="syl-subject" required></div>
+                        <div class="col-md-6 mb-3"><label>Lesson Title</label><input type="text" class="form-control form-control-dark" id="syl-title" required></div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Theory / Content</label>
+                        <textarea class="form-control form-control-dark" id="syl-content" rows="4" required></textarea>
+                    </div>
+                    <hr class="border-secondary">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>Quiz Questions (MCQ)</h6>
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="window.app.admin.addSyllabusQuestion()">+ Add Question</button>
+                    </div>
+                    <div id="syl-questions-container"></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveSyllabus()">Save</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="testEditModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Manage Test</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="testEditForm">
+                    <div class="row">
+                        <div class="col-md-4 mb-3" id="test-school-container"><label>School</label><select class="form-select form-control-dark" id="test-school" required></select></div>
+                        <div class="col-md-4 mb-3"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="test-class" required></div>
+                        <div class="col-md-4 mb-3"><label>Test Title</label><input type="text" class="form-control form-control-dark" id="test-title" required></div>
+                    </div>
+                    <hr class="border-secondary">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>Test Questions (MCQ)</h6>
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="window.app.admin.addTestQuestion()">+ Add Question</button>
+                    </div>
+                    <div id="test-questions-container"></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveTest()">Save</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="grammarEditModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Manage Grammar</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="grammarEditForm">
+                    <div class="row">
+                        <div class="col-md-4 mb-3" id="gram-school-container"><label>School</label><select class="form-select form-control-dark" id="gram-school" required></select></div>
+                        <div class="col-md-4 mb-3"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="gram-class" required></div>
+                        <div class="col-md-4 mb-3"><label>Level</label><select class="form-select form-control-dark" id="gram-level"><option value="beginner">Beginner</option><option selected value="intermediate">Intermediate</option><option value="proficient">Proficient</option></select></div>
+                    </div>
+                    <div class="mb-3"><label>Question Text</label><input type="text" class="form-control form-control-dark" id="gram-q" required></div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><input type="text" class="form-control form-control-dark" id="gram-opt0" placeholder="Option 0" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-dark" id="gram-opt1" placeholder="Option 1" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-dark" id="gram-opt2" placeholder="Option 2" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-dark" id="gram-opt3" placeholder="Option 3" required></div>
+                    </div>
+                    <div class="mb-3"><label>Correct Answer Index</label><select class="form-select form-control-dark" id="gram-ans" required><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveGrammar()">Save</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="sendFeedbackModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Send Feedback</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <p class="text-white-50">Describe your issue or suggestion:</p>
+                <textarea id="feedbackText" class="form-control form-control-dark" rows="4"></textarea>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-cyan" onclick="window.app.feedback.submit()">Send</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="viewFeedbackModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Incoming Feedback</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover bg-transparent">
+                        <thead><tr><th>Date</th><th>User</th><th>Role</th><th>Message</th></tr></thead>
+                        <tbody id="feedbackTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="staffUserModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="staffUserModalTitle">Add Student & Parent</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="staffUserEditForm">
+                    <div class="mb-3"><label>Unique Student Number (USN)</label><input type="text" class="form-control form-control-dark" id="staff-edit-usn" placeholder="USN to link Student and Parent" required></div>
+                    <hr class="border-secondary">
+                    <h6 class="text-cyan mb-3">Student Details</h6>
+                    <div class="mb-3"><label>Student Username</label><input type="text" class="form-control form-control-dark" id="staff-edit-student-username" required></div>
+                    <div class="mb-3"><label>Student Password</label><input type="password" class="form-control form-control-dark" id="staff-edit-student-password" required></div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="staff-edit-class" required></div>
+                        <div class="col-6"><label>Section Name</label><input type="text" class="form-control form-control-dark" id="staff-edit-section"></div>
+                    </div>
+                    <hr class="border-secondary">
+                    <h6 class="text-cyan mb-3">Parent Details</h6>
+                    <div class="mb-3"><label>Parent Username</label><input type="text" class="form-control form-control-dark" id="staff-edit-parent-username" required></div>
+                    <div class="mb-3"><label>Parent Password</label><input type="password" class="form-control form-control-dark" id="staff-edit-parent-password" required></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.staff.saveUser()">Create & Map Users</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="mcqSetModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Create MCQ Set (5 Questions)</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <form id="mcqSetForm">
+                    <div class="row">
+                        <div class="col-md-3 mb-3" id="mcq-school-container"><label>School</label><select class="form-select form-control-dark" id="mcq-school" required></select></div>
+                        <div class="col-md-3 mb-3"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="mcq-class" required></div>
+                        <div class="col-md-3 mb-3"><label>Category</label><select class="form-select form-control-dark" id="mcq-category" required><option value="meaning">Meaning</option><option value="content">Content</option><option value="grammar">Grammar</option><option value="syllabus">Syllabus</option></select></div>
+                        <div class="col-md-3 mb-3"><label>Set Title</label><input type="text" class="form-control form-control-dark" id="mcq-title" required></div>
+                    </div>
+                    <hr class="border-secondary">
+                    <h6 class="text-cyan mb-3">5 MCQ Questions</h6>
+                    <div id="mcq-questions-container"></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveMCQSet()">Save MCQ Set</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dark" id="sentenceExModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Create Sentence Exercise</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="sentenceExForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3" id="sent-school-container"><label>School</label><select class="form-select form-control-dark" id="sent-school" required></select></div>
+                        <div class="col-md-6 mb-3"><label>Class Name</label><input type="text" class="form-control form-control-dark" id="sent-class" required></div>
+                    </div>
+                    <div class="mb-3"><label>Correct Sentence</label><input type="text" class="form-control form-control-dark" id="sent-correct" placeholder="e.g. The cat sat on the mat" required></div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label>Words (these appear as clickable buttons for students)</label>
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="window.app.admin.autoFillWords()">Auto-fill from sentence</button>
+                    </div>
+                    <div class="row g-2 mb-3" id="sent-words-container">
+                        <div class="col-4"><input type="text" class="form-control form-control-dark sent-word-input" placeholder="Word 1" required></div>
+                        <div class="col-4"><input type="text" class="form-control form-control-dark sent-word-input" placeholder="Word 2" required></div>
+                        <div class="col-4"><input type="text" class="form-control form-control-dark sent-word-input" placeholder="Word 3" required></div>
+                        <div class="col-4"><input type="text" class="form-control form-control-dark sent-word-input" placeholder="Word 4"></div>
+                        <div class="col-4"><input type="text" class="form-control form-control-dark sent-word-input" placeholder="Word 5"></div>
+                        <div class="col-4"><input type="text" class="form-control form-control-dark sent-word-input" placeholder="Word 6"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-cyan" onclick="window.app.admin.saveSentenceExercise()">Save Exercise</button></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const appElement = document.getElementById('app');
+    const toastContainer = document.getElementById('toast-container');
+    let userEditModal, sendFeedbackModal, viewFeedbackModal, staffUserEditModal;
+    
+    // State
+    let state = {
+        auth: false, username: null, role: null, usn: null, school_name: null, class_name: null, section_name: null, parent_id: null,
+        page: 'login', mode: null, level: null,
+        words: [], quiz: [], result: {}, 
+        sessions: [], tracking: null, sessionDetail: null,
+        student: { missionData: null, missionStep: 0, missionScore: {vocab:0, grammar:0, syllabus:0, sentence:0}, missionSentenceAnswer: [], gamification: null, leaderboard: [], syllabus: [], attempts: null, selectedAttempt: null },
+        admin: { users: [], schools: [], files: [], syllabus: [], grammar: [], mcqSets: [], sentenceExercises: [], currentFile: null, fileContent: '', activeView: 'menu', selectedStudentStats: null, selectedStudentName: '', wizard: { active: false, step: 1, school: null }, schoolHierarchy: { loaded: false, schoolId: null, schoolName: '', principal: null, staff: [], students: [] } },
+        staff: { students: [], selectedStudent: null, studentStats: null, studentAttempts: null },
+        parent: { children: null, notifications: null },
+        principal: { stats: null, users: [], activeView: 'menu', selectedStudentStats: null, selectedStudentName: '' }
+    };
+
+    // Initialize Modals
+    sendFeedbackModal = new bootstrap.Modal(document.getElementById('sendFeedbackModal'));
+    viewFeedbackModal = new bootstrap.Modal(document.getElementById('viewFeedbackModal'));
+    if(!userEditModal) userEditModal = new bootstrap.Modal(document.getElementById('userEditModal'));
+    let syllabusEditModal;
+    if(!syllabusEditModal) syllabusEditModal = new bootstrap.Modal(document.getElementById('syllabusEditModal'));
+    let testEditModal;
+    if(!testEditModal) testEditModal = new bootstrap.Modal(document.getElementById('testEditModal'));
+    let schoolEditModal;
+    if(!schoolEditModal) schoolEditModal = new bootstrap.Modal(document.getElementById('schoolEditModal'));
+    let grammarEditModal;
+    if(!grammarEditModal) grammarEditModal = new bootstrap.Modal(document.getElementById('grammarEditModal'));
+    if(!staffUserEditModal) staffUserEditModal = new bootstrap.Modal(document.getElementById('staffUserModal'));
+    let mcqSetModal;
+    if(!mcqSetModal) mcqSetModal = new bootstrap.Modal(document.getElementById('mcqSetModal'));
+    let sentenceExModal;
+    if(!sentenceExModal) sentenceExModal = new bootstrap.Modal(document.getElementById('sentenceExModal'));
+
+    // Mock API
+    async function api(endpoint, method='GET', body=null) {
+        try {
+            const opts = { method, headers: { 'Content-Type': 'application/json' } };
+            if(body) opts.body = JSON.stringify(body);
+            const res = await fetch(endpoint, opts);
+            if ((res.status === 401 || res.status === 403) && endpoint !== '/api/login') { 
+                showToast('⚠️ Session expired.', 'danger'); window.app.doLogout(); return null;
+            }
+            if (endpoint === '/api/staff/export' && res.ok) return res.blob();
+            const data = await res.json();
+            if(!res.ok) { showToast(data.error || 'Error', 'danger'); return null; }
+            return data;
+        } catch(e) { return null; }
+    }
+
+    function showToast(msg, type='success') {
+        const el = document.createElement('div');
+        el.className = `toast show align-items-center text-white bg-${type} border-0 mb-2 shadow`;
+        el.innerHTML = `<div class="d-flex p-2"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+        toastContainer.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+    }
+
+    // --- RENDER FUNCTIONS ---
+    function render() {
+        if(!state.auth) {
+            appElement.innerHTML = state.page === 'register' ? renderRegister() : renderLogin();
+            return;
+        }
+        
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-IN', { hour: 'numeric', minute: 'numeric', hour12: true }).toUpperCase();
+        const dateString = now.toLocaleDateString('en-CA');
+
+        let footerButtons = `
+            <button onclick="window.app.doLogout()" class="btn-logout">Logout</button>
+        `;
+
+        // Feedback Logic for footer
+        if(state.role === 'STUDENT' || state.role === 'STAFF') {
+            footerButtons += `<button onclick="window.app.feedback.openSend()" class="btn-feedback-float">💬 Feedback</button>`;
+        }
+
+        let headerHTML = `
+            <header class="app-header">
+                <div class="brand">Alphalearn</div>
+                <div class="user-profile">
+                    <div class="text-end">
+                        <div class="fw-bold text-white" style="font-size: 0.9rem;">${state.username} <span class="role-badge">${state.role}</span></div>
+                        <div style="font-size: 0.75rem; color: #94a3b8; margin-top:2px;">${dateString} ${timeString}</div>
+                    </div>
+                    <div class="user-avatar">${state.username.charAt(0).toUpperCase()}</div>
+                </div>
+            </header>
+            <div class="container pb-5 fade-in" style="max-width: 1000px; min-height: 70vh">${renderPageContent()}</div>
+            ${footerButtons}
+        `;
+        
+        appElement.innerHTML = headerHTML;
+        
+        if(state.role === 'STUDENT' && state.page === 'track' && state.tracking) renderCharts(state.tracking);
+        if(state.role === 'ADMIN' && state.admin.activeView === 'studentStats' && state.admin.selectedStudentStats) renderCharts(state.admin.selectedStudentStats);
+        if(state.role === 'STAFF' && state.staff.studentStats) renderCharts(state.staff.studentStats);
+        if(state.role === 'PARENT' && state.parent.children) {
+            state.parent.children.forEach(c => { if(c.stats) renderCharts(c.stats, c.id); });
+        }
+    }
+
+    function renderPageContent() {
+        switch(state.role) {
+            case 'STUDENT': return renderStudentContent();
+            case 'STAFF':   return renderStaffDashboard();
+            case 'ADMIN':   return renderAdminDashboard();
+            case 'PARENT':  return renderParentDashboard();
+            case 'PRINCIPAL': return renderPrincipalDashboard();
+            default:        return `<h3 class="text-danger">Role Error</h3>`;
+        }
+    }
+
+    function renderLogin() {
+        return `<div class="d-flex justify-content-center align-items-center vh-100"><div class="glass-panel login-card fade-in"><h2 class="mb-2 text-cyan text-uppercase" style="letter-spacing: 2px;">Alphalearn</h2><p class="text-muted mb-4">Welcome back</p><form onsubmit="window.app.doLogin(event)"><input type="text" id="user" class="form-control-dark w-100" placeholder="Username" required><input type="password" id="pass" class="form-control-dark w-100" placeholder="Password" required><button class="btn-cyan w-100 mt-3">Login</button></form></div></div>`;
+    }
+
+    function renderRegister() {
+        return `<div class="d-flex justify-content-center align-items-center vh-100"><div class="glass-panel login-card fade-in"><h2 class="mb-4 text-cyan">Join Us</h2><form onsubmit="window.app.doRegister(event)"><input type="text" id="regUser" class="form-control-dark w-100" placeholder="Username" required><input type="text" id="regUsn" class="form-control-dark w-100" placeholder="USN / ID (Optional)"><input type="password" id="regPass" class="form-control-dark w-100" placeholder="Password" required><select class="form-control-dark w-100" id="regRole" required><option value="" disabled selected>Select Role</option><option value="STUDENT">Student</option><option value="STAFF">Staff</option><option value="ADMIN">Admin</option></select><button class="btn-cyan w-100 mt-3">Sign Up</button></form><div class="mt-4"><a href="#" class="text-muted text-decoration-none small" onclick="window.app.setPage('login')">← Back to Login</a></div></div></div>`;
+    }
+
+    function renderStudentContent() {
+        if (!state.student.gamification) {
+            api('/api/gamification').then(d => {
+                if(d) {
+                    state.student.gamification = d;
+                    render();
+                }
+            });
+            return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>';
+        }
+        
+        const gami = state.student.gamification;
+        
+        let bottomNav = `
+        <div class="bottom-nav">
+            <button class="nav-item-btn ${state.page === 'home' || state.page === 'login' ? 'active' : ''}" onclick="window.app.setPage('home')">
+                <span class="nav-item-icon">🏠</span> Home
+            </button>
+            <button class="nav-item-btn ${state.page === 'progress' ? 'active' : ''}" onclick="window.app.setPage('progress')">
+                <span class="nav-item-icon">📈</span> Progress
+            </button>
+            <button class="nav-item-btn ${state.page === 'leaderboard' ? 'active' : ''}" onclick="window.app.student.loadLeaderboard()">
+                <span class="nav-item-icon">🏆</span> Leaderboard
+            </button>
+            <button class="nav-item-btn ${state.page === 'profile' ? 'active' : ''}" onclick="window.app.setPage('profile')">
+                <span class="nav-item-icon">👤</span> Profile
+            </button>
+        </div>`;
+
+        if(state.page === 'home' || state.page === 'login') {
+            return `
+            <div class="fade-in mb-5 pb-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="user-avatar" style="width:60px; height:60px; font-size:2rem;">${state.username.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <h3 class="mb-0 fw-bold">Hi, ${state.username}!</h3>
+                        <p class="text-muted mb-0 small">Keep learning, keep growing!</p>
+                    </div>
+                </div>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="stat-card p-3 d-flex align-items-center justify-content-center gap-2">
+                            <span class="fs-3">🔥</span>
+                            <div class="text-start">
+                                <div class="text-muted small fw-bold">Streak</div>
+                                <div class="fs-5 fw-bold">${gami.streak} Days</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card p-3 d-flex align-items-center justify-content-center gap-2">
+                            <span class="fs-3">⭐</span>
+                            <div class="text-start">
+                                <div class="text-muted small fw-bold">XP</div>
+                                <div class="fs-5 fw-bold">${gami.xp}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mission-card shadow-lg">
+                    <h4 class="mb-1 text-white fw-bold">Today's Mission</h4>
+                    <p class="text-white-50 small mb-4">Complete all sections and earn XP!</p>
+                    
+                    <div class="mission-item">
+                        <div><span class="me-2">📖</span> Vocabulary</div>
+                        <div class="text-white-50">0 / 15</div>
+                    </div>
+                    <div class="mission-item">
+                        <div><span class="me-2">✍️</span> Grammar</div>
+                        <div class="text-white-50">0 / 5</div>
+                    </div>
+                    <div class="mission-item">
+                        <div><span class="me-2">📚</span> Syllabus</div>
+                        <div class="text-white-50">0 / 5</div>
+                    </div>
+                    <div class="mission-item">
+                        <div><span class="me-2">🔤</span> Sentences</div>
+                        <div class="text-white-50">0 / 5</div>
+                    </div>
+                    
+                    <button class="mission-btn" onclick="window.app.student.startDailyMission()">▶ Start Mission</button>
+                </div>
+            </div>
+            ${bottomNav}
+            `;
+        }
+        
+        if (state.page === 'mission_loading') return '<div class="text-center mt-5 pt-5"><div class="spinner-border text-cyan mb-3"></div><h4>Loading your mission...</h4></div>';
+        
+        if (state.page === 'mission_flow') {
+            const flow = state.student.missionData;
+            const step = state.student.missionStep;
+            
+            const totalSteps = 30;
+            const progressPct = (step / totalSteps) * 100;
+            
+            let currentQ = null;
+            let sectionTitle = "";
+            let sectionType = "";
+            let colorClass = "text-primary";
+            let isSentence = false;
+            
+            if (step < 15) {
+                currentQ = flow.vocab[step];
+                sectionTitle = "Vocabulary";
+                if(currentQ.type==='meaning') sectionType="Meaning";
+                else if(currentQ.type==='synonym') { sectionType="Synonym"; colorClass="text-danger"; }
+                else { sectionType="Antonym"; colorClass="text-warning"; }
+            } else if (step < 20) {
+                currentQ = flow.grammar[step - 15];
+                sectionTitle = "Grammar";
+                sectionType = "Fill in the blanks";
+                colorClass = "text-success";
+            } else if (step < 25) {
+                currentQ = flow.syllabus[step - 20];
+                sectionTitle = "Syllabus";
+                sectionType = "General Knowledge";
+                colorClass = "text-info";
+            } else if (step < 30) {
+                currentQ = flow.sentences[step - 25];
+                sectionTitle = "Sentence Formation";
+                sectionType = "Arrange the words";
+                colorClass = "text-purple";
+                isSentence = true;
+            } else {
+                return renderMissionComplete();
+            }
+            
+            if (isSentence) {
+                // Duolingo-style sentence formation UI
+                const answer = state.student.missionSentenceAnswer || [];
+                const shuffledWords = currentQ.words.slice().sort(() => Math.random() - 0.5);
+                // Store shuffled if not already
+                if (!window._sentenceShuffled || window._sentenceStep !== step) {
+                    window._sentenceShuffled = shuffledWords;
+                    window._sentenceStep = step;
+                }
+                const usedIndices = answer.map(a => a.idx);
+                
+                return `
+                <div class="fade-in bg-white position-fixed top-0 start-0 w-100 h-100 p-4 z-3" style="overflow-y:auto; padding-bottom: 120px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <button class="btn btn-sm btn-light rounded-circle fw-bold fs-5" onclick="window.app.setPage('home')">←</button>
+                        <h5 class="m-0 fw-bold">${sectionTitle}</h5>
+                        <span class="small text-muted fw-bold">${step + 1} / ${totalSteps}</span>
+                    </div>
+                    
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${progressPct}%"></div></div>
+                    
+                    <div class="mt-4">
+                        <span class="badge bg-light ${colorClass} mb-3 p-2 px-3 border">${sectionType}</span>
+                        <h4 class="fw-bold my-3 lh-base text-center">Form the correct sentence</h4>
+                        
+                        <div class="answer-area ${answer.length > 0 ? 'has-words' : ''}" id="sentenceAnswerArea">
+                            ${answer.length === 0 ? '<span class="answer-area-placeholder">Tap words below to form the sentence...</span>' : 
+                              answer.map((a, i) => `<span class="answer-word" onclick="window.app.student.removeWord(${i})">${a.word}</span>`).join('')}
+                        </div>
+                        
+                        <div class="word-pool" id="sentenceWordPool">
+                            ${window._sentenceShuffled.map((w, i) => `<button class="word-btn ${usedIndices.includes(i) ? 'used' : ''}" onclick="window.app.student.addWord(${i}, '${w.replace(/'/g, "\\'")}')">${w}</button>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="position-fixed bottom-0 start-0 w-100 p-4 bg-white border-top">
+                        <button class="btn-cyan w-100 py-3 fs-5" id="missionNextBtn" onclick="window.app.student.checkSentence()" ${answer.length === 0 ? 'disabled' : ''}>Check & Next</button>
+                    </div>
+                </div>`;
+            }
+            
+            return `
+            <div class="fade-in bg-white position-fixed top-0 start-0 w-100 h-100 p-4 z-3" style="overflow-y:auto; padding-bottom: 100px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <button class="btn btn-sm btn-light rounded-circle fw-bold fs-5" onclick="window.app.setPage('home')">←</button>
+                    <h5 class="m-0 fw-bold">${sectionTitle}</h5>
+                    <span class="small text-muted fw-bold">${step + 1} / ${totalSteps}</span>
+                </div>
+                
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${progressPct}%"></div></div>
+                
+                <div class="mt-4">
+                    <span class="badge bg-light ${colorClass} mb-3 p-2 px-3 border">${sectionType}</span>
+                    
+                    ${step < 15 ? 
+                        `
+                         <p class="text-muted fw-bold mb-1">Q. What is the ${currentQ.type} of the word?</p>
+                         <h2 class="text-center fw-bold my-4 display-4">${currentQ.word}</h2>
+                        `
+                        : 
+                        `
+                         <h4 class="fw-bold my-4 lh-base">${currentQ.q}</h4>
+                        `
+                    }
+                    
+                    <div id="mission-options" class="mt-4">
+                        ${renderMissionOptions(currentQ, step)}
+                    </div>
+                </div>
+                
+                <div class="position-fixed bottom-0 start-0 w-100 p-4 bg-white border-top">
+                    <button class="btn-cyan w-100 py-3 fs-5" id="missionNextBtn" onclick="window.app.student.missionNext()" disabled>Next</button>
+                </div>
+            </div>`;
+        }
+        
+        if (state.page === 'progress') {
+            if (!state.student.attempts) {
+                api('/api/student/attempts').then(d => {
+                    state.student.attempts = d || [];
+                    render();
+                });
+                return `<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>${bottomNav}`;
+            }
+            const attempts = state.student.attempts;
+            const selected = state.student.selectedAttempt;
+            
+            function scoreClass(score, max) {
+                const pct = max > 0 ? (score / max) * 100 : 0;
+                return pct >= 70 ? 'good' : pct >= 40 ? 'avg' : 'low';
+            }
+            
+            return `
+            <div class="fade-in mb-5 pb-5">
+                <h3 class="mb-2 fw-bold">📊 Progress & Attempts</h3>
+                <p class="text-muted mb-4 fw-500">Your mission history, organized by date</p>
+                
+                ${attempts.length === 0 ? 
+                    '<div class="stat-card p-4 text-center"><p class="text-muted fw-bold mb-0">No attempts yet. Complete a Daily Mission to see your progress!</p></div>' :
+                    attempts.map(a => {
+                        const d = new Date(a.date + 'T00:00:00');
+                        const dateStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+                        const isOpen = selected === a.date;
+                        const totalScore = (a.vocab_score || 0) + (a.grammar_score || 0) + (a.syllabus_score || 0) + (a.sentence_score || 0);
+                        const totalMax = 30;
+                        const pct = Math.round((totalScore / totalMax) * 100);
+                        
+                        return `
+                        <button class="attempt-btn ${isOpen ? 'active' : ''}" onclick="window.app.student.toggleAttempt('${a.date}')">
+                            <div>
+                                <div class="attempt-date">📅 ${dateStr}</div>
+                                <div class="attempt-time">${a.is_completed ? '✅ Completed' : '⏳ In Progress'}</div>
+                            </div>
+                            <div class="fw-bold" style="font-size: 1.1rem; color: ${pct >= 70 ? '#22c55e' : pct >= 40 ? '#eab308' : '#ef4444'};">${pct}%</div>
+                        </button>
+                        ${isOpen ? `
+                        <div class="glass-panel p-4 mb-3 fade-in" style="margin-top:-4px; border-top-left-radius:0; border-top-right-radius:0;">
+                            <div class="row g-2">
+                                <div class="col-6"><div class="category-score ${scoreClass(a.vocab_score, 15)} w-100">📖 Meaning: <strong>${a.vocab_score || 0}/15</strong></div></div>
+                                <div class="col-6"><div class="category-score ${scoreClass(a.grammar_score, 5)} w-100">✍️ Grammar: <strong>${a.grammar_score || 0}/5</strong></div></div>
+                                <div class="col-6"><div class="category-score ${scoreClass(a.syllabus_score, 5)} w-100">📚 Syllabus: <strong>${a.syllabus_score || 0}/5</strong></div></div>
+                                <div class="col-6"><div class="category-score ${scoreClass(a.sentence_score, 5)} w-100">🔤 Sentences: <strong>${a.sentence_score || 0}/5</strong></div></div>
+                            </div>
+                            <div class="text-center mt-3 pt-2 border-top">
+                                <span class="fw-bold text-muted">Total: ${totalScore} / ${totalMax}</span>
+                            </div>
+                        </div>
+                        ` : ''}`;
+                    }).join('')
+                }
+            </div>
+            ${bottomNav}
+            `;
+        }
+        
+        if (state.page === 'leaderboard') {
+            return `
+            <div class="fade-in mb-5 pb-5">
+                <h3 class="mb-4 fw-bold">Leaderboard</h3>
+                <div class="glass-panel p-0 overflow-hidden">
+                    ${state.student.leaderboard.map((u, i) => `
+                        <div class="d-flex align-items-center p-3 border-bottom ${u.username === state.username ? 'bg-light border-primary border-2' : ''}">
+                            <div class="fw-bold text-muted me-3 fs-5" style="width:20px;">${i+1}</div>
+                            <div class="user-avatar flex-shrink-0 me-3" style="width:40px; height:40px; font-size:1.2rem;">${u.username.charAt(0).toUpperCase()}</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold fs-5">${u.username} ${u.username === state.username ? '(You)' : ''}</div>
+                                <div class="small text-muted fw-bold">Class ${u.class_name || 'N/A'}</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold text-cyan fs-5">${u.xp} XP</div>
+                                <div class="small text-muted fw-bold">🔥 ${u.streak}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ${bottomNav}
+            `;
+        }
+        
+        if (state.page === 'profile') {
+            return `
+            <div class="fade-in mb-5 pb-5 text-center">
+                <div class="user-avatar mx-auto mb-3" style="width:100px; height:100px; font-size:3rem;">${state.username.charAt(0).toUpperCase()}</div>
+                <h2 class="fw-bold mb-1">${state.username}</h2>
+                <p class="text-muted fw-bold">Class ${state.class_name || '-'} ${state.section_name ? '- '+state.section_name : ''}</p>
+                
+                <div class="row mt-4 g-3 text-start">
+                    <div class="col-12">
+                        <div class="stat-card p-3 d-flex justify-content-between align-items-center">
+                            <span class="fw-bold fs-5">My Badges</span>
+                            <span class="text-cyan fw-bold">View All ></span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="stat-card p-4 text-center">
+                            ${gami.badges.length > 0 ? gami.badges.map(b => `<div class="badge-gamified mx-1">🏆 ${b.badge_name}</div>`).join('') : '<span class="text-muted fw-bold">Complete missions to earn badges!</span>'}
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-danger w-100 mt-5 py-3 fs-5 fw-bold rounded-4" onclick="window.app.doLogout()">Logout</button>
+            </div>
+            ${bottomNav}
+            `;
+        }
+        
+        return `<div class="fade-in">Unknown state</div>${bottomNav}`;
+    }
+    
+    function renderMissionOptions(q, step) {
+        if (step < 15) {
+            let opts = [q.meaning || q.word, "A state of confusion", "Extremely large", "Very quick"];
+            opts = opts.sort(() => Math.random() - 0.5);
+            window._currentCorrectAns = q.meaning || q.word;
+            
+            return opts.map((opt, i) => `<div class="quiz-opt" onclick="window.app.student.selectOption(${i}, '${opt.replace(/'/g, "")}')" id="opt_${i}">${String.fromCharCode(65+i)}. ${opt}</div>`).join('');
+        } else {
+            window._currentCorrectAns = q.opts[q.ans];
+            return q.opts.map((opt, i) => `<div class="quiz-opt" onclick="window.app.student.selectOption(${i}, '${opt.replace(/'/g, "")}')" id="opt_${i}">${String.fromCharCode(65+i)}. ${opt}</div>`).join('');
+        }
+    }
+    
+    function renderMissionComplete() {
+        const stats = state.student.missionResult || {xp_gained: 50, new_streak: 1};
+        const score = state.student.missionScore || {vocab:0, grammar:0, syllabus:0, sentence:0};
+        return `
+        <div class="fade-in bg-white position-fixed top-0 start-0 w-100 h-100 p-4 z-3 text-center d-flex flex-column justify-content-center align-items-center" style="overflow-y:auto;">
+            <div class="mb-4" style="font-size: 6rem;">🏆</div>
+            <h1 class="fw-bold text-success mb-2">Mission Complete!</h1>
+            <p class="text-muted fs-5 mb-4 fw-bold">Great job, ${state.username}!<br>You have completed today's mission.</p>
+            
+            <div class="row w-100 mb-3 g-2" style="max-width: 500px;">
+                <div class="col-6">
+                    <div class="p-3 border rounded-4 bg-light text-center">
+                        <div class="text-muted fw-bold mb-1 small">📖 Vocabulary</div>
+                        <div class="fs-4 fw-bold">${score.vocab}/15</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 border rounded-4 bg-light text-center">
+                        <div class="text-muted fw-bold mb-1 small">✍️ Grammar</div>
+                        <div class="fs-4 fw-bold">${score.grammar}/5</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 border rounded-4 bg-light text-center">
+                        <div class="text-muted fw-bold mb-1 small">📚 Syllabus</div>
+                        <div class="fs-4 fw-bold">${score.syllabus}/5</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 border rounded-4 bg-light text-center">
+                        <div class="text-muted fw-bold mb-1 small">🔤 Sentences</div>
+                        <div class="fs-4 fw-bold">${score.sentence}/5</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row w-100 mb-4 g-3" style="max-width: 500px;">
+                <div class="col-6">
+                    <div class="p-4 border rounded-4 bg-light text-center">
+                        <div class="text-muted fw-bold mb-2">XP Earned</div>
+                        <div class="fs-2 fw-bold text-success">+${stats.xp_gained}</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-4 border rounded-4 bg-light text-center">
+                        <div class="text-muted fw-bold mb-2">🔥 Streak</div>
+                        <div class="fs-2 fw-bold text-orange">${stats.new_streak} Days</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn-cyan w-100 py-3 fs-5 fw-bold" style="max-width: 500px; border-radius: 16px;" onclick="window.app.student.finishMission()">Go to Home</button>
+        </div>
+        `;
+    }
+
+    function renderLessonDetail() {
+        const s = state.student.activeLesson;
+        let qhtml = '';
+        if (s.quiz_data) {
+            try {
+                const qdata = JSON.parse(s.quiz_data);
+                if (qdata.length > 0) {
+                    qhtml = `<h4 class="mt-5 text-cyan">Quiz</h4><form onsubmit="window.app.student.submitLessonQuiz(event)">${qdata.map((q, i) => `<div class="mb-4"><p class="mb-2 fw-bold">Q${i+1}. ${q.q}</p>${q.opts.map((opt, oi) => `<div class="form-check"><input class="form-check-input" type="radio" name="lq_${i}" value="${oi}" required id="lq_${i}_${oi}"><label class="form-check-label" for="lq_${i}_${oi}">${opt}</label></div>`).join('')}</div>`).join('')}<button class="btn btn-sm btn-cyan mt-2">Submit Quiz</button></form><div id="lessonQuizResult" class="mt-3"></div>`;
+                }
+            } catch(e) {}
+        }
+        return `<button class="btn-back" onclick="window.app.student.activeLesson=null; window.app.setPage('syllabus')">← Back to Syllabus</button><div class="glass-panel p-4 fade-in"><h3 class="text-cyan mb-3">${s.lesson_title} <span class="text-muted small fs-6">(${s.subject})</span></h3><div class="p-3 bg-dark bg-opacity-25 rounded mb-4" style="white-space:pre-wrap">${s.content}</div>${qhtml}</div>`;
+    }
+
+    function renderTestDetail() {
+        const t = state.student.activeTest;
+        let qhtml = '';
+        if (t.questions_json) {
+            try {
+                const qdata = JSON.parse(t.questions_json);
+                if (qdata.length > 0) {
+                    qhtml = `<form onsubmit="window.app.student.submitTest(event)">${qdata.map((q, i) => `<div class="mb-4"><p class="mb-2 fw-bold">Q${i+1}. ${q.q}</p>${q.opts.map((opt, oi) => `<div class="form-check"><input class="form-check-input" type="radio" name="tq_${i}" value="${oi}" required id="tq_${i}_${oi}"><label class="form-check-label" for="tq_${i}_${oi}">${opt}</label></div>`).join('')}</div>`).join('')}<button class="btn btn-sm btn-cyan mt-2">Submit Exam</button></form><div id="testResultContainer" class="mt-3"></div>`;
+                }
+            } catch(e) {}
+        }
+        return `<button class="btn-back" onclick="window.app.student.activeTest=null; window.app.setPage('tests')">← Back to Tests</button><div class="glass-panel p-4 fade-in"><h3 class="text-cyan mb-4">${t.title}</h3>${qhtml}</div>`;
+    }
+
+    function renderStaffDashboard() {
+        if (state.staff.students.length === 0 && !state.staff.studentsLoaded) { api('/api/staff/students').then(d => { state.staff.studentsLoaded = true; if(d) { state.staff.students = d; render(); } }); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+
+        if (state.staff.selectedStudent) {
+            // Load attempt history if not loaded
+            if (!state.staff.studentAttempts) {
+                api(`/api/staff/student-attempts/${state.staff.selectedStudent.id}`).then(d => {
+                    state.staff.studentAttempts = d || [];
+                    render();
+                });
+            }
+            const attempts = state.staff.studentAttempts || [];
+            function staffScoreClass(score, max) {
+                const pct = max > 0 ? (score / max) * 100 : 0;
+                return pct >= 70 ? 'good' : pct >= 40 ? 'avg' : 'low';
+            }
+            const attemptHtml = attempts.length === 0 ? '<p class="text-white-50 mt-3">No mission attempts recorded yet.</p>' :
+                `<div class="mt-4">
+                    <h5 class="text-cyan mb-3 border-bottom border-secondary pb-2">📅 Mission Attempt History</h5>
+                    ${attempts.map(a => {
+                        const d = new Date(a.date + 'T00:00:00');
+                        const dateStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+                        const totalScore = (a.vocab_score||0) + (a.grammar_score||0) + (a.syllabus_score||0) + (a.sentence_score||0);
+                        const pct = Math.round((totalScore/30)*100);
+                        const isOpen = state.staff.selectedAttemptDate === a.date;
+                        return `
+                        <div class="mb-2 p-3 rounded bg-dark bg-opacity-50 border border-secondary cursor-pointer" onclick="window.app.staff.toggleAttempt('${a.date}')" style="cursor:pointer;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="fw-bold text-white">${dateStr}</span>
+                                    <span class="badge ${a.is_completed ? 'bg-success' : 'bg-warning'} ms-2">${a.is_completed ? 'Completed' : 'In Progress'}</span>
+                                </div>
+                                <span class="fw-bold ${pct >= 70 ? 'text-success' : pct >= 40 ? 'text-warning' : 'text-danger'}">${pct}%</span>
+                            </div>
+                            ${isOpen ? `<div class="row g-2 mt-2 pt-2 border-top border-secondary">
+                                <div class="col-6"><div class="category-score ${staffScoreClass(a.vocab_score, 15)} w-100">📖 Meaning: <strong>${a.vocab_score||0}/15</strong></div></div>
+                                <div class="col-6"><div class="category-score ${staffScoreClass(a.grammar_score, 5)} w-100">✍️ Grammar: <strong>${a.grammar_score||0}/5</strong></div></div>
+                                <div class="col-6"><div class="category-score ${staffScoreClass(a.syllabus_score, 5)} w-100">📚 Syllabus: <strong>${a.syllabus_score||0}/5</strong></div></div>
+                                <div class="col-6"><div class="category-score ${staffScoreClass(a.sentence_score, 5)} w-100">🔤 Sentences: <strong>${a.sentence_score||0}/5</strong></div></div>
+                            </div>` : ''}
+                        </div>`;
+                    }).join('')}
+                </div>`;
+
+            return `<button class="btn-back" onclick="window.app.staff.clearSelection()">← Back to Students</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between align-items-center mb-4"><div><h2 class="mb-0">Student Progress: <span class="text-cyan">${state.staff.selectedStudent.username}</span></h2><div class="text-muted">USN: ${state.staff.selectedStudent.usn || 'N/A'}</div></div><button class="btn btn-warning text-dark fw-bold" onclick="window.app.staff.messageParent('${state.staff.selectedStudent.usn}')">💬 Message Parent</button></div><hr class="border-secondary mb-4">${attemptHtml}${renderChartGridHTML()}</div>`;
+        }
+        
+        if (state.staff.selectedClass) {
+            const cls = state.staff.selectedClass;
+            const classStudents = state.staff.students.filter(s => s.class_name === cls);
+            return `<button class="btn-back" onclick="window.app.staff.selectedClass=null; render();">← Back to Classes</button>
+            <div class="glass-panel p-4 fade-in">
+                <h3 class="mb-4">Students in Class <span class="text-cyan">${cls}</span></h3>
+                <div class="table-responsive"><table class="table table-dark table-hover bg-transparent"><thead><tr class="text-muted text-uppercase small"><th>Student</th><th>USN</th><th>Avg Score</th><th>Gamification</th><th>Action</th></tr></thead><tbody>${classStudents.map(s => `<tr class="student-row" onclick="window.app.staff.viewStudent(${s.id})"><td class="fw-bold">${s.username}</td><td>${s.usn || '--'}</td><td><div class="d-flex align-items-center gap-2"><div class="progress w-50" style="height: 6px; background: rgba(255,255,255,0.1);"><div class="progress-bar ${s.average_score >= 70 ? 'bg-success' : s.average_score >= 40 ? 'bg-warning' : 'bg-danger'}" style="width: ${s.average_score}%"></div></div><span class="small">${Math.round(s.average_score||0)}%</span></div></td><td><span class="badge bg-warning text-dark me-1">⭐ ${s.xp||0}</span> <span class="badge bg-danger">🔥 ${s.streak||0}</span></td><td><button class="btn btn-sm btn-outline-warning" onclick="event.stopPropagation(); window.app.staff.messageParent('${s.usn}')">Message</button></td></tr>`).join('')}</tbody></table></div>
+            </div>`;
+        }
+
+        const classes = [...new Set(state.staff.students.map(s => s.class_name))];
+        return `
+        <div class="glass-panel p-4 fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>My Classes</h3>
+                <div class="d-flex gap-2">
+                    <input type="date" id="exportDate" class="form-control form-control-sm form-control-dark" style="width:auto; margin-bottom:0;">
+                    <button class="btn btn-sm btn-success" onclick="window.app.staff.exportData()">Export Excel</button>
+                    <button class="btn btn-sm btn-info" onclick="window.app.feedback.openView()">View Feedback</button>
+                </div>
+            </div>
+            <div class="row g-3">
+                ${classes.length === 0 ? '<p class="text-white-50">No students mapped to you yet.</p>' : classes.map(c => `<div class="col-md-3"><button class="btn btn-outline-info w-100 py-3 fw-bold fs-5" onclick="window.app.staff.selectedClass='${c}'; render();">${c || 'Unassigned'}</button></div>`).join('')}
+            </div>
+        </div>`;
+    }
+
+    function renderAdminDashboard() {
+        if (state.admin.activeView === 'menu') return `<div class="glass-panel p-5 fade-in text-center"><h2 class="mb-5">Admin Console</h2><div class="row g-4 justify-content-center"><div class="col-md-2"><div onclick="window.app.admin.setView('schools')" class="nav-card"><span class="nav-icon">🏫</span><h5 class="fw-bold">Schools</h5></div></div><div class="col-md-2"><div onclick="window.app.admin.setView('files')" class="nav-card"><span class="nav-icon">📝</span><h5 class="fw-bold">Content</h5></div></div><div class="col-md-2"><div onclick="window.app.admin.setView('syllabus')" class="nav-card"><span class="nav-icon">📖</span><h5 class="fw-bold">Syllabus</h5></div></div><div class="col-md-2"><div onclick="window.app.admin.setView('tests')" class="nav-card"><span class="nav-icon">📝</span><h5 class="fw-bold">Tests</h5></div></div><div class="col-md-2"><div onclick="window.app.admin.setView('grammar')" class="nav-card"><span class="nav-icon">✍️</span><h5 class="fw-bold">Grammar</h5></div></div><div class="col-md-2"><div onclick="window.app.admin.setView('mcqSets')" class="nav-card"><span class="nav-icon">📋</span><h5 class="fw-bold">MCQ Sets</h5></div></div><div class="col-md-2"><div onclick="window.app.admin.setView('sentences')" class="nav-card"><span class="nav-icon">🔤</span><h5 class="fw-bold">Sentences</h5></div></div></div><div class="mt-4"><button class="btn btn-info" onclick="window.app.feedback.openView()">View All Feedback</button></div></div>`;
+        if (state.admin.activeView === 'wizard') return renderAdminWizard();
+        if (state.admin.activeView === 'schools') return renderAdminSchools();
+        if (state.admin.activeView === 'users') return renderUserManagement();
+        if (state.admin.activeView === 'files') return renderFileEditor();
+        if (state.admin.activeView === 'syllabus') return renderAdminSyllabus();
+        if (state.admin.activeView === 'tests') return renderAdminTests();
+        if (state.admin.activeView === 'grammar') return renderAdminGrammar();
+        if (state.admin.activeView === 'mcqSets') return renderAdminMCQSets();
+        if (state.admin.activeView === 'sentences') return renderAdminSentences();
+        if (state.admin.activeView === 'studentStats') return renderStudentStatsView();
+        if (state.admin.activeView === 'schoolHierarchy') return renderSchoolHierarchy();
+    }
+    
+    function renderAdminSchools() {
+        if (state.admin.schools.length === 0 && !state.admin.schoolsLoaded) { window.app.admin.loadSchools(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>Schools</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.startWizard()">+ Setup New School</button></div><table class="table table-dark bg-transparent"><thead><tr><th>ID</th><th>School Name</th><th>Address</th><th>Actions</th></tr></thead><tbody>${state.admin.schools.map(s => `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.address||'-'}</td><td><button class="btn btn-sm btn-outline-success" onclick="window.app.admin.viewSchoolHierarchy(${s.id}, '${s.name}')">View Users</button> <button class="btn btn-sm btn-outline-info" onclick="window.app.admin.continueWizard(${s.id}, '${s.name}')">Setup Users</button> <button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteSchool(${s.id}, '${s.name}')">Del</button></td></tr>`).join('')}</tbody></table></div>`;
+    }
+
+    function renderSchoolHierarchy() {
+        const h = state.admin.schoolHierarchy;
+        if (!h.loaded) { window.app.admin.loadSchoolHierarchy(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        
+        let content = '';
+        if (h.principal) {
+            content += `<div class="mb-4"><h4 class="text-cyan mb-2">🧑‍🏫 Principal</h4><div class="p-3 bg-dark rounded border border-secondary d-flex justify-content-between align-items-center"><strong>${h.principal.username}</strong> <span class="badge bg-secondary">Principal</span></div></div>`;
+        } else {
+            content += `<div class="mb-4"><h4 class="text-warning mb-2">⚠️ No Principal Assigned</h4></div>`;
+        }
+        
+        const usersByClass = {};
+        h.staff.concat(h.students).concat(h.parents).forEach(u => {
+            let cls = u.class_name;
+            if (u.role === 'PARENT') {
+                const child = h.students.find(s => s.usn === u.mapped_usns);
+                if (child) cls = child.class_name;
+            }
+            cls = cls || 'Unassigned';
+            
+            if (!usersByClass[cls]) usersByClass[cls] = { staff: [], students: [], parents: [] };
+            if (u.role === 'STAFF') usersByClass[cls].staff.push(u);
+            else if (u.role === 'STUDENT') usersByClass[cls].students.push(u);
+            else if (u.role === 'PARENT') usersByClass[cls].parents.push(u);
+        });
+
+        Object.keys(usersByClass).sort().forEach(cls => {
+            const group = usersByClass[cls];
+            content += `<div class="mb-4 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);">
+                <h4 class="text-info mb-3">Class: ${cls}</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="text-cyan">Staff</h6>
+                        <ul class="list-group list-group-flush bg-transparent">
+                            ${group.staff.length === 0 ? '<li class="list-group-item bg-transparent text-white-50 border-0 px-0">No staff</li>' : group.staff.map(s => `<li class="list-group-item bg-transparent text-white border-secondary px-0">${s.username}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-cyan">Students</h6>
+                        <ul class="list-group list-group-flush bg-transparent">
+                            ${group.students.length === 0 ? '<li class="list-group-item bg-transparent text-white-50 border-0 px-0">No students</li>' : group.students.map(s => `<li class="list-group-item bg-transparent text-white border-secondary px-0">${s.username} <span class="text-white-50 small">(${s.usn || '-'})</span></li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-cyan">Parents</h6>
+                        <ul class="list-group list-group-flush bg-transparent">
+                            ${group.parents.length === 0 ? '<li class="list-group-item bg-transparent text-white-50 border-0 px-0">No parents</li>' : group.parents.map(p => `<li class="list-group-item bg-transparent text-white border-secondary px-0">${p.username}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            </div>`;
+        });
+        
+        return `<button class="btn-back" onclick="window.app.admin.setView('schools')">← Back to Schools</button><div class="glass-panel p-4 fade-in"><h3 class="mb-4">Users: <span class="text-cyan">${h.schoolName}</span></h3>${content}</div>`;
+    }
+
+    function renderAdminWizard() {
+        const w = state.admin.wizard;
+        const schoolBadge = w.school ? `<span class="badge bg-secondary ms-2">${w.school.name}</span>` : '';
+        const progress = Math.min((w.step / 5) * 100, 100);
+        let content = '';
+        if (w.step === 1) {
+            content = `<h4>Step 1: Create School</h4><form onsubmit="window.app.admin.wizardSubmitSchool(event)"><input class="form-control-dark w-100 mb-3" id="wiz-school-name" placeholder="School Name" required><input class="form-control-dark w-100 mb-3" id="wiz-school-addr" placeholder="School Address (Optional)"><button type="submit" class="btn-cyan w-100">Create & Continue →</button></form>`;
+        } else {
+            let roleVal = w.step===2?'PRINCIPAL':w.step===3?'STAFF':w.step===4?'STUDENT_PARENT':'';
+            if (roleVal === 'STUDENT_PARENT') {
+                content = `<h4>Step 4: Add Student & Parent ${schoolBadge}</h4>
+                <form onsubmit="window.app.admin.wizardSubmitUser(event, 'STUDENT_PARENT')">
+                    <input type="hidden" id="wiz-user-school" value="${w.school.id}">
+                    <h6 class="text-cyan mb-2 mt-3">Student Details</h6>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><input class="form-control-dark w-100" id="wiz-stu-username" placeholder="Student Username" required></div>
+                        <div class="col-6"><input class="form-control-dark w-100" id="wiz-stu-usn" placeholder="Student USN" required></div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-12"><input type="password" class="form-control-dark w-100" id="wiz-stu-password" placeholder="Student Password" required></div>
+                        <div class="col-6"><input class="form-control-dark w-100" id="wiz-stu-class" placeholder="Class Name (e.g. 10th)"></div>
+                        <div class="col-6"><input class="form-control-dark w-100" id="wiz-stu-section" placeholder="Section (Optional)"></div>
+                    </div>
+                    <h6 class="text-cyan mb-2 mt-3">Parent Details</h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6"><input class="form-control-dark w-100" id="wiz-par-username" placeholder="Parent Username" required></div>
+                        <div class="col-6"><input type="password" class="form-control-dark w-100" id="wiz-par-password" placeholder="Parent Password" required></div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-outline-info" onclick="window.app.admin.wizardAdvance=false">Add Another</button>
+                        <button type="submit" class="btn-cyan flex-grow-1" onclick="window.app.admin.wizardAdvance=true">Add & Finish</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="window.app.admin.wizardNextStep()">Skip →</button>
+                    </div>
+                </form>`;
+            } else {
+                let roleTitle = w.step===2?'Principal':w.step===3?'Staff (Teacher)':'';
+                let extraFields = '';
+                if (roleVal === 'STAFF') {
+                    extraFields += `<input class="form-control-dark w-100 mb-2" id="wiz-user-class" placeholder="Class Name (e.g. 10th)"><input class="form-control-dark w-100 mb-2" id="wiz-user-section" placeholder="Section (Optional)">`;
+                }
+                content = `<h4>Step ${w.step}: Add ${roleTitle} ${schoolBadge}</h4><form onsubmit="window.app.admin.wizardSubmitUser(event, '${roleVal}')"><input type="hidden" id="wiz-user-school" value="${w.school.id}"><input class="form-control-dark w-100 mb-2" id="wiz-user-username" placeholder="Username" required><input class="form-control-dark w-100 mb-2" id="wiz-user-usn" placeholder="USN / ID (Optional)"><input type="password" class="form-control-dark w-100 mb-3" id="wiz-user-password" placeholder="Password" required>${extraFields}<div class="d-flex gap-2"><button type="submit" class="btn btn-outline-info" onclick="window.app.admin.wizardAdvance=false">Add Another</button><button type="submit" class="btn-cyan flex-grow-1" onclick="window.app.admin.wizardAdvance=true">Add & Continue</button><button type="button" class="btn btn-outline-secondary" onclick="window.app.admin.wizardNextStep()">Skip →</button></div></form>`;
+            }
+        }
+        return `<button class="btn-back" onclick="window.app.admin.setView('schools')">← Cancel Setup</button><div class="glass-panel p-5 fade-in mx-auto" style="max-width: 600px;"><div class="progress mb-4" style="height: 5px; background: rgba(255,255,255,0.1);"><div class="progress-bar bg-cyan" style="width: ${progress}%"></div></div>${content}</div>`;
+    }
+
+    function renderUserManagement() { 
+        if (state.admin.users.length === 0) { window.app.admin.loadUsers(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        
+        let content = '';
+        const schools = [...new Set(state.admin.users.map(u => u.school_name).filter(Boolean))];
+        const noSchoolUsers = state.admin.users.filter(u => !u.school_name);
+        
+        schools.forEach(schoolName => {
+            const schoolUsers = state.admin.users.filter(u => u.school_name === schoolName);
+            content += `<div class="mb-4 border border-secondary rounded p-3 bg-dark bg-opacity-50">
+                <h4 class="text-cyan mb-3">🏫 School: ${schoolName}</h4>`;
+            
+            const classes = [...new Set(schoolUsers.map(u => u.class_name).filter(Boolean))];
+            
+            // Users with no class in this school (e.g. Principal)
+            const unassigned = schoolUsers.filter(u => !u.class_name);
+            if (unassigned.length > 0) {
+                content += `<div class="ms-3 mb-3 p-2 bg-dark rounded border border-secondary">
+                    <h5 class="text-info">No Class Assigned</h5>
+                    <table class="table table-sm table-dark table-hover bg-transparent mb-0"><tbody>${unassigned.map(u => `<tr><td>${u.username} <span class="badge bg-secondary">${u.role}</span></td><td class="text-end"><button class="btn btn-sm btn-outline-light" onclick="window.app.admin.openUserModal(${u.id})">Edit</button> <button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteUser(${u.id}, '${u.username}')">Del</button></td></tr>`).join('')}</tbody></table>
+                </div>`;
+            }
+
+            classes.forEach(cls => {
+                const classUsers = schoolUsers.filter(u => u.class_name === cls);
+                content += `<div class="ms-3 mb-3 p-3 bg-dark rounded border border-secondary">
+                    <h5 class="text-info border-bottom border-secondary pb-2">Class: ${cls}</h5>`;
+                
+                const sections = [...new Set(classUsers.map(u => u.section_name))];
+                sections.forEach(sec => {
+                    const secLabel = sec ? `Section: ${sec}` : `No Section`;
+                    const sectionUsers = classUsers.filter(u => u.section_name === sec);
+                    content += `<div class="ms-4 mt-2">
+                        <h6 class="text-warning">${secLabel}</h6>
+                        <table class="table table-sm table-dark table-hover bg-transparent"><tbody>${sectionUsers.map(u => `<tr><td style="width: 40%">${u.username} <span class="badge bg-secondary ms-2">${u.role}</span></td><td>${u.role === 'STUDENT' ? `<span class="badge bg-warning text-dark me-1">⭐ ${u.xp||0}</span> <span class="badge bg-danger">🔥 ${u.streak||0}</span>` : ''}</td><td class="text-end"><button class="btn btn-sm btn-outline-light" onclick="window.app.admin.openUserModal(${u.id})">Edit</button> ${u.role === 'STUDENT' ? `<button class="btn btn-sm btn-outline-info" onclick="window.app.admin.viewStudentStats(${u.id}, '${u.username}')">Stats</button>` : ''} <button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteUser(${u.id}, '${u.username}')">Del</button></td></tr>`).join('')}</tbody></table>
+                    </div>`;
+                });
+                content += `</div>`;
+            });
+            content += `</div>`;
+        });
+        
+        if (noSchoolUsers.length > 0) {
+            content += `<div class="mb-4 border border-secondary rounded p-3 bg-dark bg-opacity-50">
+                <h4 class="text-danger mb-3">⚠️ System / Unassigned School Users</h4>
+                <table class="table table-sm table-dark table-hover bg-transparent mb-0"><tbody>${noSchoolUsers.map(u => `<tr><td>${u.username} <span class="badge bg-secondary">${u.role}</span></td><td class="text-end"><button class="btn btn-sm btn-outline-light" onclick="window.app.admin.openUserModal(${u.id})">Edit</button> <button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteUser(${u.id}, '${u.username}')">Del</button></td></tr>`).join('')}</tbody></table>
+            </div>`;
+        }
+
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>User Hierarchy</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.openUserModal(null)">+ Add User</button></div>${content}</div>`;
+    }
+    function renderAdminSyllabus() {
+        if (!state.admin.syllabusLoaded) { window.app.admin.loadSyllabus(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>Syllabus Management</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.openSyllabusModal()">+ Add Lesson</button></div><table class="table table-dark bg-transparent"><thead><tr><th>Class</th><th>Subject</th><th>Lesson Title</th><th>Actions</th></tr></thead><tbody>${state.admin.syllabus.map(s => `<tr><td>${s.class_name}</td><td>${s.subject}</td><td>${s.lesson_title}</td><td><button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteSyllabus(${s.id})">Del</button></td></tr>`).join('')}</tbody></table></div>`;
+    }
+    function renderAdminTests() {
+        if (!state.admin.testsLoaded) { window.app.admin.loadTests(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>Test Management</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.openTestModal()">+ Add Test</button></div><table class="table table-dark bg-transparent"><thead><tr><th>Class</th><th>Title</th><th>Actions</th></tr></thead><tbody>${state.admin.tests.map(t => `<tr><td>${t.class_name}</td><td>${t.title}</td><td><button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteTest(${t.id})">Del</button></td></tr>`).join('')}</tbody></table></div>`;
+    }
+    function renderAdminGrammar() {
+        if (!state.admin.grammarLoaded) { window.app.admin.loadGrammar(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>Grammar Management</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.openGrammarModal()">+ Add Grammar</button></div><table class="table table-dark bg-transparent"><thead><tr><th>Class</th><th>Level</th><th>Question</th><th>Actions</th></tr></thead><tbody>${state.admin.grammar.map(g => `<tr><td>${g.class_name}</td><td>${g.level}</td><td>${g.question_text}</td><td><button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteGrammar(${g.id})">Del</button></td></tr>`).join('')}</tbody></table></div>`;
+    }
+    function renderAdminMCQSets() {
+        if (!state.admin.mcqSetsLoaded) { window.app.admin.loadMCQSets(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>📋 MCQ Set Management (5 MCQs per set)</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.openMCQSetModal()">+ Create MCQ Set</button></div><table class="table table-dark bg-transparent"><thead><tr><th>School</th><th>Class</th><th>Category</th><th>Title</th><th>Qs</th><th>Actions</th></tr></thead><tbody>${state.admin.mcqSets.map(s => { let qcount = 0; try { qcount = JSON.parse(s.questions_json).length; } catch(e){} return `<tr><td>${s.school_name||'-'}</td><td>${s.class_name}</td><td><span class="badge bg-info text-dark text-capitalize">${s.category}</span></td><td>${s.title}</td><td>${qcount}</td><td><button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteMCQSet(${s.id})">Del</button></td></tr>`; }).join('')}</tbody></table></div>`;
+    }
+    function renderAdminSentences() {
+        if (!state.admin.sentencesLoaded) { window.app.admin.loadSentenceExercises(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>🔤 Sentence Formation Exercises</h3><button class="btn btn-sm btn-cyan" onclick="window.app.admin.openSentenceModal()">+ Add Exercise</button></div><table class="table table-dark bg-transparent"><thead><tr><th>School</th><th>Class</th><th>Correct Sentence</th><th>Words</th><th>Actions</th></tr></thead><tbody>${state.admin.sentenceExercises.map(s => { let words = []; try { words = JSON.parse(s.words_json); } catch(e){} return `<tr><td>${s.school_name||'-'}</td><td>${s.class_name}</td><td>${s.correct_sentence}</td><td>${words.join(', ')}</td><td><button class="btn btn-sm btn-outline-danger" onclick="window.app.admin.deleteSentenceExercise(${s.id})">Del</button></td></tr>`; }).join('')}</tbody></table></div>`;
+    }
+    function renderStudentStatsView() { return `<button class="btn-back" onclick="window.app.admin.setView('users')">Back</button><div class="glass-panel p-4"><h3>Stats: ${state.admin.selectedStudentName}</h3>${renderChartGridHTML()}</div>`; }
+
+
+    function renderParentDashboard() {
+        if (!state.parent.children) { api('/api/parent/dashboard').then(d => { state.parent.children = d || []; render(); }); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        if (!state.parent.notifications) { api('/api/notifications').then(d => { state.parent.notifications = d || []; render(); }); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        
+        const unreadCount = state.parent.notifications.filter(n => !n.is_read).length;
+        const notifBadge = unreadCount > 0 ? `<span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">${unreadCount}</span>` : '';
+        const notifList = state.parent.notifications.length === 0 ? '<p class="text-white-50 p-3">No notifications.</p>' : state.parent.notifications.map(n => `<div class="p-3 border-bottom border-secondary ${n.is_read ? 'text-muted' : 'bg-dark text-white'}" onclick="window.app.parent.markRead(${n.id})" style="cursor:pointer;"><div class="d-flex justify-content-between"><small class="text-uppercase text-cyan">${n.type}</small><small>${new Date(n.created_at + " UTC").toLocaleDateString('en-IN')}</small></div><div class="mt-1">${n.message}</div><div class="small text-end mt-1 text-white-50">- ${n.sender_name} (${n.sender_role})</div></div>`).join('');
+
+        if (state.parent.children.length === 0) return `<div class="glass-panel p-5 text-center fade-in"><h4>No children mapped to your account.</h4></div>`;
+        
+        let childrenCards = state.parent.children.map(c => {
+            let total = 0; let count = 0;
+            if(c.stats) {
+                ['words','synonyms','antonyms'].forEach(m => {
+                    ['beginner','intermediate','proficient'].forEach(l => {
+                        if(c.stats[m] && c.stats[m][l]) { total += c.stats[m][l].average; count++; }
+                    });
+                });
+            }
+            const overall = count > 0 ? total / count : 0;
+            const statusText = overall >= 70 ? 'Doing Good 🌟' : overall >= 40 ? 'Average 👍' : 'Needs Improvement ⚠️';
+            const statusColor = overall >= 70 ? 'text-success' : overall >= 40 ? 'text-warning' : 'text-danger';
+            
+            const isTracking = state.parent.trackingChildId === c.id;
+            const testHtml = c.tests && c.tests.length > 0 ? `<h5 class="text-cyan mt-4 border-top border-secondary pt-3">Test Results</h5><div class="list-group mb-4">${c.tests.map(t => `<div class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center"><div><h6 class="mb-0">${t.title}</h6><small class="text-white-50">${new Date(t.date + ' UTC').toLocaleDateString()}</small></div><span class="badge ${t.score/t.total >= 0.7 ? 'bg-success' : t.score/t.total >= 0.4 ? 'bg-warning' : 'bg-danger'}">${t.score} / ${t.total}</span></div>`).join('')}</div>` : '<p class="text-white-50 mt-4 mb-4 border-top border-secondary pt-3">No tests completed yet.</p>';
+            
+            return `
+            <div class="glass-panel p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="text-cyan mb-1">${c.username}</h4>
+                        <p class="text-muted small mb-0">Class: ${c.class_name || 'N/A'} | Section: ${c.section_name || 'N/A'}</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="fs-5 fw-bold ${statusColor}">${statusText}</div>
+                        <div class="small text-white-50">Overall Score: ${Math.round(overall)}%</div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="btn btn-outline-info w-100 fw-bold" onclick="window.app.parent.toggleTrack(${c.id})">${isTracking ? 'Hide Details' : 'Track Detailed Progress 📊'}</button>
+                </div>
+                
+                ${isTracking ? `<div class="mt-4 fade-in">${testHtml}${renderChartGridHTML(c.id)}</div>` : ''}
+            </div>`;
+        }).join('');
+
+        return `
+        <div class="fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="mb-0">Your Children's Progress</h3>
+                <div class="position-relative">
+                    <button class="btn btn-dark border border-secondary p-2 position-relative" data-bs-toggle="modal" data-bs-target="#notifModal">
+                        <span style="font-size: 1.5rem;">🔔</span>
+                        ${notifBadge}
+                    </button>
+                </div>
+            </div>
+            ${childrenCards}
+        </div>
+        
+        <div class="modal fade" id="notifModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content bg-dark text-white border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title text-cyan">Notifications</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-0">
+                        ${notifList}
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    function renderPrincipalDashboard() {
+        if (state.principal.activeView === 'menu') return `<div class="glass-panel p-5 fade-in text-center"><h2 class="mb-5">Principal Dashboard</h2><div class="row g-4 justify-content-center"><div class="col-md-4"><div onclick="window.app.principal.setView('stats')" class="nav-card"><span class="nav-icon">📊</span><h5 class="fw-bold">School Overview</h5></div></div><div class="col-md-4"><div onclick="window.app.principal.setView('alerts')" class="nav-card"><span class="nav-icon">⚠️</span><h5 class="fw-bold">Irregular Students</h5></div></div></div></div>`;
+        if (state.principal.activeView === 'stats') return renderPrincipalStats();
+        if (state.principal.activeView === 'users') return renderPrincipalUsers();
+        if (state.principal.activeView === 'alerts') return renderPrincipalAlerts();
+        if (state.principal.activeView === 'notifications') return renderPrincipalNotifications();
+    }
+
+    function renderPrincipalStats() {
+        if (!state.principal.usersLoaded) { window.app.principal.loadUsers(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        
+        if (state.principal.selectedStudent) {
+            return `<button class="btn-back" onclick="window.app.principal.viewSection('${state.principal.selectedSection}')">← Back to Section</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between align-items-center mb-4"><div><h2 class="mb-0">Student Progress: <span class="text-cyan">${state.principal.selectedStudent.username}</span></h2><div class="text-muted">USN: ${state.principal.selectedStudent.usn || 'N/A'}</div></div></div><hr class="border-secondary mb-4">${renderChartGridHTML()}</div>`;
+        }
+        
+        if (state.principal.selectedSection !== null && state.principal.selectedSection !== undefined) {
+            const cls = state.principal.selectedClass;
+            const sec = state.principal.selectedSection;
+            const staffId = state.principal.selectedStaff.id;
+            const students = state.principal.users.filter(u => u.role === 'STUDENT' && u.class_name === cls && u.section_name === (sec === 'Unassigned' ? null : sec) && (u.mapped_usns || '').includes(`STAFF_${staffId}`));
+            return `<button class="btn-back" onclick="window.app.principal.viewClass('${cls}')">← Back to Sections</button><div class="glass-panel p-4 fade-in"><h3 class="mb-4">Students in Class <span class="text-cyan">${cls}</span> - Section <span class="text-cyan">${sec}</span></h3>
+            <table class="table table-dark table-hover bg-transparent"><thead><tr class="text-muted text-uppercase small"><th>Student</th><th>USN</th><th>Avg Score</th><th>Action</th></tr></thead><tbody>
+            ${students.length === 0 ? '<tr><td colspan="4" class="text-muted text-center">No students found.</td></tr>' : students.map(s => `<tr><td class="fw-bold">${s.username}</td><td>${s.usn||'-'}</td><td><div class="d-flex align-items-center gap-2"><div class="progress w-50" style="height: 6px; background: rgba(255,255,255,0.1);"><div class="progress-bar ${s.average_score >= 70 ? 'bg-success' : s.average_score >= 40 ? 'bg-warning' : 'bg-danger'}" style="width: ${s.average_score}%"></div></div><span class="small fw-bold ${s.average_score >= 70 ? 'text-success' : s.average_score >= 40 ? 'text-warning' : 'text-danger'}">${Math.round(s.average_score||0)}%</span></div></td><td><button class="btn btn-sm btn-cyan" onclick="window.app.principal.viewStudent(${s.id})">View Progress</button></td></tr>`).join('')}
+            </tbody></table></div>`;
+        }
+
+        if (state.principal.selectedClass) {
+            const cls = state.principal.selectedClass;
+            const staffId = state.principal.selectedStaff.id;
+            const students = state.principal.users.filter(u => u.role === 'STUDENT' && u.class_name === cls && (u.mapped_usns || '').includes(`STAFF_${staffId}`));
+            let sections = [...new Set(students.map(s => s.section_name))];
+            return `<button class="btn-back" onclick="window.app.principal.viewStaff(${staffId})">← Back to Classes</button><div class="glass-panel p-4 fade-in"><h3 class="mb-4">Sections in Class <span class="text-cyan">${cls}</span></h3>
+            <div class="row g-3">
+            ${sections.length === 0 ? '<p class="text-white-50">No sections mapped to this class.</p>' : sections.map(sec => `<div class="col-md-3"><button class="btn btn-outline-info w-100 py-3 fw-bold fs-5" onclick="window.app.principal.viewSection('${sec || 'Unassigned'}')">${sec || 'Unassigned'}</button></div>`).join('')}
+            </div></div>`;
+        }
+        
+        if (state.principal.selectedStaff) {
+            const staff = state.principal.selectedStaff;
+            const students = state.principal.users.filter(u => u.role === 'STUDENT' && (u.mapped_usns || '').includes(`STAFF_${staff.id}`));
+            let classes = [...new Set(students.map(s => s.class_name))];
+            if (classes.length === 0 && staff.class_name) classes = [staff.class_name]; // fallback to staff's own class_name if no mapped students
+            
+            return `<button class="btn-back" onclick="window.app.principal.clearSelection()">← Back to Staff Directory</button><div class="glass-panel p-4 fade-in"><h3 class="mb-4">Classes assigned to <span class="text-cyan">${staff.username}</span></h3>
+            <div class="row g-3">
+            ${classes.length === 0 ? '<p class="text-white-50">No assigned classes or mapped students.</p>' : classes.map(c => `<div class="col-md-3"><button class="btn btn-outline-info w-100 py-3 fw-bold fs-5" onclick="window.app.principal.viewClass('${c}')">${c || 'Unassigned'}</button></div>`).join('')}
+            </div></div>`;
+        }
+        
+        const staffList = state.principal.users.filter(u => u.role === 'STAFF');
+        return `<button class="btn-back" onclick="window.app.principal.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><h3 class="mb-4">Staff Directory</h3>
+        <table class="table table-dark table-hover bg-transparent"><thead><tr><th>Staff Name</th><th>Role</th><th>Action</th></tr></thead><tbody>
+        ${staffList.map(s => `<tr><td>${s.username}</td><td><span class="badge bg-secondary">Teacher</span></td><td><button class="btn btn-sm btn-cyan" onclick="window.app.principal.viewStaff(${s.id})">View Classes</button></td></tr>`).join('')}
+        </tbody></table></div>`;
+    }
+
+    function renderPrincipalNotifications() {
+        if (!state.principal.notifications) { api('/api/principal/notifications').then(d => { state.principal.notifications = d || []; render(); }); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        const notifList = state.principal.notifications.length === 0 ? '<p class="text-white-50">No notifications found for this school.</p>' : state.principal.notifications.map(n => `<div class="p-3 mb-2 rounded bg-dark border border-secondary text-white"><div class="d-flex justify-content-between"><small class="text-uppercase text-cyan fw-bold">${n.type}</small><small class="text-muted">${new Date(n.created_at + " UTC").toLocaleDateString('en-IN')}</small></div><div class="mt-2 mb-2">${n.message}</div><div class="small text-end mt-1 text-white-50">From: ${n.sender_name} (${n.sender_role}) &rarr; To: ${n.receiver_name} (${n.receiver_role})</div></div>`).join('');
+        return `<button class="btn-back" onclick="window.app.principal.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><h3 class="mb-4">School Notifications History</h3><div class="notif-scroll-area" style="max-height: 600px; overflow-y: auto;">${notifList}</div></div>`;
+    }
+
+    function renderPrincipalUsers() {
+        if (state.principal.users.length === 0 && !state.principal.usersLoaded) { window.app.principal.loadUsers(); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        return `<button class="btn-back" onclick="window.app.principal.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>Users in My School</h3><button class="btn btn-sm btn-cyan" onclick="window.app.principal.openUserModal(null)">+ Add User</button></div><table class="table table-dark bg-transparent"><thead><tr><th>User</th><th>Role</th><th>Class</th><th>Gamification</th><th>Actions</th></tr></thead><tbody>${state.principal.users.map(u => `<tr><td>${u.username}</td><td><span class="badge bg-secondary">${u.role}</span></td><td>${u.class_name||'-'}</td><td>${u.role === 'STUDENT' ? `<span class="badge bg-warning text-dark me-1">⭐ ${u.xp||0}</span> <span class="badge bg-danger">🔥 ${u.streak||0}</span>` : '-'}</td><td><button class="btn btn-sm btn-outline-light" onclick="window.app.principal.openUserModal(${u.id})">Edit</button> <button class="btn btn-sm btn-outline-danger" onclick="window.app.principal.deleteUser(${u.id}, '${u.username}')">Del</button></td></tr>`).join('')}</tbody></table></div>`;
+    }
+
+    function renderPrincipalAlerts() {
+        if (!state.principal.stats) { api('/api/principal/dashboard').then(d => { state.principal.stats = d || {}; render(); }); return '<div class="text-center mt-5"><div class="spinner-border text-cyan"></div></div>'; }
+        
+        const irregularClasses = state.principal.stats.class_stats ? state.principal.stats.class_stats.filter(s => s.average_score < 40) : [];
+        return `<button class="btn-back" onclick="window.app.principal.setView('menu')">Back</button><div class="glass-panel p-4 fade-in"><div class="d-flex justify-content-between mb-4"><h3>Irregular Students / Low Performance Alerts</h3></div>${irregularClasses.length === 0 ? '<p class="text-white-50">All classes are performing well above 40% average.</p>' : `<table class="table table-dark bg-transparent"><thead><tr><th>Class</th><th>Total Students</th><th>Average Score</th><th>Action</th></tr></thead><tbody>${irregularClasses.map(s => `<tr><td>Class ${s.class_name}</td><td>${s.student_count}</td><td><span class="text-danger fw-bold">${Math.round(s.average_score||0)}%</span></td><td><button class="btn btn-sm btn-warning fw-bold text-dark" onclick="window.app.principal.sendAutoAlert('${s.class_name}', ${Math.round(s.average_score||0)})">Send Auto Alert to Class</button></td></tr>`).join('')}</tbody></table>`}<div class="alert alert-info mt-4"><strong>Note:</strong> Pressing "Send Auto Alert" will send an auto-generated performance warning to parents of students in that class.</div></div>`;
+    }
+
+    function renderFileEditor() { if (state.admin.files.length === 0) window.app.admin.loadFiles(); return `<button class="btn-back" onclick="window.app.admin.setView('menu')">Back</button><div class="glass-panel p-4"><div class="row"><div class="col-md-3 mb-3"><div class="list-group">${state.admin.files.map(f => `<button class="list-group-item list-group-item-action bg-dark text-white border-secondary ${state.admin.currentFile===f?'active':''}" onclick="window.app.admin.loadFileContent('${f}')">${f}</button>`).join('')}</div></div><div class="col-md-9"><textarea id="fileEditor" class="form-control bg-dark text-info font-monospace mb-2 border-secondary" rows="15">${state.admin.fileContent}</textarea><button class="btn btn-cyan" onclick="window.app.admin.saveFileContent()">Save Changes</button></div></div></div>`; }
+    
+    // UPDATED renderChartGridHTML with "Sessions: 3" removed
+    function renderChartGridHTML(suffix='') { const sid = suffix ? `-${suffix}` : ''; return ['words','synonyms','antonyms'].map(m => `<h5 class="mt-4 text-capitalize text-white-50 border-bottom border-secondary pb-2">${m}</h5><div class="row g-4 mt-1">${['beginner','intermediate','proficient'].map(l => `<div class="col-md-4 text-center"><div class="p-3 rounded" style="background: rgba(255,255,255,0.03)"><h6 class="text-uppercase text-white small mb-3">${l}</h6><div class="chart-container"><canvas id="chart-${m}-${l}${sid}"></canvas><div class="chart-center-text" id="chart-label-${m}-${l}${sid}">0%</div></div></div></div>`).join('')}</div>`).join(''); }
+    
+    function renderCharts(statsData, suffix='') { const sid = suffix ? `-${suffix}` : ''; ['words','synonyms','antonyms'].forEach(m => { ['beginner','intermediate','proficient'].forEach(l => { const ctx = document.getElementById(`chart-${m}-${l}${sid}`); const label = document.getElementById(`chart-label-${m}-${l}${sid}`); if(!ctx) return; const val = (statsData[m] && statsData[m][l]) ? statsData[m][l].average : 0; const color = val >= 70 ? '#2ecc71' : val >= 40 ? '#f1c40f' : '#e74c3c'; label.innerText = `${val}%`; label.style.color = color; let chartStatus = Chart.getChart(ctx); if (chartStatus != undefined) { chartStatus.destroy(); } new Chart(ctx, { type: 'doughnut', data: { labels: ['Score', 'Remaining'], datasets: [{ data: [val, 100-val], backgroundColor: [color, 'rgba(255,255,255,0.05)'], borderWidth: 0, borderRadius: 5 }] }, options: { cutout: '80%', responsive: true, plugins: { tooltip: { enabled: true }, legend: { display: false } } } }); }); }); }
+
+    // --- APPLICATION LOGIC ---
+    window.app = {
+        setPage: (p) => { state.page = p; render(); },
+        doLogin: async (e) => { e.preventDefault(); const d = await api('/api/login', 'POST', {username: document.getElementById('user').value, password: document.getElementById('pass').value}); if(d) { state.auth=true; state.username=d.username; state.role=d.role; state.usn=d.usn; state.school_name=d.school_name; state.class_name=d.class_name; state.section_name=d.section_name; state.page=state.role==='STUDENT'?'home':state.role.toLowerCase(); render(); } },
+        doRegister: async (e) => { e.preventDefault(); const d = await api('/api/register', 'POST', {username: document.getElementById('regUser').value, password: document.getElementById('regPass').value, usn: document.getElementById('regUsn').value, role: document.getElementById('regRole').value }); if(d) { showToast('✅ Registered!'); app.setPage('login'); } },
+        doLogout: async () => { await api('/api/logout', 'POST'); state = { auth: false, username: null, role: null, usn: null, school_name: null, class_name: null, section_name: null, mapped_usns: null, page: 'login', mode: null, level: null, words: [], quiz: [], result: {}, sessions: [], tracking: null, sessionDetail: null, student: { missionData: null, missionStep: 0, missionScore: {vocab:0, grammar:0, syllabus:0, sentence:0}, missionSentenceAnswer: [], gamification: null, leaderboard: [], syllabus: [], tests: [], attempts: null, selectedAttempt: null }, admin: { users: [], schools: [], files: [], syllabus: [], grammar: [], mcqSets: [], sentenceExercises: [], tests: [], currentFile: null, fileContent: '', activeView: 'menu', selectedStudentStats: null, selectedStudentName: '' }, staff: { students: [], selectedStudent: null, studentStats: null, studentAttempts: null, selectedAttemptDate: null }, parent: { children: null, notifications: null }, principal: { stats: null, users: [], activeView: 'menu', selectedStudentStats: null, selectedStudentName: '' } }; render(); },
+        
+        feedback: {
+            openSend: () => { document.getElementById('feedbackText').value = ''; sendFeedbackModal.show(); },
+            submit: async () => {
+                const msg = document.getElementById('feedbackText').value;
+                if(!msg) return showToast('Please enter a message', 'warning');
+                await api('/api/feedback', 'POST', {message: msg});
+                sendFeedbackModal.hide();
+                showToast('Feedback sent!');
+            },
+            openView: async () => {
+                const data = await api('/api/feedback/list');
+                if(data) {
+                    const tbody = document.getElementById('feedbackTableBody');
+                    tbody.innerHTML = data.length ? data.map(f => {
+                        const d = new Date(f.date + " UTC").toLocaleDateString('en-IN');
+                        return `<tr><td>${d}</td><td>${f.username}</td><td><span class="badge bg-secondary">${f.role}</span></td><td>${f.message}</td></tr>`;
+                    }).join('') : `<tr><td colspan="4" class="text-center text-muted">No feedback found.</td></tr>`;
+                    viewFeedbackModal.show();
+                }
+            }
+        },
+
+        student: {
+            startDailyMission: async () => {
+                if (state.student.gamification && state.student.gamification.daily_mission_completed) {
+                    showToast('You have already completed today\'s mission!', 'warning');
+                    return;
+                }
+                app.setPage('mission_loading');
+                const data = await api('/api/daily-mission');
+                if (data) {
+                    state.student.missionData = data.mission || data;
+                    state.student.missionStep = 0;
+                    state.student.missionScore = {vocab:0, grammar:0, syllabus:0, sentence:0};
+                    state.student.missionSentenceAnswer = [];
+                    window._sentenceShuffled = null;
+                    window._sentenceStep = -1;
+                    app.setPage('mission_flow');
+                } else {
+                    app.setPage('home');
+                }
+            },
+            selectOption: (idx, optText) => {
+                document.querySelectorAll('.quiz-opt').forEach(el => el.classList.remove('selected'));
+                document.getElementById('opt_' + idx).classList.add('selected');
+                window._currentSelectedAns = optText;
+                document.getElementById('missionNextBtn').disabled = false;
+            },
+            missionNext: () => {
+                const step = state.student.missionStep;
+                const correct = window._currentCorrectAns;
+                const selected = window._currentSelectedAns;
+                
+                if (selected === correct) {
+                    if (step < 15) state.student.missionScore.vocab++;
+                    else if (step < 20) state.student.missionScore.grammar++;
+                    else if (step < 25) state.student.missionScore.syllabus++;
+                }
+                
+                state.student.missionStep++;
+                window._currentSelectedAns = null;
+                window._currentCorrectAns = null;
+                
+                if (state.student.missionStep >= 25 && state.student.missionStep < 30) {
+                    // Moving to sentence formation section
+                    state.student.missionSentenceAnswer = [];
+                    window._sentenceShuffled = null;
+                    app.setPage('mission_flow');
+                } else if (state.student.missionStep >= 30) {
+                    app.setPage('mission_loading');
+                    window.app.student.submitMissionAPI();
+                } else {
+                    app.setPage('mission_flow');
+                }
+            },
+            // Sentence Formation handlers
+            addWord: (idx, word) => {
+                state.student.missionSentenceAnswer.push({ idx, word });
+                render();
+            },
+            removeWord: (answerIdx) => {
+                state.student.missionSentenceAnswer.splice(answerIdx, 1);
+                render();
+            },
+            checkSentence: () => {
+                const step = state.student.missionStep;
+                const currentQ = state.student.missionData.sentences[step - 25];
+                const userAnswer = state.student.missionSentenceAnswer.map(a => a.word).join(' ');
+                const correct = currentQ.correct_sentence;
+                
+                const area = document.getElementById('sentenceAnswerArea');
+                if (userAnswer.toLowerCase() === correct.toLowerCase()) {
+                    state.student.missionScore.sentence++;
+                    if (area) { area.classList.add('sentence-correct'); area.classList.remove('sentence-wrong'); }
+                } else {
+                    if (area) { area.classList.add('sentence-wrong'); area.classList.remove('sentence-correct'); }
+                }
+                
+                setTimeout(() => {
+                    state.student.missionStep++;
+                    state.student.missionSentenceAnswer = [];
+                    window._sentenceShuffled = null;
+                    
+                    if (state.student.missionStep >= 30) {
+                        app.setPage('mission_loading');
+                        window.app.student.submitMissionAPI();
+                    } else {
+                        app.setPage('mission_flow');
+                    }
+                }, 800);
+            },
+            submitMissionAPI: async () => {
+                const payload = {
+                    vocab_score: state.student.missionScore.vocab,
+                    grammar_score: state.student.missionScore.grammar,
+                    syllabus_score: state.student.missionScore.syllabus,
+                    sentence_score: state.student.missionScore.sentence
+                };
+                const data = await api('/api/daily-mission/submit', 'POST', payload);
+                if (data && !data.error) {
+                    state.student.missionResult = data.results;
+                    state.student.gamification = null;
+                    state.student.attempts = null; // invalidate attempt cache
+                    app.setPage('mission_flow');
+                } else {
+                    showToast('Error saving mission', 'danger');
+                    app.setPage('home');
+                }
+            },
+            finishMission: () => {
+                app.setPage('home');
+            },
+            toggleAttempt: (date) => {
+                state.student.selectedAttempt = state.student.selectedAttempt === date ? null : date;
+                render();
+            },
+            loadLeaderboard: async () => {
+                const data = await api('/api/leaderboard');
+                if (data) {
+                    state.student.leaderboard = data;
+                    app.setPage('leaderboard');
+                }
+            },
+            selectMode: (m) => { state.mode=m; app.setPage('levelSelect'); },
+            selectLevel: async (l) => { state.level=l; const d = await api(`/api/daily-words/${state.mode}/${state.level}`); if(d) { state.words=d; app.setPage('words'); } },
+            handleSearch: (e) => { if(e.key === 'Enter') app.student.doSearch(); },
+            doSearch: async () => { const q = document.getElementById('searchInput').value; if(!q) return; document.getElementById('searchResult').style.display='none'; const d = await api('/api/ask', 'POST', {query: q}); if(d && d.answer) { document.getElementById('searchResult').innerHTML = `<strong>💡 Meaning:</strong><br>` + d.answer.replace(/\n/g, '<br>'); document.getElementById('searchResult').style.display = 'block'; } },
+            startQuiz: () => { const valid = state.words.filter(w=>w.word!=='N/A'); if(valid.length<5) { showToast('⚠️ Not enough words.', 'warning'); return; } state.quiz = []; let used = new Set(); while(used.size<5) used.add(Math.floor(Math.random()*valid.length)); used.forEach(i => { const t = valid[i]; let opts = [t.meaning]; while(opts.length<4) { let r = valid[Math.floor(Math.random()*valid.length)]; if(r.word!==t.word && !opts.includes(r.meaning)) opts.push(r.meaning); } opts.sort(()=>Math.random()-0.5); state.quiz.push({ question: `What is the meaning of "${t.word}"?`, options: opts, correctAnswer: opts.indexOf(t.meaning), word: t.word, userAnswer: null }); }); app.setPage('quiz'); },
+            submitQuiz: async (e) => { e.preventDefault(); let score = 0; const fd = new FormData(e.target); let details = []; state.quiz.forEach((q, i) => { const ans = parseInt(fd.get(`q${i}`)); q.userAnswer = ans; const correct = ans === q.correctAnswer; if(correct) score++; details.push({ question: q.question, userAns: q.options[ans], correctAns: q.options[q.correctAnswer], correct }); }); state.result = { score, total: state.quiz.length, details }; await api('/api/sessions', 'POST', { mode: state.mode, level: state.level, scorePercent: Math.round((score/state.quiz.length)*100), words: state.words, quiz: state.quiz }); app.setPage('results'); },
+            loadTrack: async () => { state.tracking = await api('/api/track'); if(state.tracking) app.setPage('track'); },
+            loadReview: async () => { state.sessions = await api('/api/sessions'); if(state.sessions) app.setPage('review'); },
+            loadSession: async (id) => { state.sessionDetail = await api(`/api/sessions/${id}`); if(state.sessionDetail) app.setPage('sessionDetail'); },
+            rerunSession: (m, l) => { state.mode = m; app.student.selectLevel(l); },
+            loadSyllabus: async () => {
+                const data = await api('/api/syllabus');
+                state.student.syllabusLoaded = true;
+                state.student.syllabus = data || [];
+                state.student.activeLesson = null;
+                render();
+            },
+            viewLesson: (id) => {
+                const lesson = state.student.syllabus.find(s => s.id === id);
+                if(lesson) { state.student.activeLesson = lesson; render(); }
+            },
+            submitLessonQuiz: (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const s = state.student.activeLesson;
+                if(!s || !s.quiz_data) return;
+                try {
+                    const qdata = JSON.parse(s.quiz_data);
+                    let score = 0;
+                    qdata.forEach((q, i) => {
+                        const ans = parseInt(fd.get(`lq_${i}`));
+                        if (ans === parseInt(q.ans)) score++;
+                    });
+                    document.getElementById('lessonQuizResult').innerHTML = `<div class="alert alert-info">You scored ${score} out of ${qdata.length}!</div>`;
+                } catch(err) {}
+            },
+            loadTests: async () => {
+                const data = await api('/api/tests');
+                state.student.testsLoaded = true;
+                state.student.tests = data || [];
+                state.student.activeTest = null;
+                render();
+            },
+            viewTest: (id) => {
+                const t = state.student.tests.find(s => s.id === id);
+                if(t) { state.student.activeTest = t; render(); }
+            },
+            submitTest: async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const t = state.student.activeTest;
+                if(!t || !t.questions_json) return;
+                try {
+                    const qdata = JSON.parse(t.questions_json);
+                    let score = 0;
+                    qdata.forEach((q, i) => {
+                        const ans = parseInt(fd.get(`tq_${i}`));
+                        if (ans === parseInt(q.ans)) score++;
+                    });
+                    
+                    const res = await api('/api/tests/submit', 'POST', { test_id: t.id, score, total: qdata.length });
+                    if(res && !res.error) {
+                        document.getElementById('testResultContainer').innerHTML = `<div class="alert alert-success fs-4">Your Score: ${score} / ${qdata.length} <small class="d-block fs-6 opacity-75 mt-2">Saved successfully</small></div>`;
+                    } else {
+                        document.getElementById('testResultContainer').innerHTML = `<div class="alert alert-danger">Error saving score</div>`;
+                    }
+                } catch(err) {}
+            },
+            startVoice: () => {
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                    showToast('Voice not supported in this browser.', 'danger'); return;
+                }
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                const mic = document.getElementById('micIcon');
+                mic.classList.add('mic-active');
+                
+                recognition.onresult = (event) => {
+                    document.getElementById('searchInput').value = event.results[0][0].transcript;
+                    mic.classList.remove('mic-active');
+                    app.student.doSearch(); 
+                };
+                recognition.onerror = () => { mic.classList.remove('mic-active'); };
+                recognition.onend = () => { mic.classList.remove('mic-active'); };
+                recognition.start();
+            }
+        },
+        staff: {
+            exportData: async () => { 
+                const date = document.getElementById('exportDate').value;
+                const url = date ? `/api/staff/export?date=${date}` : '/api/staff/export';
+                const blob = await api(url); 
+                if(blob) { 
+                    const u=window.URL.createObjectURL(blob); 
+                    const a=document.createElement('a'); 
+                    a.href=u; 
+                    a.download= date ? `Alphalearn_Report_${date}.csv` : 'Alphalearn_Report.csv'; 
+                    document.body.appendChild(a); 
+                    a.click(); 
+                } 
+            },
+            viewStudent: async (id) => {
+                const student = state.staff.students.find(s => s.id === id);
+                if (!student) return;
+                state.staff.selectedStudent = student;
+                state.staff.studentAttempts = null; // reset to trigger fresh load
+                state.staff.selectedAttemptDate = null;
+                const stats = await api(`/api/admin/student-stats/${id}`);
+                if(stats) { state.staff.studentStats = stats; render(); }
+            },
+            clearSelection: () => { state.staff.selectedStudent = null; state.staff.studentStats = null; state.staff.studentAttempts = null; state.staff.selectedAttemptDate = null; render(); },
+            toggleAttempt: (date) => {
+                state.staff.selectedAttemptDate = state.staff.selectedAttemptDate === date ? null : date;
+                render();
+            },
+            messageParent: async (usn) => {
+                const msg = prompt("Enter message for Parent:");
+                if(!msg) return;
+                const parents = await api(`/api/parents/by_student_usn/${usn}`);
+                if(!parents || parents.length === 0) { showToast("No parent mapped to this student", "danger"); return; }
+                const receiver_ids = parents.map(p => p.id);
+                const res = await api('/api/notifications/send', 'POST', { receiver_ids, message: msg, type: 'PERFORMANCE' });
+                if(res && !res.error) showToast("Message sent to parent(s)!");
+            },
+            openUserModal: () => {
+                document.getElementById('staffUserEditForm').reset();
+                staffUserEditModal.show();
+            },
+            saveUser: async () => {
+                const form = document.getElementById('staffUserEditForm');
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+                
+                const body = {
+                    student_username: document.getElementById('staff-edit-student-username').value,
+                    student_password: document.getElementById('staff-edit-student-password').value,
+                    parent_username: document.getElementById('staff-edit-parent-username').value,
+                    parent_password: document.getElementById('staff-edit-parent-password').value,
+                    usn: document.getElementById('staff-edit-usn').value,
+                    class_name: document.getElementById('staff-edit-class').value,
+                    section_name: document.getElementById('staff-edit-section').value
+                };
+                
+                const d = await api('/api/staff/student_parent', 'POST', body);
+                if(d && !d.error) { 
+                    state.staff.students = []; // invalidate cache
+                    render();
+                    staffUserEditModal.hide(); 
+                    showToast(`Student and Parent created successfully!`); 
+                } else if(d && d.error) {
+                    showToast(d.error, 'danger');
+                }
+            }
+        },
+        admin: {
+            setView: (v) => { state.admin.activeView = v; render(); },
+            startWizard: () => { state.admin.wizard = { active: true, step: 1, school: null }; app.admin.setView('wizard'); },
+            continueWizard: (id, name) => { state.admin.wizard = { active: true, step: 2, school: {id, name} }; app.admin.setView('wizard'); },
+            wizardNextStep: () => { 
+                if (state.admin.wizard.step < 4) { state.admin.wizard.step++; render(); } 
+                else { showToast('Setup Complete!'); app.admin.setView('schools'); }
+            },
+            viewSchoolHierarchy: (id, name) => {
+                state.admin.schoolHierarchy = { loaded: false, schoolId: id, schoolName: name, principal: null, staff: [], students: [], parents: [] };
+                app.admin.setView('schoolHierarchy');
+            },
+            loadSchoolHierarchy: async () => {
+                const sid = state.admin.schoolHierarchy.schoolId;
+                if (!sid) return;
+                const d = await api('/api/admin/users');
+                if (d) {
+                    const schoolUsers = d.filter(u => u.school_id === sid);
+                    state.admin.schoolHierarchy.principal = schoolUsers.find(u => u.role === 'PRINCIPAL') || null;
+                    state.admin.schoolHierarchy.staff = schoolUsers.filter(u => u.role === 'STAFF');
+                    state.admin.schoolHierarchy.students = schoolUsers.filter(u => u.role === 'STUDENT');
+                    state.admin.schoolHierarchy.parents = schoolUsers.filter(u => u.role === 'PARENT');
+                    state.admin.schoolHierarchy.loaded = true;
+                    render();
+                }
+            },
+            wizardSubmitSchool: async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('wiz-school-name').value;
+                const addr = document.getElementById('wiz-school-addr').value;
+                const res = await api('/api/admin/schools', 'POST', { name, address: addr });
+                if(res && !res.error) {
+                    state.admin.schoolsLoaded = false;
+                    state.admin.wizard.school = { id: res.id, name: res.name };
+                    state.admin.wizard.step = 2;
+                    render();
+                    showToast('School created!');
+                }
+            },
+            wizardSubmitUser: async (e, role) => {
+                e.preventDefault();
+                const school_id = document.getElementById('wiz-user-school').value;
+                if (role === 'STUDENT_PARENT') {
+                    const body = {
+                        school_id: school_id,
+                        staff_id: state.admin.wizard.staff_id,
+                        student_username: document.getElementById('wiz-stu-username').value,
+                        student_password: document.getElementById('wiz-stu-password').value,
+                        parent_username: document.getElementById('wiz-par-username').value,
+                        parent_password: document.getElementById('wiz-par-password').value,
+                        usn: document.getElementById('wiz-stu-usn').value,
+                        class_name: document.getElementById('wiz-stu-class').value,
+                        section_name: document.getElementById('wiz-stu-section').value
+                    };
+                    const res = await api('/api/admin/student_parent', 'POST', body);
+                    if (res && !res.error) {
+                        state.admin.users = [];
+                        showToast(`Student and Parent created!`);
+                        e.target.reset();
+                        if (window.app.admin.wizardAdvance) app.admin.wizardNextStep();
+                    } else if (res && res.error) {
+                        showToast(res.error, 'danger');
+                    }
+                    return;
+                }
+
+                const username = document.getElementById('wiz-user-username').value;
+                const usn = document.getElementById('wiz-user-usn').value;
+                const password = document.getElementById('wiz-user-password').value;
+                let class_name = '', section_name = '', mapped_usns = '';
+                if(role === 'STAFF') {
+                    class_name = document.getElementById('wiz-user-class').value;
+                    section_name = document.getElementById('wiz-user-section').value;
+                }
+                const res = await api('/api/admin/user', 'POST', { username, password, role, usn, school_id, class_name, section_name, mapped_usns });
+                if (res && !res.error) {
+                    state.admin.users = []; // invalidate cache
+                    if (role === 'STAFF') state.admin.wizard.staff_id = res.id;
+                    showToast(`${role} created!`);
+                    e.target.reset(); // clear form
+                    if (window.app.admin.wizardAdvance) app.admin.wizardNextStep();
+                } else if(res && res.error) {
+                    showToast(res.error, 'danger');
+                }
+            },
+            loadUsers: async () => { const d = await api('/api/admin/users'); if(d) { state.admin.users=d; render(); } },
+            loadFiles: async () => { const d = await api('/api/admin/files'); if(d) { state.admin.files=d; render(); } },
+            viewStudentStats: async (uid, uname) => { state.admin.selectedStudentName = uname; state.admin.selectedStudentStats = await api(`/api/admin/student-stats/${uid}`); state.admin.activeView = 'studentStats'; render(); setTimeout(() => renderCharts(state.admin.selectedStudentStats), 100); },
+            loadSyllabus: async () => { const data = await api('/api/admin/syllabus'); state.admin.syllabusLoaded = true; state.admin.syllabus = data || []; render(); },
+            openSyllabusModal: async () => {
+                document.getElementById('syllabusEditForm').reset();
+                document.getElementById('syl-questions-container').innerHTML = '';
+                if(state.admin.schools.length === 0) await window.app.admin.loadSchools();
+                const schoolSelect = document.getElementById('syl-school');
+                schoolSelect.innerHTML = '<option value="">Select School</option>' + state.admin.schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                syllabusEditModal.show();
+            },
+            addSyllabusQuestion: () => {
+                const container = document.getElementById('syl-questions-container');
+                const idx = container.children.length;
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-dark rounded mb-3 border border-secondary';
+                div.innerHTML = `
+                    <input type="text" class="form-control form-control-sm form-control-dark mb-2" placeholder="Question Text" name="sq_${idx}_q" required>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 0" name="sq_${idx}_opt0" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 1" name="sq_${idx}_opt1" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 2" name="sq_${idx}_opt2" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 3" name="sq_${idx}_opt3" required></div>
+                    </div>
+                    <select class="form-select form-select-sm form-control-dark" name="sq_${idx}_ans" required>
+                        <option value="">Select Correct Option...</option>
+                        <option value="0">Option 0</option><option value="1">Option 1</option><option value="2">Option 2</option><option value="3">Option 3</option>
+                    </select>
+                `;
+                container.appendChild(div);
+            },
+            saveSyllabus: async () => {
+                const form = document.getElementById('syllabusEditForm');
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+                const payload = {
+                    school_id: document.getElementById('syl-school').value,
+                    class_name: document.getElementById('syl-class').value,
+                    subject: document.getElementById('syl-subject').value,
+                    lesson_title: document.getElementById('syl-title').value,
+                    content: document.getElementById('syl-content').value,
+                    quiz_data: '[]'
+                };
+                const fd = new FormData(form);
+                const qdata = [];
+                const container = document.getElementById('syl-questions-container');
+                for(let i=0; i<container.children.length; i++) {
+                    qdata.push({
+                        q: fd.get(`sq_${i}_q`),
+                        opts: [fd.get(`sq_${i}_opt0`), fd.get(`sq_${i}_opt1`), fd.get(`sq_${i}_opt2`), fd.get(`sq_${i}_opt3`)],
+                        ans: fd.get(`sq_${i}_ans`)
+                    });
+                }
+                payload.quiz_data = JSON.stringify(qdata);
+                
+                const res = await api('/api/admin/syllabus', 'POST', payload);
+                if(res && !res.error) { showToast('Syllabus added!'); syllabusEditModal.hide(); state.admin.syllabusLoaded = false; render(); }
+            },
+            deleteSyllabus: async (id) => { if(confirm('Delete syllabus lesson?')) { const res = await api(`/api/admin/syllabus/${id}`, 'DELETE'); if(res && !res.error) { state.admin.syllabusLoaded = false; render(); } } },
+            loadTests: async () => { const data = await api('/api/admin/tests'); state.admin.testsLoaded = true; state.admin.tests = data || []; render(); },
+            openTestModal: async () => {
+                document.getElementById('testEditForm').reset();
+                document.getElementById('test-questions-container').innerHTML = '';
+                if(state.admin.schools.length === 0) await window.app.admin.loadSchools();
+                const schoolSelect = document.getElementById('test-school');
+                schoolSelect.innerHTML = '<option value="">Select School</option>' + state.admin.schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                testEditModal.show();
+            },
+            addTestQuestion: () => {
+                const container = document.getElementById('test-questions-container');
+                const idx = container.children.length;
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-dark rounded mb-3 border border-secondary';
+                div.innerHTML = `
+                    <input type="text" class="form-control form-control-sm form-control-dark mb-2" placeholder="Question Text" name="tq_${idx}_q" required>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 0" name="tq_${idx}_opt0" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 1" name="tq_${idx}_opt1" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 2" name="tq_${idx}_opt2" required></div>
+                        <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option 3" name="tq_${idx}_opt3" required></div>
+                    </div>
+                    <select class="form-select form-select-sm form-control-dark" name="tq_${idx}_ans" required>
+                        <option value="">Select Correct Option...</option>
+                        <option value="0">Option 0</option><option value="1">Option 1</option><option value="2">Option 2</option><option value="3">Option 3</option>
+                    </select>
+                `;
+                container.appendChild(div);
+            },
+            saveTest: async () => {
+                const form = document.getElementById('testEditForm');
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+                const payload = {
+                    school_id: document.getElementById('test-school').value,
+                    class_name: document.getElementById('test-class').value,
+                    title: document.getElementById('test-title').value,
+                    questions_json: '[]'
+                };
+                const fd = new FormData(form);
+                const qdata = [];
+                const container = document.getElementById('test-questions-container');
+                for(let i=0; i<container.children.length; i++) {
+                    qdata.push({
+                        q: fd.get(`tq_${i}_q`),
+                        opts: [fd.get(`tq_${i}_opt0`), fd.get(`tq_${i}_opt1`), fd.get(`tq_${i}_opt2`), fd.get(`tq_${i}_opt3`)],
+                        ans: fd.get(`tq_${i}_ans`)
+                    });
+                }
+                payload.questions_json = JSON.stringify(qdata);
+                
+                const res = await api('/api/admin/tests', 'POST', payload);
+                if(res && !res.error) { showToast('Test added!'); testEditModal.hide(); state.admin.testsLoaded = false; render(); }
+            },
+            deleteTest: async (id) => { if(confirm('Delete Test?')) { const res = await api(`/api/admin/tests/${id}`, 'DELETE'); if(res && !res.error) { state.admin.testsLoaded = false; render(); } } },
+            loadGrammar: async () => { const data = await api('/api/admin/grammar'); state.admin.grammarLoaded = true; state.admin.grammar = data || []; render(); },
+            openGrammarModal: async () => {
+                document.getElementById('grammarEditForm').reset();
+                if(state.admin.schools.length === 0) await window.app.admin.loadSchools();
+                const schoolSelect = document.getElementById('gram-school');
+                schoolSelect.innerHTML = '<option value="">Select School</option>' + state.admin.schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                grammarEditModal.show();
+            },
+            saveGrammar: async () => {
+                const form = document.getElementById('grammarEditForm');
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+                const payload = {
+                    school_id: document.getElementById('gram-school').value,
+                    class_name: document.getElementById('gram-class').value,
+                    level: document.getElementById('gram-level').value,
+                    question_text: document.getElementById('gram-q').value,
+                    options: JSON.stringify([
+                        document.getElementById('gram-opt0').value,
+                        document.getElementById('gram-opt1').value,
+                        document.getElementById('gram-opt2').value,
+                        document.getElementById('gram-opt3').value
+                    ]),
+                    correct_answer: document.getElementById('gram-ans').value,
+                    explanation: ""
+                };
+                const res = await api('/api/admin/grammar', 'POST', payload);
+                if(res && !res.error) { showToast('Grammar added!'); grammarEditModal.hide(); state.admin.grammarLoaded = false; render(); }
+            },
+            deleteGrammar: async (id) => { if(confirm('Delete Grammar Module?')) { const res = await api(`/api/admin/grammar/${id}`, 'DELETE'); if(res && !res.error) { state.admin.grammarLoaded = false; render(); } } },
+            
+            // --- MCQ Set Handlers ---
+            loadMCQSets: async () => { const data = await api('/api/admin/mcq-sets'); state.admin.mcqSetsLoaded = true; state.admin.mcqSets = data || []; render(); },
+            openMCQSetModal: async () => {
+                document.getElementById('mcqSetForm').reset();
+                document.getElementById('mcq-questions-container').innerHTML = '';
+                if(state.admin.schools.length === 0) await window.app.admin.loadSchools();
+                const schoolSelect = document.getElementById('mcq-school');
+                schoolSelect.innerHTML = '<option value="">Select School</option>' + state.admin.schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                // Generate 5 question blocks
+                const container = document.getElementById('mcq-questions-container');
+                for (let i = 0; i < 5; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'p-3 bg-dark rounded mb-3 border border-secondary';
+                    div.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center mb-2"><span class="badge bg-info text-dark">Q${i+1}</span></div>
+                        <input type="text" class="form-control form-control-sm form-control-dark mb-2" placeholder="Question Text" name="mcq_${i}_q" required>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option A" name="mcq_${i}_opt0" required></div>
+                            <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option B" name="mcq_${i}_opt1" required></div>
+                            <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option C" name="mcq_${i}_opt2" required></div>
+                            <div class="col-6"><input type="text" class="form-control form-control-sm form-control-dark" placeholder="Option D" name="mcq_${i}_opt3" required></div>
+                        </div>
+                        <select class="form-select form-select-sm form-control-dark" name="mcq_${i}_ans" required>
+                            <option value="">Correct Answer...</option>
+                            <option value="0">Option A</option><option value="1">Option B</option><option value="2">Option C</option><option value="3">Option D</option>
+                        </select>
+                    `;
+                    container.appendChild(div);
+                }
+                mcqSetModal.show();
+            },
+            saveMCQSet: async () => {
+                const form = document.getElementById('mcqSetForm');
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+                const fd = new FormData(form);
+                const qdata = [];
+                for(let i=0; i<5; i++) {
+                    qdata.push({
+                        q: fd.get(`mcq_${i}_q`),
+                        opts: [fd.get(`mcq_${i}_opt0`), fd.get(`mcq_${i}_opt1`), fd.get(`mcq_${i}_opt2`), fd.get(`mcq_${i}_opt3`)],
+                        ans: fd.get(`mcq_${i}_ans`)
+                    });
+                }
+                const payload = {
+                    school_id: document.getElementById('mcq-school').value,
+                    class_name: document.getElementById('mcq-class').value,
+                    category: document.getElementById('mcq-category').value,
+                    title: document.getElementById('mcq-title').value,
+                    questions_json: JSON.stringify(qdata)
+                };
+                const res = await api('/api/admin/mcq-sets', 'POST', payload);
+                if(res && !res.error) { showToast('MCQ Set created!'); mcqSetModal.hide(); state.admin.mcqSetsLoaded = false; render(); }
+            },
+            deleteMCQSet: async (id) => { if(confirm('Delete MCQ Set?')) { const res = await api(`/api/admin/mcq-sets/${id}`, 'DELETE'); if(res && !res.error) { state.admin.mcqSetsLoaded = false; render(); } } },
+            
+            // --- Sentence Exercise Handlers ---
+            loadSentenceExercises: async () => { const data = await api('/api/admin/sentence-exercises'); state.admin.sentencesLoaded = true; state.admin.sentenceExercises = data || []; render(); },
+            openSentenceModal: async () => {
+                document.getElementById('sentenceExForm').reset();
+                if(state.admin.schools.length === 0) await window.app.admin.loadSchools();
+                const schoolSelect = document.getElementById('sent-school');
+                schoolSelect.innerHTML = '<option value="">Select School</option>' + state.admin.schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                sentenceExModal.show();
+            },
+            autoFillWords: () => {
+                const sentence = document.getElementById('sent-correct').value;
+                if (!sentence) { showToast('Enter a sentence first', 'warning'); return; }
+                const words = sentence.split(/\s+/).filter(w => w.length > 0);
+                const inputs = document.querySelectorAll('.sent-word-input');
+                // Shuffle words for display
+                const shuffled = words.slice().sort(() => Math.random() - 0.5);
+                inputs.forEach((inp, i) => { inp.value = shuffled[i] || ''; });
+            },
+            saveSentenceExercise: async () => {
+                const form = document.getElementById('sentenceExForm');
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+                const words = [];
+                document.querySelectorAll('.sent-word-input').forEach(inp => {
+                    if(inp.value.trim()) words.push(inp.value.trim());
+                });
+                if(words.length < 3) { showToast('At least 3 words required', 'warning'); return; }
+                const payload = {
+                    school_id: document.getElementById('sent-school').value,
+                    class_name: document.getElementById('sent-class').value,
+                    correct_sentence: document.getElementById('sent-correct').value,
+                    words_json: JSON.stringify(words)
+                };
+                const res = await api('/api/admin/sentence-exercises', 'POST', payload);
+                if(res && !res.error) { showToast('Sentence exercise created!'); sentenceExModal.hide(); state.admin.sentencesLoaded = false; render(); }
+            },
+            deleteSentenceExercise: async (id) => { if(confirm('Delete Sentence Exercise?')) { const res = await api(`/api/admin/sentence-exercises/${id}`, 'DELETE'); if(res && !res.error) { state.admin.sentencesLoaded = false; render(); } } },
+            openUserModal: async (uid) => { 
+                document.getElementById('userEditForm').reset(); 
+                if(state.admin.schools.length === 0) await window.app.admin.loadSchools();
+                const schoolSelect = document.getElementById('edit-school');
+                schoolSelect.innerHTML = '<option value="">No School</option>' + state.admin.schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                if(uid) { 
+                    const u = state.admin.users.find(x=>x.id===uid); 
+                    document.getElementById('edit-user-id').value = u.id; 
+                    document.getElementById('edit-username').value = u.username; 
+                    document.getElementById('edit-usn').value = u.usn || ''; 
+                    document.getElementById('edit-role').value = u.role; 
+                    document.getElementById('edit-school').value = u.school_id || ''; 
+                    document.getElementById('edit-class').value = u.class_name || ''; 
+                    document.getElementById('edit-section').value = u.section_name || ''; 
+                    document.getElementById('edit-mapped-usns').value = u.mapped_usns || ''; 
+                    document.getElementById('edit-password-group').style.display='none'; 
+                } else { 
+                    document.getElementById('edit-user-id').value = ''; 
+                    document.getElementById('edit-password-group').style.display='block'; 
+                } 
+                userEditModal.show(); 
+            },
+            saveUser: async () => { const uid = document.getElementById('edit-user-id').value; const body = { username: document.getElementById('edit-username').value, usn: document.getElementById('edit-usn').value, role: document.getElementById('edit-role').value, school_id: document.getElementById('edit-school').value, class_name: document.getElementById('edit-class').value, section_name: document.getElementById('edit-section').value, mapped_usns: document.getElementById('edit-mapped-usns').value, password: document.getElementById('edit-password').value }; const d = await api(uid ? `/api/admin/user/${uid}` : '/api/admin/user', uid ? 'PUT' : 'POST', body); if(d) { window.app.admin.loadUsers(); userEditModal.hide(); showToast('Saved'); } },
+            deleteUser: async (uid, name) => { if(confirm(`Delete ${name}?`)) { await api(`/api/admin/user/${uid}`, 'DELETE'); window.app.admin.loadUsers(); } },
+            loadSchools: async () => { const d = await api('/api/admin/schools'); state.admin.schoolsLoaded = true; if(d) { state.admin.schools=d; render(); } },
+            openSchoolModal: () => { document.getElementById('schoolEditForm').reset(); schoolEditModal.show(); },
+            saveSchool: async () => {
+                const name = document.getElementById('edit-school-name').value;
+                const address = document.getElementById('edit-school-address').value;
+                if(!name) return showToast('School name required', 'warning');
+                const res = await api('/api/admin/schools', 'POST', { name, address });
+                if(res && !res.error) { showToast('School saved!'); schoolEditModal.hide(); state.admin.schoolsLoaded=false; render(); }
+            },
+            deleteSchool: async (id, name) => { if(confirm(`Delete school ${name}?`)) { await api(`/api/admin/schools/${id}`, 'DELETE'); state.admin.schoolsLoaded=false; render(); } },
+            loadFileContent: async (f) => { const d = await api(`/api/admin/file?filename=${f}`); if(d) { state.admin.currentFile=d.filename; state.admin.fileContent=d.content; render(); } },
+            saveFileContent: async () => { const d = await api('/api/admin/file', 'POST', { filename: state.admin.currentFile, content: document.getElementById('fileEditor').value }); if(d) { state.admin.fileContent = document.getElementById('fileEditor').value; showToast('Saved'); } }
+        },
+        parent: {
+            markRead: async (notifId) => {
+                const res = await api(`/api/notifications/${notifId}/read`, 'PUT');
+                if (res && !res.error) {
+                    const n = state.parent.notifications.find(x => x.id === notifId);
+                    if (n) n.is_read = 1;
+                    render();
+                }
+            },
+            toggleTrack: (childId) => {
+                if (state.parent.trackingChildId === childId) {
+                    state.parent.trackingChildId = null;
+                } else {
+                    state.parent.trackingChildId = childId;
+                    setTimeout(() => renderCharts(state.parent.children.find(c => c.id === childId).stats, childId), 100);
+                }
+                render();
+            }
+        },
+        principal: {
+            setView: (v) => { state.principal.activeView = v; render(); },
+            loadUsers: async () => { const d = await api('/api/principal/users'); state.principal.usersLoaded = true; if(d) { state.principal.users=d; render(); } },
+            openUserModal: (uid) => {
+                document.getElementById('userEditForm').reset();
+                document.getElementById('edit-school-container').style.display = 'none'; // Principal can't edit school
+                if(uid) {
+                    const u = state.principal.users.find(x=>x.id===uid);
+                    document.getElementById('edit-user-id').value = u.id;
+                    document.getElementById('edit-username').value = u.username;
+                    document.getElementById('edit-usn').value = u.usn || '';
+                    document.getElementById('edit-role').value = u.role;
+                    document.getElementById('edit-class').value = u.class_name || '';
+                    document.getElementById('edit-section').value = u.section_name || '';
+                    document.getElementById('edit-mapped-usns').value = u.mapped_usns || '';
+                    document.getElementById('edit-password-group').style.display='none';
+                } else {
+                    document.getElementById('edit-user-id').value = '';
+                    document.getElementById('edit-password-group').style.display='block';
+                }
+                userEditModal.show();
+            },
+            saveUser: async () => { 
+                const uid = document.getElementById('edit-user-id').value; 
+                const role = document.getElementById('edit-role').value;
+                if(role === 'ADMIN' || role === 'PRINCIPAL') return showToast('Cannot create Admin/Principal', 'warning');
+                const body = { username: document.getElementById('edit-username').value, usn: document.getElementById('edit-usn').value, role: role, class_name: document.getElementById('edit-class').value, section_name: document.getElementById('edit-section').value, mapped_usns: document.getElementById('edit-mapped-usns').value, password: document.getElementById('edit-password').value }; 
+                const d = await api(uid ? `/api/principal/user/${uid}` : '/api/principal/user', uid ? 'PUT' : 'POST', body); 
+                if(d) { window.app.principal.loadUsers(); userEditModal.hide(); showToast('Saved'); } 
+            },
+            deleteUser: async (uid, name) => { if(confirm(`Delete ${name}?`)) { await api(`/api/principal/user/${uid}`, 'DELETE'); window.app.principal.loadUsers(); } },
+            viewStaff: (staffId) => { state.principal.selectedStaff = state.principal.users.find(u => u.id === staffId); state.principal.selectedClass = null; state.principal.selectedSection = null; state.principal.selectedStudent = null; render(); },
+            viewClass: (cls) => { state.principal.selectedClass = cls; state.principal.selectedSection = null; state.principal.selectedStudent = null; render(); },
+            viewSection: (sec) => { state.principal.selectedSection = sec; state.principal.selectedStudent = null; render(); },
+            viewStudent: async (studentId) => {
+                const student = state.principal.users.find(u => u.id === studentId);
+                if (student) {
+                    state.principal.selectedStudent = student;
+                    const stats = await api(`/api/admin/student-stats/${studentId}`); // reuse admin endpoint which just queries the db
+                    if (stats) {
+                        state.principal.selectedStudentStats = stats;
+                        render();
+                        setTimeout(() => renderCharts(state.principal.selectedStudentStats), 100);
+                    }
+                }
+            },
+            clearSelection: () => { state.principal.selectedStaff = null; state.principal.selectedClass = null; state.principal.selectedSection = null; state.principal.selectedStudent = null; state.principal.selectedStudentStats = null; render(); },
+            sendAutoAlert: async (className, avgScore) => {
+                if(!confirm(`Send auto-generated performance warning to parents of students in Class ${className}?`)) return;
+                
+                if(!state.principal.usersLoaded) await window.app.principal.loadUsers();
+                const criticalStudents = state.principal.users.filter(u => u.role === 'STUDENT' && u.class_name === className);
+                if(criticalStudents.length === 0) return showToast('No critical students found in this class', 'info');
+                
+                let count = 0;
+                for(let student of criticalStudents) {
+                    const parents = await api(`/api/parents/by_student_usn/${student.usn}`);
+                    if(parents && parents.length > 0) {
+                        const receivers = parents.map(p => p.id);
+                        const msgTone = avgScore < 40 ? 'This needs immediate improvement.' : 'Please monitor their progress closely.';
+                        const message = `Auto-Alert: ${student.username} is currently performing at ${avgScore}%. ${msgTone}`;
+                        await api('/api/notifications/send', 'POST', { receiver_ids: receivers, message: message, type: 'PERFORMANCE' });
+                        count++;
+                    }
+                }
+                
+                showToast(`Alerts sent successfully to parents of ${count} students!`);
+            }
+        }
+    };
+    
+    // Auth Check
+    api('/api/check_auth').then(d => { if(d && d.isAuthenticated) { state.auth=true; state.username=d.username; state.role=d.role; state.usn=d.usn; state.school_name=d.school_name; state.class_name=d.class_name; state.section_name=d.section_name; state.page=state.role==='STUDENT'?'home':state.role.toLowerCase(); } render(); });
+});
+</script>
+</body>
+</html>

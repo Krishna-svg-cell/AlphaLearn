@@ -1,0 +1,142 @@
+{
+  "meanings": [
+    ["Ambiguous", "Open to more than one interpretation", "Clear and definite", "Loud and harsh", "Slow and steady"],
+    ["Benevolent", "Well-meaning and kindly", "Hostile and aggressive", "Lazy and careless", "Timid and shy"],
+    ["Candid", "Truthful and straightforward", "Deceitful and dishonest", "Shy and reserved", "Loud and obnoxious"],
+    ["Diligent", "Having careful and persistent effort", "Being lazy and idle", "Rude and impolite", "Quick and careless"],
+    ["Eloquent", "Fluent or persuasive in speaking", "Unable to speak clearly", "Very quiet", "Extremely loud"],
+    ["Feasible", "Possible and practical to do", "Impossible to achieve", "Very dangerous", "Extremely expensive"],
+    ["Gratitude", "The quality of being thankful", "Feeling of anger", "State of confusion", "Sense of fear"],
+    ["Hypothesis", "A proposed explanation for something", "A proven fact", "A historical event", "A mathematical equation"],
+    ["Inevitable", "Certain to happen; unavoidable", "Easily preventable", "Highly unlikely", "Completely impossible"],
+    ["Juxtapose", "Place close together for comparison", "Separate things far apart", "Destroy completely", "Build from scratch"],
+    ["Pragmatic", "Dealing with things practically", "Being overly idealistic", "Avoiding all problems", "Creating unnecessary drama"],
+    ["Resilient", "Able to recover quickly from difficulties", "Easily broken or damaged", "Very rigid and inflexible", "Constantly fearful"],
+    ["Scrutinize", "Examine or inspect closely", "Ignore completely", "Destroy without thought", "Accept without question"],
+    ["Tenacious", "Holding firmly to something", "Giving up easily", "Being very flexible", "Avoiding all conflict"],
+    ["Ubiquitous", "Present everywhere at the same time", "Extremely rare and hard to find", "Located in one place only", "Hidden from view"],
+    ["Verbose", "Using more words than needed", "Being very concise", "Completely silent", "Speaking rarely"],
+    ["Acumen", "The ability to make good judgments", "Lack of understanding", "Physical strength", "Musical talent"],
+    ["Brevity", "Concise and exact use of words", "Long and wordy expression", "Loud vocal delivery", "Slow reading speed"],
+    ["Cognizant", "Having knowledge or awareness", "Completely unaware", "Physically strong", "Emotionally unstable"],
+    ["Paradigm", "A typical example or pattern", "A rare exception", "An impossible task", "A simple mistake"]
+  ],
+  "synonyms": [
+    ["Abandon", "Forsake", "Embrace", "Protect", "Cherish"],
+    ["Benign", "Harmless", "Dangerous", "Lethal", "Toxic"],
+    ["Comprehensive", "Thorough", "Incomplete", "Shallow", "Brief"],
+    ["Diminish", "Decrease", "Increase", "Multiply", "Expand"],
+    ["Enhance", "Improve", "Worsen", "Damage", "Destroy"],
+    ["Fluctuate", "Vary", "Stabilize", "Fix", "Settle"],
+    ["Genuine", "Authentic", "Fake", "Artificial", "Counterfeit"],
+    ["Hostile", "Unfriendly", "Welcoming", "Kind", "Gentle"],
+    ["Impede", "Hinder", "Assist", "Accelerate", "Encourage"],
+    ["Jeopardize", "Endanger", "Protect", "Secure", "Safeguard"],
+    ["Lucid", "Clear", "Confusing", "Vague", "Obscure"],
+    ["Mundane", "Ordinary", "Extraordinary", "Unique", "Remarkable"],
+    ["Novice", "Beginner", "Expert", "Master", "Veteran"],
+    ["Obsolete", "Outdated", "Modern", "Current", "Advanced"],
+    ["Profound", "Deep", "Shallow", "Surface", "Simple"],
+    ["Reluctant", "Unwilling", "Eager", "Enthusiastic", "Ready"],
+    ["Subtle", "Slight", "Obvious", "Clear", "Bold"],
+    ["Transparent", "Clear", "Opaque", "Hidden", "Secret"],
+    ["Vivid", "Bright", "Dull", "Faded", "Pale"],
+    ["Zealous", "Enthusiastic", "Apathetic", "Indifferent", "Lazy"]
+  ],
+  "antonyms": [
+    ["Abundant", "Scarce", "Plentiful", "Numerous", "Copious"],
+    ["Arrogant", "Humble", "Proud", "Conceited", "Vain"],
+    ["Bold", "Timid", "Brave", "Courageous", "Fearless"],
+    ["Complex", "Simple", "Complicated", "Intricate", "Elaborate"],
+    ["Defend", "Attack", "Protect", "Shield", "Guard"],
+    ["Expand", "Contract", "Enlarge", "Grow", "Stretch"],
+    ["Flexible", "Rigid", "Adaptable", "Elastic", "Pliable"],
+    ["Generous", "Stingy", "Liberal", "Charitable", "Kind"],
+    ["Harmony", "Discord", "Peace", "Unity", "Agreement"],
+    ["Include", "Exclude", "Contain", "Involve", "Embrace"],
+    ["Juvenile", "Mature", "Young", "Childish", "Youthful"],
+    ["Knowledge", "Ignorance", "Wisdom", "Learning", "Education"],
+    ["Lively", "Dull", "Energetic", "Vibrant", "Active"],
+    ["Maximum", "Minimum", "Greatest", "Highest", "Largest"],
+    ["Optimistic", "Pessimistic", "Hopeful", "Positive", "Confident"],
+    ["Permanent", "Temporary", "Lasting", "Enduring", "Fixed"],
+    ["Rational", "Irrational", "Logical", "Reasonable", "Sensible"],
+    ["Success", "Failure", "Achievement", "Victory", "Triumph"],
+    ["Transparent", "Opaque", "Clear", "See-through", "Visible"],
+    ["Unity", "Division", "Togetherness", "Harmony", "Agreement"]
+  ],
+  "grammar": [
+    {"q": "Choose the correct form: She _____ to the store yesterday.", "o": ["go", "went", "gone", "goes"], "a": 1, "t": "Past Tense", "c": "The simple past tense is used for completed actions in the past. 'Went' is the past tense of 'go'."},
+    {"q": "Identify the correct passive voice: The cake _____ by my mother.", "o": ["bakes", "is baked", "was baked", "baking"], "a": 2, "t": "Passive Voice", "c": "In passive voice, the subject receives the action. 'Was baked' is the past passive form."},
+    {"q": "Choose the correct conjunction: I wanted to go, _____ it was raining.", "o": ["and", "but", "or", "so"], "a": 1, "t": "Conjunctions", "c": "Conjunctions connect clauses. 'But' shows contrast between wanting to go and the rain preventing it."},
+    {"q": "Which sentence uses the correct subject-verb agreement?", "o": ["The team are winning", "The team is winning", "The team were winning", "The team have winning"], "a": 1, "t": "Subject-Verb Agreement", "c": "Collective nouns like 'team' take singular verbs in standard English. 'Is winning' is correct."},
+    {"q": "Choose the correct relative pronoun: The book _____ I borrowed was interesting.", "o": ["who", "which", "whom", "whose"], "a": 1, "t": "Relative Pronouns", "c": "'Which' is used for things/objects. Since 'book' is a thing, 'which' is the correct relative pronoun."},
+    {"q": "Identify the correct use of articles: She is _____ honest woman.", "o": ["a", "an", "the", "no article"], "a": 1, "t": "Articles", "c": "'An' is used before words starting with a vowel sound. 'Honest' starts with a vowel sound (the 'h' is silent)."},
+    {"q": "Choose the correct preposition: He arrived _____ Monday morning.", "o": ["in", "on", "at", "by"], "a": 1, "t": "Prepositions", "c": "'On' is used with specific days. We say 'on Monday', 'on Friday', etc."},
+    {"q": "Which is the correct conditional sentence?", "o": ["If I will study, I pass", "If I study, I will pass", "If I studied, I will pass", "If I studies, I pass"], "a": 1, "t": "Conditional Sentences", "c": "First conditional: If + present simple, will + base verb. 'If I study, I will pass' is correct."},
+    {"q": "Choose the correct reported speech: She said, 'I am tired.'", "o": ["She said she is tired", "She said she was tired", "She said I am tired", "She says she was tired"], "a": 1, "t": "Reported Speech", "c": "In reported speech, present tense changes to past tense. 'Am' becomes 'was'."},
+    {"q": "Identify the correct degree of comparison: Mount Everest is the _____ peak in the world.", "o": ["higher", "highest", "more high", "most high"], "a": 1, "t": "Degrees of Comparison", "c": "Superlative degree uses '-est' for short adjectives. 'Highest' is the superlative of 'high'."}
+  ],
+  "syllabus": [
+    {
+      "s": "English",
+      "l": "Figures of Speech",
+      "c": "Figures of speech are literary devices that create vivid imagery. Common types include Simile (comparison using like/as), Metaphor (direct comparison), Personification (giving human qualities to non-human things), Alliteration (repetition of initial consonant sounds), and Hyperbole (exaggeration for effect).",
+      "q": [
+        {"q": "What figure of speech is used in: 'Life is a journey'?", "o": ["Simile", "Metaphor", "Personification", "Alliteration"], "a": 1},
+        {"q": "'The wind howled through the trees' is an example of:", "o": ["Metaphor", "Simile", "Personification", "Hyperbole"], "a": 2},
+        {"q": "'She sells seashells by the seashore' is an example of:", "o": ["Metaphor", "Personification", "Alliteration", "Hyperbole"], "a": 2},
+        {"q": "'As brave as a lion' uses which figure of speech?", "o": ["Metaphor", "Simile", "Personification", "Irony"], "a": 1},
+        {"q": "'I have told you a million times' is an example of:", "o": ["Simile", "Metaphor", "Alliteration", "Hyperbole"], "a": 3}
+      ]
+    },
+    {
+      "s": "Science",
+      "l": "Chemical Reactions and Equations",
+      "c": "A chemical reaction involves the transformation of reactants into products. Types include combination, decomposition, displacement, and double displacement reactions. Balancing equations ensures the law of conservation of mass is obeyed.",
+      "q": [
+        {"q": "What type of reaction is: 2H₂ + O₂ → 2H₂O?", "o": ["Decomposition", "Combination", "Displacement", "Double displacement"], "a": 1},
+        {"q": "In a decomposition reaction, a single compound:", "o": ["Combines with another", "Breaks into simpler substances", "Displaces another element", "Remains unchanged"], "a": 1},
+        {"q": "What must be balanced in a chemical equation?", "o": ["Color of substances", "Number of atoms", "Temperature", "Volume"], "a": 1},
+        {"q": "Rusting of iron is an example of:", "o": ["Combination reaction", "Decomposition", "Oxidation", "Reduction"], "a": 2},
+        {"q": "Which law states that matter cannot be created or destroyed?", "o": ["Law of gravity", "Conservation of mass", "Newton's third law", "Boyle's law"], "a": 1}
+      ]
+    },
+    {
+      "s": "Mathematics",
+      "l": "Quadratic Equations",
+      "c": "A quadratic equation is of the form ax² + bx + c = 0, where a ≠ 0. Solutions can be found by factoring, completing the square, or using the quadratic formula: x = (-b ± √(b²-4ac)) / 2a. The discriminant (b²-4ac) determines the nature of roots.",
+      "q": [
+        {"q": "What is the standard form of a quadratic equation?", "o": ["ax + b = 0", "ax² + bx + c = 0", "ax³ + bx = 0", "a/x + b = 0"], "a": 1},
+        {"q": "If the discriminant is zero, the roots are:", "o": ["Real and distinct", "Real and equal", "Complex", "No roots exist"], "a": 1},
+        {"q": "The quadratic formula is:", "o": ["x = -b/2a", "x = (-b ± √(b²-4ac))/2a", "x = b² - 4ac", "x = 2a/b"], "a": 1},
+        {"q": "How many roots does a quadratic equation have?", "o": ["One", "Two", "Three", "Four"], "a": 1},
+        {"q": "If discriminant is negative, roots are:", "o": ["Real", "Equal", "Not real (complex)", "Zero"], "a": 2}
+      ]
+    },
+    {
+      "s": "Social Science",
+      "l": "Nationalism in India",
+      "c": "The Indian National Movement was a mass movement seeking independence from British rule. Key events include the Non-Cooperation Movement (1920), Civil Disobedience Movement (1930), and Quit India Movement (1942). Leaders like Mahatma Gandhi, Jawaharlal Nehru, and Subhas Chandra Bose played crucial roles.",
+      "q": [
+        {"q": "Who led the Salt March in 1930?", "o": ["Jawaharlal Nehru", "Mahatma Gandhi", "Subhas Chandra Bose", "Sardar Patel"], "a": 1},
+        {"q": "The Quit India Movement was launched in which year?", "o": ["1920", "1930", "1942", "1947"], "a": 2},
+        {"q": "What was the main method used by Gandhi?", "o": ["Violence", "Non-violence", "Armed revolt", "Diplomacy only"], "a": 1},
+        {"q": "The Jallianwala Bagh massacre took place in:", "o": ["1919", "1920", "1930", "1942"], "a": 0},
+        {"q": "India gained independence on:", "o": ["15 Aug 1947", "26 Jan 1950", "15 Aug 1946", "26 Jan 1947"], "a": 0}
+      ]
+    }
+  ],
+  "sentences": [
+    {"s": "The students are preparing for their annual examination", "w": ["examination", "their", "are", "annual", "students", "The", "preparing", "for"]},
+    {"s": "Knowledge is the most powerful weapon in the world", "w": ["the", "most", "in", "weapon", "powerful", "is", "Knowledge", "world"]},
+    {"s": "She completed her homework before going to play outside", "w": ["outside", "completed", "to", "her", "play", "She", "homework", "before", "going"]},
+    {"s": "The teacher explained the concept of quadratic equations clearly", "w": ["clearly", "of", "The", "equations", "teacher", "concept", "the", "quadratic", "explained"]},
+    {"s": "Regular practice helps students improve their academic performance", "w": ["performance", "their", "practice", "improve", "Regular", "academic", "students", "helps"]},
+    {"s": "The experiment demonstrated the principle of conservation of energy", "w": ["of", "energy", "demonstrated", "conservation", "The", "principle", "experiment", "the", "of"]},
+    {"s": "Critical thinking is an essential skill for every student", "w": ["student", "is", "skill", "Critical", "thinking", "for", "an", "essential", "every"]},
+    {"s": "The library contains thousands of books on various subjects", "w": ["subjects", "The", "on", "various", "of", "library", "contains", "books", "thousands"]},
+    {"s": "Mathematics requires consistent practice and logical reasoning", "w": ["reasoning", "practice", "and", "consistent", "requires", "logical", "Mathematics"]},
+    {"s": "The principal announced the results of the annual sports day", "w": ["day", "of", "results", "annual", "The", "the", "sports", "principal", "announced"]}
+  ]
+}
