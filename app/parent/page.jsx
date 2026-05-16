@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Flame, Star, Bell, CheckCircle, TrendingUp, ArrowLeft, ChevronDown, ChevronUp, Award, ArrowRight, Calendar, BookOpen } from 'lucide-react';
+import { Flame, Star, Bell, CheckCircle, TrendingUp, ArrowLeft, ChevronDown, ChevronUp, Award, ArrowRight, Calendar, BookOpen, AlertTriangle, Brain } from 'lucide-react';
 import DashboardLayout from '../components/DashboardLayout';
 
 export default function ParentDashboard() {
@@ -17,6 +17,7 @@ export default function ParentDashboard() {
   const [expandedDay, setExpandedDay] = useState(null);
   const [dayAnswers, setDayAnswers] = useState({});
   const [subjectProgress, setSubjectProgress] = useState([]);
+  const [riskAnalysis, setRiskAnalysis] = useState(null);
   const router = useRouter();
 
   // Resilient API fetcher — retries on 500/network errors (Neon cold-start recovery)
@@ -55,6 +56,7 @@ export default function ParentDashboard() {
 
       // Non-critical
       axios.get('/api/notifications', { headers: h }).then(r => setNotifications(r.data)).catch(() => {});
+      axios.get('/api/parent/predictive-analytics', { headers: h }).then(r => setRiskAnalysis(r.data)).catch(() => {});
     };
     loadDashboard();
   }, [router]);
@@ -161,6 +163,42 @@ export default function ParentDashboard() {
               <Award className="mx-auto mb-3" size={48} color="#e2e8f0" />
               <p className="font-bold text-slate-700 mb-1">No student linked</p>
               <p className="text-sm text-slate-400">Contact the Admin to link your child's account.</p>
+            </div>
+          )}
+
+          {/* Predictive Analytics Alert */}
+          {riskAnalysis && riskAnalysis.risk_level !== 'low' && (
+            <div className="card p-5 border-l-4" style={{borderLeftColor: riskAnalysis.risk_color}}>
+              <div className="flex items-start gap-3">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{background: riskAnalysis.risk_color + '20'}}>
+                  <AlertTriangle size={20} style={{color: riskAnalysis.risk_color}} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-bold text-slate-800">{riskAnalysis.risk_label}</p>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{background: riskAnalysis.risk_color + '15', color: riskAnalysis.risk_color}}>Risk: {riskAnalysis.risk_score}%</span>
+                  </div>
+                  {riskAnalysis.risk_factors.map((f, i) => (
+                    <div key={i} className="flex items-start gap-2 mt-1.5">
+                      <span className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${f.severity === 'high' ? 'bg-red-400' : 'bg-yellow-400'}`} />
+                      <p className="text-xs text-slate-600"><span className="font-bold">{f.factor}:</span> {f.detail}</p>
+                    </div>
+                  ))}
+                  {riskAnalysis.overall_accuracy !== null && (
+                    <p className="text-xs text-slate-400 mt-2">Overall accuracy: {riskAnalysis.overall_accuracy}% • {riskAnalysis.missions_last_14_days} missions in last 14 days</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {riskAnalysis && riskAnalysis.risk_level === 'low' && (
+            <div className="card p-4 flex items-center gap-3 border-l-4 border-l-emerald-400">
+              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><span className="text-lg">🟢</span></div>
+              <div>
+                <p className="font-bold text-slate-800 text-sm">On Track</p>
+                <p className="text-xs text-slate-500">{riskAnalysis.student_name || 'Your child'} is performing well! {riskAnalysis.overall_accuracy !== null ? `${riskAnalysis.overall_accuracy}% accuracy` : ''}</p>
+              </div>
             </div>
           )}
 

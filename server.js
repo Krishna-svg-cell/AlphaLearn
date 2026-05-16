@@ -10,6 +10,22 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { getDb, initDb, closePool } = require('./db.js');
 
+// Google Gemini AI SDK (for AI Tutor)
+let genAI = null;
+let geminiModel = null;
+try {
+  const { GoogleGenerativeAI } = require('@google/generative-ai');
+  if (process.env.GEMINI_API_KEY) {
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    geminiModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    console.log('✅ Gemini AI Tutor initialized (2.5 Flash)');
+  } else {
+    console.log('ℹ️ GEMINI_API_KEY not set — AI Tutor disabled');
+  }
+} catch (e) {
+  console.log('ℹ️ @google/generative-ai not installed — AI Tutor disabled');
+}
+
 const PORT = process.env.BACKEND_PORT || 3001; // Fixed to 3001 to avoid conflict with Next.js (3000)
 const SECRET_KEY = process.env.JWT_SECRET || 'alphalearn-secret-key';
 
@@ -183,33 +199,56 @@ const saveClassJsonData = (className, data) => {
       const user = await db.get('SELECT u.id, u.username, u.role, u.class_name, u.section_name, u.board_name, u.school_id, u.xp, u.streak, u.last_active_date, u.mapped_student_id, s.name as school_name FROM user u LEFT JOIN school s ON u.school_id = s.id WHERE u.id = ?', [req.user.id]);
       if (!user) return res.status(404).json({ error: 'User not found' });
       
-      // Auto-reset broken streaks and notify ONLY Parent and Staff
-      if (user.role === 'STUDENT' && user.streak > 0 && user.last_active_date) {
-          let lastDateStr = user.last_active_date;
-          if (lastDateStr.includes('T')) lastDateStr = lastDateStr.split('T')[0];
+      // Recalculate streak from actual mission completion history (same algorithm as submit)
+      if (user.role === 'STUDENT') {
           const todayStr = getLocalDateString();
-          const lastDate = new Date(lastDateStr + 'T00:00:00Z');
-          const today = new Date(todayStr + 'T00:00:00Z');
-          const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+          const completedDates = await db.all('SELECT date FROM daily_mission WHERE user_id = ? AND is_completed = true ORDER BY date DESC', [user.id]);
           
-          if (diffDays > 1) {
-              await db.run('UPDATE user SET streak = 0 WHERE id = ?', [user.id]);
-              user.streak = 0;
+          const dateSet = new Set(completedDates.map(d => {
+            if (typeof d.date === 'string') return d.date.split('T')[0];
+            if (d.date instanceof Date) return d.date.toISOString().split('T')[0];
+            return d.date;
+          }));
+
+          let calculatedStreak = 0;
+          let checkDate = new Date(todayStr + 'T00:00:00Z');
+          let dStr = checkDate.toISOString().split('T')[0];
+
+          // If today is NOT completed yet, start counting from yesterday
+          if (!dateSet.has(dStr)) {
+            checkDate.setDate(checkDate.getDate() - 1);
+            dStr = checkDate.toISOString().split('T')[0];
+          }
+
+          while (dateSet.has(dStr)) {
+            calculatedStreak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+            dStr = checkDate.toISOString().split('T')[0];
+          }
+
+          // Update DB if streak value has drifted
+          if (user.streak !== calculatedStreak) {
+              const oldStreak = user.streak;
+              await db.run('UPDATE user SET streak = ? WHERE id = ?', [calculatedStreak, user.id]);
+              user.streak = calculatedStreak;
               
-              const notifMsg = `⚠️ Streak Broken: ${user.username} missed their daily mission.`;
-              const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-              // Notify assigned parent
-              const parent = await db.get(`SELECT id FROM user WHERE role = 'PARENT' AND mapped_student_id = ? LIMIT 1`, [user.id]);
-              if (parent) {
-                  const existingNotif = await db.get("SELECT id FROM notification WHERE target_user_id = ? AND message = ? AND created_at >= ?", [parent.id, notifMsg, oneDayAgo]);
-                  if (!existingNotif) await db.run("INSERT INTO notification (target_user_id, school_id, message) VALUES (?, ?, ?)", [parent.id, user.school_id, notifMsg]);
-              }
-              // Notify assigned staff
-              const staff = await db.get(`SELECT id FROM user WHERE role = 'STAFF' AND school_id = ? AND class_name = ? AND (section_name = ? OR section_name IS NULL OR section_name = '') LIMIT 1`, 
-                  [user.school_id, user.class_name, user.section_name]);
-              if (staff) {
-                  const existingNotif = await db.get("SELECT id FROM notification WHERE target_user_id = ? AND message = ? AND created_at >= ?", [staff.id, notifMsg, oneDayAgo]);
-                  if (!existingNotif) await db.run("INSERT INTO notification (target_user_id, school_id, message) VALUES (?, ?, ?)", [staff.id, user.school_id, notifMsg]);
+              // Send streak-broken notification only when streak dropped to 0 from a positive value
+              if (oldStreak > 0 && calculatedStreak === 0) {
+                  const notifMsg = `⚠️ Streak Broken: ${user.username} missed their daily mission.`;
+                  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+                  // Notify assigned parent
+                  const parent = await db.get(`SELECT id FROM user WHERE role = 'PARENT' AND mapped_student_id = ? LIMIT 1`, [user.id]);
+                  if (parent) {
+                      const existingNotif = await db.get("SELECT id FROM notification WHERE target_user_id = ? AND message = ? AND created_at >= ?", [parent.id, notifMsg, oneDayAgo]);
+                      if (!existingNotif) await db.run("INSERT INTO notification (target_user_id, school_id, message) VALUES (?, ?, ?)", [parent.id, user.school_id, notifMsg]);
+                  }
+                  // Notify assigned staff
+                  const staff = await db.get(`SELECT id FROM user WHERE role = 'STAFF' AND school_id = ? AND class_name = ? AND (section_name = ? OR section_name IS NULL OR section_name = '') LIMIT 1`, 
+                      [user.school_id, user.class_name, user.section_name]);
+                  if (staff) {
+                      const existingNotif = await db.get("SELECT id FROM notification WHERE target_user_id = ? AND message = ? AND created_at >= ?", [staff.id, notifMsg, oneDayAgo]);
+                      if (!existingNotif) await db.run("INSERT INTO notification (target_user_id, school_id, message) VALUES (?, ?, ?)", [staff.id, user.school_id, notifMsg]);
+                  }
               }
           }
       }
@@ -1754,6 +1793,640 @@ const saveClassJsonData = (className, data) => {
       `, [parent.mapped_student_id]);
       res.json(progress);
     } catch (err) { res.status(500).json({ error: err.message }); }
+  });
+
+
+  // ==================== ADAPTIVE DIFFICULTY ====================
+
+  server.get('/api/student/adaptive-difficulty', authenticateToken, async (req, res) => {
+    try {
+      const db = await getDb();
+      // Get accuracy per section from last 7 days
+      const stats = await db.all(`
+        SELECT section,
+               COUNT(*) as total,
+               SUM(CASE WHEN is_correct = true THEN 1 ELSE 0 END) as correct
+        FROM mission_answers
+        WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '7 days'
+        GROUP BY section
+      `, [req.user.id]);
+
+      const difficulty = {};
+      const sections = ['meaning', 'synonym', 'antonym', 'grammar', 'syllabus', 'sentence'];
+      for (const s of sections) {
+        const stat = stats.find(r => r.section === s);
+        if (!stat || stat.total < 3) {
+          difficulty[s] = { level: 'normal', accuracy: null, label: 'Not enough data' };
+        } else {
+          const acc = Math.round((stat.correct / stat.total) * 100);
+          if (acc >= 85) difficulty[s] = { level: 'hard', accuracy: acc, label: '🔥 Challenge Mode' };
+          else if (acc >= 60) difficulty[s] = { level: 'normal', accuracy: acc, label: '📚 Standard' };
+          else difficulty[s] = { level: 'easy', accuracy: acc, label: '🌱 Reinforcement' };
+        }
+      }
+
+      // Overall difficulty
+      const totalCorrect = stats.reduce((s, r) => s + Number(r.correct), 0);
+      const totalAll = stats.reduce((s, r) => s + Number(r.total), 0);
+      const overallAcc = totalAll > 0 ? Math.round((totalCorrect / totalAll) * 100) : null;
+
+      res.json({ sections: difficulty, overall_accuracy: overallAcc, total_answers: totalAll });
+    } catch (err) {
+      console.error('[ADAPTIVE ERROR]', err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // ==================== SPACED REPETITION (SRS) ====================
+
+  server.get('/api/student/srs-review', authenticateToken, async (req, res) => {
+    try {
+      const db = await getDb();
+
+      // SRS intervals: review after 1, 3, 7, 14, 30 days
+      const intervals = [1, 3, 7, 14, 30];
+      const dateClauses = intervals.map(d => `ma.date::text = to_char(CURRENT_DATE - INTERVAL '${d} days', 'YYYY-MM-DD')`).join(' OR ');
+
+      // Find wrong answers from SRS interval dates that haven't been answered correctly since
+      const dueItems = await db.all(`
+        SELECT DISTINCT ON (ma.question_text, ma.section)
+               ma.section, ma.question_text, ma.options_json, ma.correct_index, ma.date,
+               (CURRENT_DATE - ma.date::date) as days_ago
+        FROM mission_answers ma
+        WHERE ma.user_id = $1
+          AND ma.is_correct = false
+          AND (${dateClauses})
+          AND NOT EXISTS (
+            SELECT 1 FROM mission_answers ma2
+            WHERE ma2.user_id = ma.user_id
+              AND ma2.question_text = ma.question_text
+              AND ma2.section = ma.section
+              AND ma2.is_correct = true
+              AND ma2.date > ma.date
+          )
+        ORDER BY ma.question_text, ma.section, ma.date DESC
+        LIMIT 15
+      `, [req.user.id]);
+
+      // Also get count of total items due for review
+      const countResult = await db.get(`
+        SELECT COUNT(DISTINCT (ma.question_text || '||' || ma.section)) as due_count
+        FROM mission_answers ma
+        WHERE ma.user_id = $1
+          AND ma.is_correct = false
+          AND (${dateClauses})
+          AND NOT EXISTS (
+            SELECT 1 FROM mission_answers ma2
+            WHERE ma2.user_id = ma.user_id
+              AND ma2.question_text = ma.question_text
+              AND ma2.section = ma.section
+              AND ma2.is_correct = true
+              AND ma2.date > ma.date
+          )
+      `, [req.user.id]);
+
+      res.json({
+        due_count: Number(countResult?.due_count) || 0,
+        items: dueItems.map(item => ({
+          section: item.section,
+          question: item.question_text,
+          options: item.options_json ? JSON.parse(item.options_json) : [],
+          correct_index: item.correct_index,
+          days_ago: Number(item.days_ago) || 0,
+          original_date: item.date
+        }))
+      });
+    } catch (err) {
+      console.error('[SRS ERROR]', err.message);
+      res.json({ due_count: 0, items: [] });
+    }
+  });
+
+  // ==================== WEAKNESS HEATMAP ====================
+
+  server.get('/api/student/weakness-heatmap', authenticateToken, async (req, res) => {
+    try {
+      const db = await getDb();
+
+      // Per-section breakdown with recent trend
+      const sectionStats = await db.all(`
+        SELECT section,
+               COUNT(*) as total,
+               SUM(CASE WHEN is_correct = true THEN 1 ELSE 0 END) as correct,
+               SUM(CASE WHEN is_correct = false THEN 1 ELSE 0 END) as incorrect
+        FROM mission_answers
+        WHERE user_id = $1
+        GROUP BY section
+        ORDER BY section
+      `, [req.user.id]);
+
+      // Recent 7-day trend per section
+      const recentStats = await db.all(`
+        SELECT section,
+               COUNT(*) as total,
+               SUM(CASE WHEN is_correct = true THEN 1 ELSE 0 END) as correct
+        FROM mission_answers
+        WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '7 days'
+        GROUP BY section
+      `, [req.user.id]);
+
+      // Most-missed questions (top 10)
+      const topMissed = await db.all(`
+        SELECT section, question_text, COUNT(*) as miss_count, options_json, correct_index
+        FROM mission_answers
+        WHERE user_id = $1 AND is_correct = false
+        GROUP BY section, question_text, options_json, correct_index
+        ORDER BY miss_count DESC
+        LIMIT 10
+      `, [req.user.id]);
+
+      const sectionMeta = {
+        meaning: { label: 'Word Meanings', icon: '📚', color: '#6366f1' },
+        synonym: { label: 'Synonyms', icon: '🔗', color: '#10b981' },
+        antonym: { label: 'Antonyms', icon: '🔄', color: '#ec4899' },
+        grammar: { label: 'Grammar', icon: '✏️', color: '#f59e0b' },
+        syllabus: { label: 'Syllabus', icon: '📖', color: '#14b8a6' },
+        sentence: { label: 'Sentence Formation', icon: '🔤', color: '#8b5cf6' },
+      };
+
+      const heatmap = sectionStats.map(s => {
+        const total = Number(s.total);
+        const correct = Number(s.correct);
+        const incorrect = Number(s.incorrect);
+        const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+        const recent = recentStats.find(r => r.section === s.section);
+        const recentAcc = recent && recent.total > 0 ? Math.round((Number(recent.correct) / Number(recent.total)) * 100) : null;
+        const meta = sectionMeta[s.section] || { label: s.section, icon: '📋', color: '#64748b' };
+
+        let severity, badge;
+        if (accuracy >= 80) { severity = 'strong'; badge = '🟢 Strong'; }
+        else if (accuracy >= 60) { severity = 'average'; badge = '🟡 Average'; }
+        else if (accuracy >= 40) { severity = 'weak'; badge = '🟠 Weak'; }
+        else { severity = 'critical'; badge = '🔴 Critical'; }
+
+        // Trend: comparing recent vs overall
+        let trend = 'stable';
+        if (recentAcc !== null && accuracy > 0) {
+          if (recentAcc > accuracy + 5) trend = 'improving';
+          else if (recentAcc < accuracy - 5) trend = 'declining';
+        }
+
+        return {
+          section: s.section,
+          ...meta,
+          total, correct, incorrect, accuracy,
+          recent_accuracy: recentAcc,
+          severity, badge, trend,
+        };
+      });
+
+      res.json({
+        heatmap: heatmap.sort((a, b) => a.accuracy - b.accuracy), // weakest first
+        top_missed: topMissed.map(m => ({
+          section: m.section,
+          question: m.question_text,
+          miss_count: m.miss_count,
+          options: m.options_json ? JSON.parse(m.options_json) : [],
+          correct_index: m.correct_index,
+        })),
+      });
+    } catch (err) {
+      console.error('[HEATMAP ERROR]', err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+
+  // ==================== AI TUTOR (GEMINI) ====================
+
+
+  // Rate limit: 30 AI messages per hour per student
+  const aiTutorLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 30,
+    keyGenerator: (req) => `ai-tutor-${req.user?.id || req.ip}`,
+    message: { error: 'AI Tutor limit reached (30/hour). Please try again later.' },
+  });
+
+  // AI Tutor Chat
+  server.post('/api/student/ai-tutor', authenticateToken, requireRole('STUDENT'), aiTutorLimiter, async (req, res) => {
+    try {
+      if (!geminiModel) {
+        return res.status(503).json({ error: 'AI Tutor is not configured. Ask your admin to set GEMINI_API_KEY.' });
+      }
+
+      const { message, session_id } = req.body;
+      if (!message || !message.trim()) return res.status(400).json({ error: 'Message is required.' });
+      if (message.length > 2000) return res.status(400).json({ error: 'Message too long (max 2000 chars).' });
+
+      const db = await getDb();
+      const sessionId = session_id || `session_${req.user.id}_${Date.now()}`;
+
+      // Ensure ai_conversation table exists
+      await db.run(`CREATE TABLE IF NOT EXISTS ai_conversation (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        session_id TEXT NOT NULL,
+        role TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      )`);
+
+      // Get recent mistakes for context
+      let recentMistakes = [];
+      try {
+        recentMistakes = await db.all(
+          'SELECT section, question_text FROM mission_answers WHERE user_id = $1 AND is_correct = false ORDER BY created_at DESC LIMIT 8',
+          [req.user.id]
+        );
+      } catch(e) { /* ignore — table might not have data */ }
+
+      // Get conversation history for this session (last 10 messages)
+      let history = [];
+      try {
+        history = await db.all(
+          'SELECT role, content FROM ai_conversation WHERE user_id = $1 AND session_id = $2 ORDER BY created_at DESC LIMIT 10',
+          [req.user.id, sessionId]
+        );
+        history = history.reverse();
+      } catch(e) { /* ignore */ }
+
+      // Build the system context
+      const className = req.user.class_name || '1';
+      const boardName = req.user.board_name || 'CBSE';
+      const mistakeCtx = recentMistakes.length > 0
+        ? `\nThe student recently got these questions WRONG: ${recentMistakes.map(m => `[${m.section}] ${m.question_text}`).join('; ')}`
+        : '';
+
+      const systemPrompt = `You are Alpha, a friendly, encouraging, and expert AI tutor on the AlphaLearn education platform.
+
+STUDENT PROFILE:
+- Class/Grade: ${className}
+- Board: ${boardName}
+- School: ${req.user.school_name || 'Not specified'}${mistakeCtx}
+
+RULES:
+1. Keep answers simple, clear, and appropriate for a Class ${className} student.
+2. Use examples, analogies, and visual descriptions to explain concepts.
+3. If the student asks about a topic, teach it step-by-step.
+4. Encourage the student and celebrate their curiosity.
+5. If asked to solve homework directly, guide them through the thinking process instead of giving direct answers.
+6. You can create practice questions when asked.
+7. Keep responses concise (under 300 words) unless the student asks for detailed explanations.
+8. Use emojis sparingly to keep it friendly (1-2 per message).
+9. Always stay on academic topics relevant to a Class ${className} student.
+10. If asked about non-academic or inappropriate topics, gently redirect to learning.`;
+
+      // Build Gemini conversation
+      const contents = [];
+
+      // Add system instruction as first user+model exchange
+      contents.push({
+        role: 'user',
+        parts: [{ text: 'You are my AI tutor. Please follow these instructions: ' + systemPrompt }]
+      });
+      contents.push({
+        role: 'model',
+        parts: [{ text: `Hi there! 👋 I'm Alpha, your personal AI tutor! I'm ready to help you with any Class ${className} subjects. What would you like to learn about today?` }]
+      });
+
+      // Add conversation history
+      for (const h of history) {
+        contents.push({
+          role: h.role === 'user' ? 'user' : 'model',
+          parts: [{ text: h.content }]
+        });
+      }
+
+      // Add current message
+      contents.push({
+        role: 'user',
+        parts: [{ text: message }]
+      });
+
+      // Call Gemini
+      const result = await geminiModel.generateContent({ contents });
+      const reply = result.response.text();
+
+      // Store conversation
+      await db.run(
+        'INSERT INTO ai_conversation (user_id, session_id, role, content) VALUES ($1, $2, $3, $4)',
+        [req.user.id, sessionId, 'user', message.substring(0, 5000)]
+      );
+      await db.run(
+        'INSERT INTO ai_conversation (user_id, session_id, role, content) VALUES ($1, $2, $3, $4)',
+        [req.user.id, sessionId, 'assistant', reply.substring(0, 10000)]
+      );
+
+      res.json({ reply, session_id: sessionId });
+    } catch (err) {
+      console.error('[AI TUTOR ERROR]', err.message);
+      if (err.message?.includes('SAFETY')) {
+        return res.status(400).json({ error: 'I cannot help with that topic. Let\'s focus on your studies! 📚' });
+      }
+      res.status(500).json({ error: 'AI Tutor is temporarily unavailable. Please try again.' });
+    }
+  });
+
+  // AI Tutor History
+  server.get('/api/student/ai-tutor/history', authenticateToken, requireRole('STUDENT'), async (req, res) => {
+    try {
+      const db = await getDb();
+      // Ensure table exists
+      await db.run(`CREATE TABLE IF NOT EXISTS ai_conversation (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        session_id TEXT NOT NULL,
+        role TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      )`);
+      const sessionId = req.query.session_id;
+      let messages = [];
+      if (sessionId) {
+        messages = await db.all(
+          'SELECT role, content, created_at FROM ai_conversation WHERE user_id = $1 AND session_id = $2 ORDER BY created_at ASC',
+          [req.user.id, sessionId]
+        );
+      } else {
+        // Get recent sessions
+        messages = await db.all(
+          'SELECT role, content, session_id, created_at FROM ai_conversation WHERE user_id = $1 ORDER BY created_at DESC LIMIT 50',
+          [req.user.id]
+        );
+        messages = messages.reverse();
+      }
+      res.json(messages);
+    } catch (err) {
+      console.error('[AI HISTORY ERROR]', err.message);
+      res.json([]);
+    }
+  });
+
+  // AI Tutor: Clear session
+  server.delete('/api/student/ai-tutor/session', authenticateToken, requireRole('STUDENT'), async (req, res) => {
+    try {
+      const db = await getDb();
+      const sessionId = req.query.session_id;
+      if (sessionId) {
+        await db.run('DELETE FROM ai_conversation WHERE user_id = $1 AND session_id = $2', [req.user.id, sessionId]);
+      }
+      res.json({ success: true });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+  });
+
+
+  // ==================== AI CONTENT GENERATOR (PRINCIPAL) ====================
+
+  const aiGenLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 10,
+    keyGenerator: (req) => `ai-gen-${req.user?.id || req.ip}`,
+    message: { error: 'AI generation limit reached (10/hour). Please try again later.' },
+  });
+
+  server.post('/api/principal/ai-generate-questions', authenticateToken, requireRole('PRINCIPAL'), aiGenLimiter, async (req, res) => {
+    try {
+      if (!geminiModel) {
+        return res.status(503).json({ error: 'AI is not configured. Ask your admin to set GEMINI_API_KEY.' });
+      }
+
+      const { topic, subject_name, class_name, count, difficulty } = req.body;
+      if (!topic || !topic.trim()) return res.status(400).json({ error: 'Topic is required.' });
+
+      const numQuestions = Math.min(Math.max(parseInt(count) || 5, 1), 15);
+      const diffLevel = ['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium';
+
+      const prompt = `You are an expert educational content creator for Indian school curriculum (CBSE/ICSE/State boards).
+
+Generate exactly ${numQuestions} multiple-choice questions (MCQ) for:
+- Subject: ${subject_name || 'General'}
+- Class: ${class_name || 'Not specified'}
+- Topic: ${topic}
+- Difficulty: ${diffLevel}
+
+RULES:
+- Each question must have exactly 4 options
+- Exactly one option must be correct
+- Questions should be age-appropriate for Class ${class_name || '1-12'} students
+- Include a brief explanation for the correct answer
+- Mix conceptual, factual, and application-based questions
+
+Return ONLY a valid JSON array with this exact structure (no markdown, no code blocks):
+[
+  {
+    "question_text": "What is...?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correct_answer": "0",
+    "explanation": "Brief explanation why this is correct",
+    "difficulty": "${diffLevel}"
+  }
+]`;
+
+      const result = await geminiModel.generateContent(prompt);
+      const responseText = result.response.text();
+
+      // Parse JSON from response (strip markdown code blocks if present)
+      let questions;
+      try {
+        const jsonStr = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        questions = JSON.parse(jsonStr);
+      } catch (parseErr) {
+        console.error('[AI GEN] JSON parse failed:', parseErr.message, responseText.substring(0, 200));
+        return res.status(500).json({ error: 'AI returned invalid format. Please try again.' });
+      }
+
+      if (!Array.isArray(questions) || questions.length === 0) {
+        return res.status(500).json({ error: 'AI returned no questions. Please try again.' });
+      }
+
+      // Validate and clean
+      const validQuestions = questions.filter(q =>
+        q.question_text && Array.isArray(q.options) && q.options.length === 4 && q.correct_answer !== undefined
+      ).map(q => ({
+        question_text: String(q.question_text).trim(),
+        options: q.options.map(o => String(o).trim()),
+        correct_answer: String(q.correct_answer),
+        explanation: String(q.explanation || '').trim(),
+        difficulty: q.difficulty || diffLevel,
+      }));
+
+      res.json({ questions: validQuestions, generated: validQuestions.length, requested: numQuestions });
+    } catch (err) {
+      console.error('[AI GEN ERROR]', err.message);
+      if (err.message?.includes('SAFETY')) {
+        return res.json({ questions: [], generated: 0, error: 'Content was blocked by safety filters. Try a different topic.' });
+      }
+      res.status(500).json({ error: 'AI generation failed. Please try again.' });
+    }
+  });
+
+
+  // ==================== PREDICTIVE ANALYTICS ====================
+
+  // Helper: compute risk score for a student
+  const computeStudentRisk = async (db, studentId) => {
+    // Get last 14 days of performance data
+    const recentMissions = await db.all(`
+      SELECT date, vocab_score, grammar_score, syllabus_score, sentence_score,
+             (SELECT COUNT(*) FROM mission_answers ma WHERE ma.user_id = dm.user_id AND ma.date = dm.date AND ma.is_correct = true) as correct,
+             (SELECT COUNT(*) FROM mission_answers ma WHERE ma.user_id = dm.user_id AND ma.date = dm.date) as total
+      FROM daily_mission dm
+      WHERE dm.user_id = $1 AND dm.is_completed = true
+      ORDER BY dm.date DESC
+      LIMIT 14
+    `, [studentId]);
+
+    // Get user's streak and total stats
+    const userStats = await db.get('SELECT streak, xp FROM "user" WHERE id = $1', [studentId]);
+
+    // Section accuracy (all time)
+    const sectionStats = await db.all(`
+      SELECT section,
+             COUNT(*) as total,
+             SUM(CASE WHEN is_correct = true THEN 1 ELSE 0 END) as correct
+      FROM mission_answers WHERE user_id = $1 GROUP BY section
+    `, [studentId]);
+
+    // Calculate risk factors
+    let riskScore = 0;
+    const riskFactors = [];
+
+    // Factor 1: Streak (0 = high risk, 1-2 = medium, 3+ = low)
+    const streak = userStats?.streak || 0;
+    if (streak === 0) { riskScore += 30; riskFactors.push({ factor: 'No active streak', severity: 'high', detail: 'Student hasn\'t completed a mission recently' }); }
+    else if (streak <= 2) { riskScore += 10; riskFactors.push({ factor: 'Low streak', severity: 'medium', detail: `Only ${streak} day streak` }); }
+
+    // Factor 2: Recent accuracy trend (compare last 7 vs prior 7)
+    if (recentMissions.length >= 4) {
+      const half = Math.floor(recentMissions.length / 2);
+      const recent = recentMissions.slice(0, half);
+      const prior = recentMissions.slice(half);
+      const recentAcc = recent.reduce((s, m) => s + (m.total > 0 ? m.correct / m.total : 0), 0) / recent.length;
+      const priorAcc = prior.reduce((s, m) => s + (m.total > 0 ? m.correct / m.total : 0), 0) / prior.length;
+
+      if (recentAcc < priorAcc - 0.15) {
+        riskScore += 25;
+        riskFactors.push({ factor: 'Declining accuracy', severity: 'high', detail: `Accuracy dropped from ${Math.round(priorAcc * 100)}% to ${Math.round(recentAcc * 100)}%` });
+      } else if (recentAcc < priorAcc - 0.05) {
+        riskScore += 10;
+        riskFactors.push({ factor: 'Slight accuracy decline', severity: 'medium', detail: `${Math.round(priorAcc * 100)}% → ${Math.round(recentAcc * 100)}%` });
+      }
+    }
+
+    // Factor 3: Low engagement (few missions completed)
+    if (recentMissions.length < 3) {
+      riskScore += 20;
+      riskFactors.push({ factor: 'Low engagement', severity: 'high', detail: `Only ${recentMissions.length} missions in the last 14 days` });
+    } else if (recentMissions.length < 7) {
+      riskScore += 10;
+      riskFactors.push({ factor: 'Moderate engagement', severity: 'medium', detail: `${recentMissions.length} of 14 possible missions completed` });
+    }
+
+    // Factor 4: Weak sections (any section below 40%)
+    const weakSections = sectionStats.filter(s => {
+      const total = Number(s.total);
+      const correct = Number(s.correct);
+      return total >= 5 && (correct / total) < 0.4;
+    });
+    if (weakSections.length > 0) {
+      riskScore += 15;
+      riskFactors.push({
+        factor: 'Struggling in subjects',
+        severity: 'medium',
+        detail: `Below 40% accuracy in: ${weakSections.map(s => s.section).join(', ')}`
+      });
+    }
+
+    // Overall accuracy
+    const totalCorrect = recentMissions.reduce((s, m) => s + (Number(m.correct) || 0), 0);
+    const totalAll = recentMissions.reduce((s, m) => s + (Number(m.total) || 0), 0);
+    const overallAccuracy = totalAll > 0 ? Math.round((totalCorrect / totalAll) * 100) : null;
+
+    // Risk level
+    let riskLevel, riskLabel, riskColor;
+    if (riskScore >= 50) { riskLevel = 'high'; riskLabel = '🔴 At Risk'; riskColor = '#ef4444'; }
+    else if (riskScore >= 25) { riskLevel = 'medium'; riskLabel = '🟡 Needs Attention'; riskColor = '#eab308'; }
+    else { riskLevel = 'low'; riskLabel = '🟢 On Track'; riskColor = '#10b981'; }
+
+    return {
+      risk_score: Math.min(riskScore, 100),
+      risk_level: riskLevel,
+      risk_label: riskLabel,
+      risk_color: riskColor,
+      risk_factors: riskFactors,
+      streak,
+      missions_last_14_days: recentMissions.length,
+      overall_accuracy: overallAccuracy,
+      weak_sections: weakSections.map(s => s.section),
+    };
+  };
+
+  // Student: Get own risk analysis
+  server.get('/api/student/predictive-analytics', authenticateToken, async (req, res) => {
+    try {
+      const db = await getDb();
+      const analysis = await computeStudentRisk(db, req.user.id);
+      res.json(analysis);
+    } catch (err) {
+      console.error('[PREDICT ERROR]', err.message);
+      res.json({ risk_score: 0, risk_level: 'low', risk_label: '🟢 On Track', risk_factors: [], streak: 0 });
+    }
+  });
+
+  // Parent: Get child's risk analysis
+  server.get('/api/parent/predictive-analytics', authenticateToken, requireRole('PARENT'), async (req, res) => {
+    try {
+      const db = await getDb();
+      const parent = await db.get('SELECT mapped_student_id FROM "user" WHERE id = $1 AND role = $2', [req.user.id, 'PARENT']);
+      if (!parent?.mapped_student_id) return res.json({ risk_score: 0, risk_level: 'low', risk_label: '🟢 On Track', risk_factors: [] });
+
+      const student = await db.get('SELECT id, username, class_name, section_name FROM "user" WHERE id = $1', [parent.mapped_student_id]);
+      const analysis = await computeStudentRisk(db, parent.mapped_student_id);
+      res.json({ ...analysis, student_name: student?.username, class_name: student?.class_name });
+    } catch (err) {
+      console.error('[PARENT PREDICT ERROR]', err.message);
+      res.json({ risk_score: 0, risk_level: 'low', risk_label: '🟢 On Track', risk_factors: [] });
+    }
+  });
+
+  // Principal: Get all at-risk students
+  server.get('/api/principal/at-risk-students', authenticateToken, requireRole('PRINCIPAL'), async (req, res) => {
+    try {
+      const db = await getDb();
+      const students = await db.all(
+        'SELECT id, username, class_name, section_name, streak, xp FROM "user" WHERE role = $1 AND school_id = $2',
+        ['STUDENT', req.user.school_id]
+      );
+
+      const results = [];
+      for (const student of students) {
+        const analysis = await computeStudentRisk(db, student.id);
+        results.push({
+          student_id: student.id,
+          student_name: student.username,
+          class_name: student.class_name,
+          section_name: student.section_name,
+          xp: student.xp,
+          ...analysis,
+        });
+      }
+
+      // Sort by risk score (highest first)
+      results.sort((a, b) => b.risk_score - a.risk_score);
+
+      const atRisk = results.filter(r => r.risk_level === 'high');
+      const needsAttention = results.filter(r => r.risk_level === 'medium');
+      const onTrack = results.filter(r => r.risk_level === 'low');
+
+      res.json({
+        summary: { total: results.length, at_risk: atRisk.length, needs_attention: needsAttention.length, on_track: onTrack.length },
+        students: results,
+      });
+    } catch (err) {
+      console.error('[PRINCIPAL PREDICT ERROR]', err.message);
+      res.json({ summary: { total: 0, at_risk: 0, needs_attention: 0, on_track: 0 }, students: [] });
+    }
   });
 
 

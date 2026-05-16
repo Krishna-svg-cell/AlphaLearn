@@ -1,9 +1,13 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Flame, Star, BookOpen, PenTool, CheckCircle, Award, ArrowRight, TrendingUp, LogOut, X, BarChart2, RotateCcw, Bell, Zap, MessageCircle, Send, Calendar, User } from 'lucide-react';
+import { Flame, Star, BookOpen, PenTool, CheckCircle, Award, ArrowRight, TrendingUp, LogOut, X, BarChart2, RotateCcw, Bell, Zap, MessageCircle, Send, Calendar, User, Mic, Volume2, Bot, MicOff, Sparkles, Trash2, StopCircle } from 'lucide-react';
 import DashboardLayout from '../components/DashboardLayout';
+import UserLevelBar from '../components/UserLevelBar';
+import LearningPath from '../components/LearningPath';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { loadClassContent, generateDailyMission, getLocalDateString, getPracticeQuestions, getDailyPracticeQuestions } from '../lib/contentEngine';
 
 export default function StudentDashboard() {
@@ -74,8 +78,141 @@ export default function StudentDashboard() {
   const [newMessage, setNewMessage] = useState('');
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [attendanceStats, setAttendanceStats] = useState({ present: 0, absent: 0, late: 0 });
+
+  // AI Tutor state
+  const [aiMessages, setAiMessages] = useState([]);
+  const [aiInput, setAiInput] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiSessionId, setAiSessionId] = useState(null);
+  const [aiError, setAiError] = useState(null);
+  const [showAiTutor, setShowAiTutor] = useState(false);
+
+  // Voice Tutor state
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const [recognitionSupported, setRecognitionSupported] = useState(false);
+  const recognitionRef = useRef(null);
+  const synthRef = useRef(null);
+  const aiChatEndRef = useRef(null);
+
+  // Smart Learning state
+  const [srsData, setSrsData] = useState(null);
+  const [heatmapData, setHeatmapData] = useState(null);
+  const [adaptiveData, setAdaptiveData] = useState(null);
+  const [srsQuizActive, setSrsQuizActive] = useState(false);
+  const [srsIndex, setSrsIndex] = useState(0);
+  const [srsFeedback, setSrsFeedback] = useState(null);
+  const [srsScore, setSrsScore] = useState(0);
   
   const router = useRouter();
+
+  // ==================== VOICE / SPEECH SETUP ====================
+  useEffect(() => {
+    // Check Speech Synthesis support
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      setSpeechSupported(true);
+      synthRef.current = window.speechSynthesis;
+    }
+    // Check Speech Recognition support
+    const SpeechRecognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition);
+    if (SpeechRecognition) {
+      setRecognitionSupported(true);
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-IN';
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setAiInput(prev => prev ? prev + ' ' + transcript : transcript);
+        setIsListening(false);
+      };
+      recognition.onerror = () => setIsListening(false);
+      recognition.onend = () => setIsListening(false);
+      recognitionRef.current = recognition;
+    }
+    return () => {
+      if (synthRef.current) synthRef.current.cancel();
+      if (recognitionRef.current) try { recognitionRef.current.abort(); } catch(e) {}
+    };
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+    if (isListening) {
+      recognitionRef.current.abort();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch(e) { setIsListening(false); }
+    }
+  };
+
+  const speakText = (text) => {
+    if (!synthRef.current) return;
+    synthRef.current.cancel();
+    const utterance = new SpeechSynthesisUtterance(text.replace(/[*#_`]/g, '').substring(0, 1000));
+    utterance.lang = 'en-IN';
+    utterance.rate = 0.9;
+    utterance.pitch = 1.05;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    synthRef.current.speak(utterance);
+  };
+
+  const stopSpeaking = () => {
+    if (synthRef.current) {
+      synthRef.current.cancel();
+      setIsSpeaking(false);
+    }
+  };
+
+  // ==================== AI TUTOR FUNCTIONS ====================
+  const sendAiMessage = async (e) => {
+    if (e) e.preventDefault();
+    if (!aiInput.trim() || aiLoading) return;
+    const msg = aiInput.trim();
+    setAiInput('');
+    setAiError(null);
+    setAiMessages(prev => [...prev, { role: 'user', content: msg, created_at: new Date().toISOString() }]);
+    setAiLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post('/api/student/ai-tutor', 
+        { message: msg, session_id: aiSessionId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!aiSessionId) setAiSessionId(res.data.session_id);
+      setAiMessages(prev => [...prev, { role: 'assistant', content: res.data.reply, created_at: new Date().toISOString() }]);
+    } catch (err) {
+      const errMsg = err.response?.data?.error || 'Failed to get response. Please try again.';
+      setAiError(errMsg);
+      setAiMessages(prev => [...prev, { role: 'assistant', content: errMsg, created_at: new Date().toISOString(), isError: true }]);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const clearAiSession = async () => {
+    if (aiSessionId) {
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`/api/student/ai-tutor/session?session_id=${aiSessionId}`, { headers: { Authorization: `Bearer ${token}` } });
+      } catch(e) {}
+    }
+    setAiMessages([]);
+    setAiSessionId(null);
+    setAiError(null);
+  };
+
+  // Auto-scroll AI chat
+  useEffect(() => {
+    if (aiChatEndRef.current) aiChatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [aiMessages, aiLoading]);
+
 
   // Resilient API fetcher — retries on 500/network errors (Neon cold-start recovery)
   const fetchWithRetry = async (url, headers, retries = 3) => {
@@ -178,6 +315,10 @@ export default function StudentDashboard() {
       axios.get('/api/student/test-results', { headers: h }).then(r => { setTestResults(r.data); setSubmittedTestIds(r.data.map(t=>t.test_id)); }).catch(()=>{});
       axios.get('/api/student/history', { headers: h }).then(r => setHistory(r.data)).catch(()=>{});
       axios.get('/api/student/progress-stats', { headers: h }).then(r => setProgressStats(r.data)).catch(()=>{});
+      // Smart Learning features
+      axios.get('/api/student/srs-review', { headers: h }).then(r => setSrsData(r.data)).catch(()=>{});
+      axios.get('/api/student/weakness-heatmap', { headers: h }).then(r => setHeatmapData(r.data)).catch(()=>{});
+      axios.get('/api/student/adaptive-difficulty', { headers: h }).then(r => setAdaptiveData(r.data)).catch(()=>{});
     };
     loadDashboard();
   }, [router]);
@@ -209,6 +350,8 @@ export default function StudentDashboard() {
       axios.get('/api/student/history', { headers: h }).then(r => setHistory(r.data)).catch(()=>{});
       axios.get('/api/student/progress-stats', { headers: h }).then(r => setProgressStats(r.data)).catch(()=>{});
       axios.get('/api/student/test-results', { headers: h }).then(r => setTestResults(r.data)).catch(()=>{});
+      axios.get('/api/student/weakness-heatmap', { headers: h }).then(r => setHeatmapData(r.data)).catch(()=>{});
+      axios.get('/api/student/adaptive-difficulty', { headers: h }).then(r => setAdaptiveData(r.data)).catch(()=>{});
     }
     if (view === 'practice') axios.get('/api/student/tests', { headers: h }).then(r => setTests(r.data)).catch(()=>{});
   };
@@ -527,8 +670,14 @@ export default function StudentDashboard() {
     ];
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="max-w-sm w-full">
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", damping: 15 }}
+          className="max-w-sm w-full"
+        >
           <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 text-white text-center mb-4 relative overflow-hidden shadow-xl">
+
             <div className="absolute top-0 left-0 right-0 bottom-0 opacity-10" style={{background:'radial-gradient(circle at 70% 20%, white 0%, transparent 60%)'}} />
             <div className="text-6xl mb-4">🎉</div>
             <h1 className="text-2xl font-bold mb-1">Mission Complete!</h1>
@@ -561,9 +710,10 @@ export default function StudentDashboard() {
           <button onClick={() => window.location.reload()} className="w-full gradient-btn py-4 rounded-2xl font-bold text-lg text-white text-center">
             Continue Learning
           </button>
-        </div>
+        </motion.div>
       </div>
     );
+
   }
 
   // PLAYING DAILY MISSION — CONTENT READING SCREEN (Grammar & Syllabus)
@@ -689,11 +839,25 @@ export default function StudentDashboard() {
           {['meaning','synonym','antonym'].includes(currentSection) ? (
             <>
               <span className="badge badge-indigo mb-4 capitalize">{currentSection}</span>
-              <h2 className="text-4xl font-black text-slate-900 text-center my-6 tracking-wide">{q.word}</h2>
+              <div className="flex items-center justify-center gap-2 my-6">
+                <h2 className="text-4xl font-black text-slate-900 text-center tracking-wide">{q.word}</h2>
+                {speechSupported && (
+                  <button onClick={() => speakText(q.word)} className="al-voice-btn" title="Listen to pronunciation">
+                    <Volume2 size={18} />
+                  </button>
+                )}
+              </div>
               <p className="text-center text-sm text-slate-400">What is the {currentSection} of this word?</p>
             </>
           ) : (
-            <h2 className="text-lg font-bold text-slate-800 leading-relaxed">Q. {q.q}</h2>
+            <div className="flex items-start gap-2">
+              <h2 className="text-lg font-bold text-slate-800 leading-relaxed flex-1">Q. {q.q}</h2>
+              {speechSupported && (
+                <button onClick={() => speakText(q.q)} className="al-voice-btn flex-shrink-0" title="Read question aloud">
+                  <Volume2 size={16} />
+                </button>
+              )}
+            </div>
           )}
         </div>
         {/* Options */}
@@ -702,6 +866,12 @@ export default function StudentDashboard() {
             <button key={i} disabled={!!feedback} onClick={()=>handleAnswer(i)} className={optBtnCls(i,feedback)}>
               <div className="option-letter">{String.fromCharCode(65+i)}</div>
               <span className="flex-1">{opt}</span>
+              {speechSupported && !feedback && (
+                <span role="button" tabIndex={-1} onClick={(e) => { e.stopPropagation(); e.preventDefault(); speakText(opt); }}
+                  className="al-voice-btn-sm flex-shrink-0" title={`Listen: ${opt}`}>
+                  <Volume2 size={13} />
+                </span>
+              )}
               {feedback && i === feedback.correct && <span className={i === feedback.correct ? "text-white text-lg" : "text-emerald-500 text-lg"}>✓</span>}
               {feedback && i === feedback.selected && i !== feedback.correct && <span className="text-white text-lg">×</span>}
             </button>
@@ -743,7 +913,7 @@ export default function StudentDashboard() {
     ['subjects', 'Subjects', BookOpen],
     ['leaderboard', 'Board', TrendingUp],
     ['practice', 'Practice', PenTool],
-    ['notifications', 'Alerts', Bell]
+    ['ai-tutor', 'AI Tutor', Sparkles]
   ];
 
   if (error) {
@@ -762,7 +932,6 @@ export default function StudentDashboard() {
     return (
       <DashboardLayout subtitle="Student Dashboard" tabs={tabs} activeTab={activeView} onTabChange={switchView} roleColor="indigo">
         <div className="flex flex-col items-center justify-center min-h-[50vh] text-slate-400">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
           <p className="font-bold text-lg">Loading your dashboard...</p>
         </div>
       </DashboardLayout>
@@ -771,61 +940,52 @@ export default function StudentDashboard() {
 
   return (
     <DashboardLayout subtitle="Student Dashboard" tabs={tabs} activeTab={activeView} onTabChange={switchView} roleColor="indigo">
+      <UserLevelBar user={user} />
 
-      {activeView==='mission' && (<div className="space-y-5 slide-up">
-        {/* User greeting */}
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black text-2xl shadow-md flex-shrink-0">
-            {user.username[0].toUpperCase()}
-          </div>
-          <div>
-            <h1 className="text-xl font-black text-slate-900">Hi, {user.username}! 👋</h1>
-            <p className="text-sm text-slate-500">{user.school_name || 'AlphaLearn Academy'} • Class {user.class_name||'N/A'}{user.section_name ? ` — Section ${user.section_name}` : ''}{user.board_name ? ` • ${user.board_name}` : ''}</p>
-          </div>
-        </div>
+      <AnimatePresence mode="wait">
 
-        {/* Stats row */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="card p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl" style={{background:'#fff7ed',display:'flex',alignItems:'center',justifyContent:'center'}}><Flame size={20} color="#f97316" /></div>
-            <div><p className="text-xs font-bold text-slate-400">Streak</p><p className="text-xl font-black text-slate-900">{user.streak} <span className="text-sm font-semibold text-slate-500">Day Streak</span></p></div>
-          </div>
-          <div className="card p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl" style={{background:'#fffbeb',display:'flex',alignItems:'center',justifyContent:'center'}}><Star size={20} color="#f59e0b" /></div>
-            <div><p className="text-xs font-bold text-slate-400">Total XP</p><p className="text-xl font-black text-slate-900">{user.xp}</p></div>
-          </div>
-        </div>
-
-        {/* Daily Task CTA */}
-        {!mission.hasContent ? (
-          <div className="card p-8 text-center">
-            <div className="text-4xl mb-3">📚</div>
-            <p className="font-bold text-slate-700 mb-1">No content yet</p>
-            <p className="text-sm text-slate-500">Your admin hasn't set up content for your class. Check back soon!</p>
-          </div>
-        ) : (
-          <div className="relative overflow-hidden rounded-[24px] p-6 text-white shadow-xl" style={{background:'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)'}}>
-            <div className="absolute top-[-40px] right-[-40px] w-[160px] h-[160px] rounded-full" style={{background:'rgba(139,92,246,0.3)'}} />
-            <div className="absolute bottom-[-30px] left-[-20px] w-[100px] h-[100px] rounded-full" style={{background:'rgba(99,102,241,0.2)'}} />
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-1">
-                <Zap size={16} color="#fbbf24" />
-                <span className="text-xs font-bold text-indigo-300 uppercase tracking-wider">Daily Task</span>
+        {activeView==='mission' && (
+          <motion.div 
+            key="mission"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="space-y-6 pb-20"
+          >
+            {/* Mascot / Welcome Header */}
+            <div className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl mt-4 mx-4">
+              <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+              <div className="relative z-10 flex items-center gap-4">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+                  🤖
+                </div>
+                <div>
+                  <h1 className="text-xl font-black italic tracking-tight">GO GO, {user.username.toUpperCase()}!</h1>
+                  <p className="text-indigo-100 text-xs font-bold opacity-80 uppercase tracking-widest">Unit 1: Foundation Skills</p>
+                </div>
               </div>
-              <h2 className="text-2xl font-black mb-1">Today's Mission</h2>
-              <p className="text-indigo-300 text-sm mb-5">6 modules · 30 questions</p>
-              <button
-                disabled={mission.status?.is_completed}
-                onClick={startMissionFlow}
-                className="w-full py-4 rounded-2xl font-black text-base flex justify-center items-center gap-2 transition-all disabled:opacity-60"
-                style={mission.status?.is_completed ? {background:'rgba(255,255,255,0.15)'} : {background:'linear-gradient(135deg,#6366f1,#8b5cf6)',boxShadow:'0 4px 20px rgba(99,102,241,0.5)'}}>
-                {mission.status?.is_completed
-                  ? <><CheckCircle size={20}/> Mission Complete ✓</>
-                  : <><ArrowRight size={20}/> Start Mission</>}
-              </button>
             </div>
-          </div>
-        )}
+
+            {/* The Learning Path */}
+            <div className="bg-white/40 rounded-[40px] p-6 mx-2 border-2 border-white shadow-inner">
+              <LearningPath 
+                mission={mission} 
+                onStartNode={startMissionFlow} 
+              />
+            </div>
+
+            {/* Original CTA if not using Path directly for start */}
+            {!mission.status?.is_completed && mission.hasContent && (
+               <div className="px-6">
+                 <button
+                  onClick={startMissionFlow}
+                  className="w-full py-5 rounded-2xl font-black text-lg flex justify-center items-center gap-3 transition-all bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-200 active:scale-95"
+                >
+                  <Play size={24} fill="currentColor" /> START TODAY'S MISSION
+                </button>
+               </div>
+            )}
+
 
         {/* Available Tests */}
         {tests.filter(t=>!submittedTestIds.includes(t.id)).length > 0 && (
@@ -842,9 +1002,88 @@ export default function StudentDashboard() {
             </div>
           </div>
         )}
-      </div>)}
 
-      {activeView==='leaderboard' && (<div className="space-y-5 slide-up">
+        {/* Adaptive Difficulty Indicator */}
+        {adaptiveData && adaptiveData.overall_accuracy !== null && (
+          <div className="card p-4 flex items-center gap-4">
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 ${
+              adaptiveData.overall_accuracy >= 85 ? 'bg-orange-100' :
+              adaptiveData.overall_accuracy >= 60 ? 'bg-blue-100' : 'bg-green-100'
+            }`}>
+              {adaptiveData.overall_accuracy >= 85 ? '🔥' : adaptiveData.overall_accuracy >= 60 ? '📚' : '🌱'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-slate-800 text-sm">
+                {adaptiveData.overall_accuracy >= 85 ? 'Challenge Mode' : adaptiveData.overall_accuracy >= 60 ? 'Standard Mode' : 'Reinforcement Mode'}
+              </p>
+              <p className="text-xs text-slate-500">7-day accuracy: {adaptiveData.overall_accuracy}% across {adaptiveData.total_answers} answers</p>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <div className="w-12 h-12 rounded-full relative" style={{background:`conic-gradient(${adaptiveData.overall_accuracy >= 80 ? '#10b981' : adaptiveData.overall_accuracy >= 60 ? '#6366f1' : '#f59e0b'} ${adaptiveData.overall_accuracy * 3.6}deg, #e2e8f0 0deg)`}}>
+                <div className="absolute inset-1 bg-white rounded-full flex items-center justify-center">
+                  <span className="text-[10px] font-black">{adaptiveData.overall_accuracy}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SRS Review Card */}
+        {srsData && srsData.due_count > 0 && (
+          <div className="relative overflow-hidden rounded-[20px] p-5 text-white shadow-lg" style={{background:'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)'}}>
+            <div className="absolute top-[-20px] right-[-20px] w-[80px] h-[80px] rounded-full" style={{background:'rgba(255,255,255,0.1)'}} />
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-1">
+                <RotateCcw size={16} />
+                <span className="text-xs font-bold text-teal-200 uppercase tracking-wider">Spaced Repetition</span>
+              </div>
+              <h3 className="text-lg font-black mb-1">{srsData.due_count} Question{srsData.due_count !== 1 ? 's' : ''} Due for Review</h3>
+              <p className="text-teal-200 text-xs mb-3">Questions you got wrong are resurfaced at optimal intervals to boost retention</p>
+              <button onClick={() => { setSrsQuizActive(true); setSrsIndex(0); setSrsScore(0); setSrsFeedback(null); }}
+                className="w-full py-3 rounded-xl font-bold text-sm flex justify-center items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all">
+                <RotateCcw size={16} /> Start SRS Review
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Weakness Quick-View */}
+        {heatmapData && heatmapData.heatmap && heatmapData.heatmap.filter(h => h.severity === 'critical' || h.severity === 'weak').length > 0 && (
+          <div className="card p-4">
+            <h3 className="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">📊 Areas to Improve</h3>
+            <div className="space-y-2">
+              {heatmapData.heatmap.filter(h => h.severity === 'critical' || h.severity === 'weak').slice(0, 3).map((w, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <span className="text-lg">{w.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-700 truncate">{w.label}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full transition-all" style={{width:`${w.accuracy}%`, background: w.accuracy >= 60 ? '#10b981' : w.accuracy >= 40 ? '#f59e0b' : '#ef4444'}} />
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-500">{w.accuracy}%</span>
+                    </div>
+                  </div>
+                  <button onClick={() => switchView('track')} className="text-xs font-bold text-indigo-600 hover:text-indigo-700 whitespace-nowrap">
+                    Details →
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+          </motion.div>
+        )}
+
+        {activeView==='leaderboard' && (
+          <motion.div 
+            key="leaderboard"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="space-y-5 px-4"
+          >
+
         <div className="section-header"><h1 className="section-title">🏆 Leaderboard</h1></div>
         <div className="card overflow-hidden">
           {leaderboard.length===0 ? (
@@ -863,9 +1102,18 @@ export default function StudentDashboard() {
             </div>
           ))}
         </div>
-      </div>)}
+          </motion.div>
+        )}
 
-      {activeView==='practice' && (<div className="space-y-5 slide-up">
+        {activeView==='practice' && (
+          <motion.div 
+            key="practice"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-5 px-4"
+          >
+
         <div className="section-header">
           <h1 className="section-title">⚡ Practice</h1>
           <p className="text-sm text-slate-500 mt-1 flex items-center gap-1.5"><Calendar size={14} /> Today's content — {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })}</p>
@@ -904,6 +1152,124 @@ export default function StudentDashboard() {
             </div>
           </div>
         )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
+      {/* ==================== AI TUTOR VIEW ==================== */}
+      {activeView==='ai-tutor' && (<div className="flex flex-col h-[calc(100vh-180px)] md:h-[calc(100vh-120px)] slide-up">
+        <div className="card flex flex-col h-full overflow-hidden">
+          {/* Header */}
+          <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-md">
+                <Bot size={20} className="text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-800 text-base flex items-center gap-1.5">Alpha AI Tutor <Sparkles size={14} className="text-amber-400" /></h3>
+                <p className="text-[11px] text-slate-500">Class {user?.class_name || '?'} • {user?.board_name || 'CBSE'} • Ask any doubt!</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              {aiMessages.length > 0 && (
+                <button onClick={clearAiSession} className="p-2 rounded-xl hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors" title="Clear chat">
+                  <Trash2 size={16} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+            {aiMessages.length === 0 && (
+              <div className="h-full flex flex-col items-center justify-center text-center px-4">
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 flex items-center justify-center mb-4">
+                  <Bot size={36} className="text-violet-500" />
+                </div>
+                <h3 className="font-bold text-slate-700 text-lg mb-2">Hey {user?.username}! 👋</h3>
+                <p className="text-sm text-slate-500 mb-6 max-w-xs">I'm Alpha, your personal AI tutor. Ask me anything about your Class {user?.class_name || ''} subjects!</p>
+                <div className="grid grid-cols-1 gap-2 w-full max-w-xs">
+                  {[
+                    '📚 Explain photosynthesis simply',
+                    '✏️ Help me with grammar rules',
+                    '🔢 What are prime numbers?',
+                    '🧪 Give me 5 practice questions on fractions',
+                  ].map((suggestion, i) => (
+                    <button key={i} onClick={() => { setAiInput(suggestion.replace(/^[^\s]+ /, '')); }}
+                      className="text-left text-sm p-3 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50 text-slate-600 transition-all">
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {aiMessages.map((msg, i) => (
+              <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                <div className={`max-w-[88%] p-3.5 rounded-2xl text-sm leading-relaxed ${
+                  msg.role === 'user'
+                    ? 'bg-gradient-to-br from-violet-600 to-purple-600 text-white rounded-tr-sm'
+                    : msg.isError
+                      ? 'bg-red-50 text-red-700 border border-red-200 rounded-tl-sm'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-sm'
+                }`} style={{whiteSpace: 'pre-wrap'}}>
+                  {msg.content}
+                </div>
+                <div className="flex items-center gap-1.5 mt-1 mx-1">
+                  <span className="text-[10px] text-slate-400">{new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                  {msg.role === 'assistant' && !msg.isError && speechSupported && (
+                    <button onClick={() => isSpeaking ? stopSpeaking() : speakText(msg.content)}
+                      className={`p-1 rounded-lg transition-colors ${isSpeaking ? 'text-violet-600 bg-violet-50' : 'text-slate-400 hover:text-violet-500 hover:bg-violet-50'}`}
+                      title={isSpeaking ? 'Stop speaking' : 'Read aloud'}>
+                      {isSpeaking ? <StopCircle size={12} /> : <Volume2 size={12} />}
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+            {aiLoading && (
+              <div className="flex items-start">
+                <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl rounded-tl-sm">
+                  <div className="flex gap-1.5">
+                    <div className="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                    <div className="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                    <div className="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={aiChatEndRef} />
+          </div>
+
+          {/* Input */}
+          <div className="p-3 border-t border-slate-100 dark:border-slate-800 flex-shrink-0">
+            <form onSubmit={sendAiMessage} className="flex items-center gap-2">
+              {recognitionSupported && (
+                <button type="button" onClick={toggleListening}
+                  className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all flex-shrink-0 ${
+                    isListening
+                      ? 'bg-red-500 text-white shadow-lg shadow-red-200 al-pulse-ring'
+                      : 'bg-slate-100 text-slate-500 hover:bg-violet-50 hover:text-violet-600'
+                  }`} title={isListening ? 'Stop listening' : 'Voice input'}>
+                  {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                </button>
+              )}
+              <input
+                type="text"
+                value={aiInput}
+                onChange={e => setAiInput(e.target.value)}
+                placeholder={isListening ? 'Listening... 🎤' : 'Ask Alpha anything...'}
+                disabled={aiLoading || isListening}
+                className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 disabled:opacity-50 transition-all"
+              />
+              <button type="submit" disabled={!aiInput.trim() || aiLoading}
+                className="w-11 h-11 bg-gradient-to-br from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl flex items-center justify-center transition-all shadow-sm flex-shrink-0">
+                <Send size={18} />
+              </button>
+            </form>
+            {isListening && <p className="text-xs text-red-500 font-medium mt-1.5 text-center animate-pulse">🎤 Listening... speak now</p>}
+          </div>
+        </div>
       </div>)}
 
       {activeView === 'messages' && (
@@ -975,7 +1341,142 @@ export default function StudentDashboard() {
             </div>);
           })}
         </div></div>)}
+
+        {/* ==================== WEAKNESS HEATMAP ==================== */}
+        {heatmapData && heatmapData.heatmap && heatmapData.heatmap.length > 0 && (
+          <div>
+            <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">📊 Weakness Heatmap</h3>
+            <div className="space-y-3">
+              {heatmapData.heatmap.map((item, i) => (
+                <div key={i} className="card p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{item.icon}</span>
+                      <span className="font-bold text-slate-800 text-sm">{item.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{
+                        background: item.severity === 'strong' ? '#dcfce7' : item.severity === 'average' ? '#fef9c3' : item.severity === 'weak' ? '#ffedd5' : '#fee2e2',
+                        color: item.severity === 'strong' ? '#166534' : item.severity === 'average' ? '#854d0e' : item.severity === 'weak' ? '#c2410c' : '#991b1b'
+                      }}>
+                        {item.badge}
+                      </span>
+                      {item.trend === 'improving' && <span className="text-xs text-emerald-600 font-bold">📈</span>}
+                      {item.trend === 'declining' && <span className="text-xs text-red-500 font-bold">📉</span>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-3 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-500" style={{
+                        width: `${item.accuracy}%`,
+                        background: item.severity === 'strong' ? '#10b981' : item.severity === 'average' ? '#eab308' : item.severity === 'weak' ? '#f97316' : '#ef4444'
+                      }} />
+                    </div>
+                    <span className="text-sm font-black text-slate-700 w-10 text-right">{item.accuracy}%</span>
+                  </div>
+                  <div className="flex justify-between mt-2">
+                    <span className="text-[10px] text-slate-400">{item.correct}✓ correct · {item.incorrect}✗ wrong · {item.total} total</span>
+                    {item.recent_accuracy !== null && (
+                      <span className="text-[10px] text-slate-500">7-day: <span className="font-bold">{item.recent_accuracy}%</span></span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Top Missed Questions */}
+        {heatmapData && heatmapData.top_missed && heatmapData.top_missed.length > 0 && (
+          <div>
+            <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">❌ Most Missed Questions</h3>
+            <div className="card divide-y divide-slate-100">
+              {heatmapData.top_missed.map((m, i) => (
+                <div key={i} className="p-3 flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-[10px] font-black text-red-600">{m.miss_count}×</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-700 truncate">{m.question}</p>
+                    <p className="text-[10px] text-slate-400 capitalize">{m.section}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>)}
+
+      {/* ==================== SRS QUIZ MODAL ==================== */}
+      {srsQuizActive && srsData && srsData.items && srsData.items.length > 0 && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" style={{background:'#f1f5f9'}}>
+          <div className="p-4 pb-20 max-w-md mx-auto">
+            <div className="flex justify-between items-center mb-4 pt-4">
+              <button onClick={() => setSrsQuizActive(false)} className="text-slate-500 font-bold text-sm">← Close</button>
+              <div className="badge badge-emerald">🔁 SRS Review</div>
+              <div className="text-sm font-black text-teal-600">{srsIndex + 1}/{srsData.items.length}</div>
+            </div>
+            <div className="progress-bar-track mb-6">
+              <div className="progress-bar-fill" style={{width: `${((srsIndex + 1) / srsData.items.length) * 100}%`, background: 'linear-gradient(90deg, #0f766e, #14b8a6)'}} />
+            </div>
+
+            {srsIndex < srsData.items.length ? (() => {
+              const item = srsData.items[srsIndex];
+              return (
+                <>
+                  <div className="card p-5 mb-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="badge badge-indigo capitalize">{item.section}</span>
+                      <span className="text-[10px] text-slate-400 font-bold">{item.days_ago} days ago</span>
+                    </div>
+                    <h2 className="text-lg font-bold text-slate-800">{item.question}</h2>
+                  </div>
+                  <div className="space-y-3">
+                    {item.options.map((opt, i) => {
+                      const isCorrect = String(i) === String(item.correct_index);
+                      let cls = 'quiz-option';
+                      if (srsFeedback !== null) {
+                        if (isCorrect) cls = 'quiz-option bg-emerald-500 text-white border-emerald-500';
+                        else if (i === srsFeedback && !isCorrect) cls = 'quiz-option bg-red-500 text-white border-red-500';
+                      }
+                      return (
+                        <button key={i} disabled={srsFeedback !== null} onClick={() => {
+                          setSrsFeedback(i);
+                          if (isCorrect) setSrsScore(s => s + 1);
+                          setTimeout(() => {
+                            setSrsFeedback(null);
+                            if (srsIndex < srsData.items.length - 1) setSrsIndex(srsIndex + 1);
+                            else setSrsIndex(srsData.items.length); // trigger completion
+                          }, 1500);
+                        }} className={cls}>
+                          <div className="option-letter">{String.fromCharCode(65 + i)}</div>
+                          <span className="flex-1">{opt}</span>
+                          {srsFeedback !== null && isCorrect && <span className="text-white text-lg">✓</span>}
+                          {srsFeedback !== null && i === srsFeedback && !isCorrect && <span className="text-white text-lg">×</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              );
+            })() : (
+              <div className="card p-8 text-center">
+                <div className="text-5xl mb-4">🎉</div>
+                <h2 className="text-2xl font-black text-slate-800 mb-2">SRS Review Complete!</h2>
+                <p className="text-slate-500 mb-4">You scored {srsScore}/{srsData.items.length}</p>
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full relative" style={{background:`conic-gradient(#14b8a6 ${Math.round((srsScore/srsData.items.length)*100)*3.6}deg, #e2e8f0 0deg)`}}>
+                  <div className="absolute inset-2 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-lg font-black text-teal-600">{Math.round((srsScore/srsData.items.length)*100)}%</span>
+                  </div>
+                </div>
+                <button onClick={() => setSrsQuizActive(false)} className="gradient-btn w-full py-3 rounded-2xl font-bold">
+                  Back to Dashboard
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {activeView==='review' && (<div className="space-y-6">
         <div className="flex items-center justify-between mb-2">
@@ -1076,6 +1577,17 @@ export default function StudentDashboard() {
         <h1 className="font-bold text-slate-800 text-2xl text-center mb-2">Notifications</h1>
         {notifications.length===0 ? <div className="card p-8 text-center text-slate-500"><Bell className="mx-auto text-slate-200 mb-3" size={40}/><p>No notifications yet.</p></div> : notifications.map((n,i)=><div key={i} className="card p-4"><p className="text-sm text-slate-700">{n.message}</p><p className="text-xs text-slate-400 mt-1">{safeDate(n.created_at).toLocaleString()}</p></div>)}
       </div>)}
+
+      {/* Floating AI Tutor Button (visible on non-AI views) */}
+      {activeView !== 'ai-tutor' && !playing && !activeTest && !showPracticeModal && !sentencePractice && (
+        <button
+          onClick={() => switchView('ai-tutor')}
+          className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-40 w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-purple-600 text-white shadow-xl shadow-violet-300/40 flex items-center justify-center hover:scale-105 active:scale-95 transition-all al-fab-pulse"
+          title="Ask AI Tutor"
+        >
+          <Sparkles size={22} />
+        </button>
+      )}
 
     {showPracticeModal && practiceQs.length>0 && (<div className="fixed inset-0 z-50 overflow-y-auto" style={{background:'#f1f5f9'}}><div className="p-4 pb-20 max-w-md mx-auto">
       <div className="flex justify-between items-center mb-2 pt-4">
@@ -1178,10 +1690,10 @@ export default function StudentDashboard() {
         <button onClick={() => setReadingChapter(null)} className="flex items-center gap-1 text-slate-500 font-bold text-sm mb-4">← Back to Chapters</button>
         <div className="card p-6 mb-6">
           <div className="flex items-center gap-3 mb-6">
-            <span className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg" style={{background: (selectedSubject.color || '#4f46e5') + '20', color: selectedSubject.color || '#4f46e5'}}>{readingChapter.chapter_number}</span>
+            <span className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg" style={{background: (selectedSubject?.color || '#4f46e5') + '20', color: selectedSubject?.color || '#4f46e5'}}>{readingChapter.chapter_number}</span>
             <div>
               <h2 className="text-xl font-bold text-slate-800">{readingChapter.chapter_title}</h2>
-              <p className="text-sm text-slate-500">{selectedSubject.name}</p>
+              <p className="text-sm text-slate-500">{selectedSubject?.name}</p>
             </div>
           </div>
           
@@ -1198,12 +1710,12 @@ export default function StudentDashboard() {
             if (readingChapter.question_count === 0) { alert('No questions in this chapter yet.'); return; }
             const h = { Authorization: `Bearer ${localStorage.getItem('token')}` };
             try {
-              const r = await axios.get(`/api/student/subject-quiz?subject_id=${selectedSubject.id}&chapter_id=${readingChapter.id}`, { headers: h });
+              const r = await axios.get(`/api/student/subject-quiz?subject_id=${selectedSubject?.id}&chapter_id=${readingChapter.id}`, { headers: h });
               setSubjectQuiz({ subject: selectedSubject, chapter: readingChapter, questions: r.data });
               setSubjectQuizIdx(0); setSubjectQuizAnswers([]); setSubjectQuizFb(null); setSubjectQuizResult(null);
               setReadingChapter(null);
             } catch(e) { alert('Error starting quiz'); }
-          }} className="flex-[2] py-4 rounded-2xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2" style={{background: `linear-gradient(135deg, ${selectedSubject.color || '#4338ca'}, ${selectedSubject.color}dd)`}}>
+          }} className="flex-[2] py-4 rounded-2xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2" style={{background: `linear-gradient(135deg, ${selectedSubject?.color || '#4338ca'}, ${selectedSubject?.color || '#4338ca'}dd)`}}>
             <Zap size={18}/> Practice Quiz
           </button>
         </div>

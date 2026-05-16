@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Building2, Bell, Presentation, Users, Flame, Star, TrendingUp, ChevronDown, ChevronUp, Award, AlertTriangle, BookOpen, Plus, Trash2, X, Edit3, MessageCircle } from 'lucide-react';
+import { Building2, Bell, Presentation, Users, Flame, Star, TrendingUp, ChevronDown, ChevronUp, Award, AlertTriangle, BookOpen, Plus, Trash2, X, Edit3, MessageCircle, Sparkles, Brain, Loader2, Check, AlertCircle } from 'lucide-react';
 import DashboardLayout from '../components/DashboardLayout';
 
 export default function PrincipalDashboard() {
@@ -35,6 +35,24 @@ export default function PrincipalDashboard() {
   const [quizForm, setQuizForm] = useState({ question_text: '', options: ['', '', '', ''], correct_answer: '0', explanation: '', difficulty: 'medium' });
   const [editingChapter, setEditingChapter] = useState(null);
   const [editChapterForm, setEditChapterForm] = useState({});
+
+  // AI Content Generator
+  const [aiGenTopic, setAiGenTopic] = useState('');
+  const [aiGenSubject, setAiGenSubject] = useState('');
+  const [aiGenClass, setAiGenClass] = useState('1');
+  const [aiGenCount, setAiGenCount] = useState(5);
+  const [aiGenDifficulty, setAiGenDifficulty] = useState('medium');
+  const [aiGenLoading, setAiGenLoading] = useState(false);
+  const [aiGenResults, setAiGenResults] = useState(null);
+  const [aiGenError, setAiGenError] = useState('');
+  const [aiGenSaving, setAiGenSaving] = useState(false);
+  const [aiGenTargetChapter, setAiGenTargetChapter] = useState('');
+  const [aiGenTargetSubject, setAiGenTargetSubject] = useState('');
+
+  // Predictive Analytics
+  const [riskData, setRiskData] = useState(null);
+  const [riskLoading, setRiskLoading] = useState(false);
+
   const router = useRouter();
 
   // Resilient API fetcher — retries on 500/network errors (Neon cold-start recovery)
@@ -99,6 +117,8 @@ export default function PrincipalDashboard() {
   const tabs = [
     ['dashboard', 'Dashboard', Presentation],
     ['subjects', 'Subjects', BookOpen],
+    ['ai-gen', 'AI Generator', Sparkles],
+    ['analytics', 'Analytics', Brain],
     ['classes', 'Class View', TrendingUp],
     ['staffview', 'Staff View', Users],
     ['staff', 'Roster', Users],
@@ -172,7 +192,49 @@ export default function PrincipalDashboard() {
       fetchChapters(selectedSubjectForChapters.id, subjectClass);
     } catch (err) { alert('Failed to update chapter'); }
   };
-  useEffect(() => { if(activeTab === 'subjects') fetchSubjects(); }, [activeTab]);
+  useEffect(() => {
+    if(activeTab === 'subjects') fetchSubjects();
+    if(activeTab === 'ai-gen') fetchSubjects();
+    if(activeTab === 'analytics' && !riskData) {
+      setRiskLoading(true);
+      const h = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+      axios.get('/api/principal/at-risk-students', { headers: h }).then(r => { setRiskData(r.data); setRiskLoading(false); }).catch(() => setRiskLoading(false));
+    }
+  }, [activeTab]);
+
+  const generateAIQuestions = async () => {
+    if (!aiGenTopic.trim()) return;
+    setAiGenLoading(true); setAiGenError(''); setAiGenResults(null);
+    try {
+      const h = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+      const res = await axios.post('/api/principal/ai-generate-questions', {
+        topic: aiGenTopic, subject_name: aiGenSubject, class_name: aiGenClass, count: aiGenCount, difficulty: aiGenDifficulty
+      }, { headers: h });
+      if (res.data.error) { setAiGenError(res.data.error); }
+      else { setAiGenResults(res.data); }
+    } catch (err) { setAiGenError(err.response?.data?.error || 'Generation failed. Please try again.'); }
+    setAiGenLoading(false);
+  };
+
+  const saveGeneratedQuestions = async () => {
+    if (!aiGenResults?.questions?.length || !aiGenTargetChapter || !aiGenTargetSubject) { alert('Select a subject and chapter to save to.'); return; }
+    setAiGenSaving(true);
+    const h = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+    let saved = 0;
+    for (const q of aiGenResults.questions) {
+      try {
+        await axios.post('/api/admin/subject-questions', {
+          subject_id: aiGenTargetSubject, chapter_id: aiGenTargetChapter, class_name: aiGenClass,
+          question_text: q.question_text, question_type: 'mcq', options: q.options,
+          correct_answer: q.correct_answer, explanation: q.explanation, difficulty: q.difficulty,
+        }, { headers: h });
+        saved++;
+      } catch(e) {}
+    }
+    alert(`✅ ${saved} questions saved successfully!`);
+    setAiGenSaving(false);
+    setAiGenResults(null); setAiGenTopic('');
+  };
 
   const openStudentHistory = async (student) => {
     setSelectedStudent(student); setLoadingHistory(true); setStudentHistory([]); setExpandedDay(null); setDayAnswers({});
@@ -625,6 +687,188 @@ export default function PrincipalDashboard() {
               })}
               </div>
             </div>
+          )}
+        </>)}
+
+        {/* ---- AI CONTENT GENERATOR TAB ---- */}
+        {activeTab === 'ai-gen' && (<>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">🤖 AI Content Generator</h2>
+          <p className="text-sm text-slate-500 mb-6">Generate MCQ questions instantly using AI. Just enter a topic!</p>
+
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-1">Topic / Chapter Name *</label>
+                <input value={aiGenTopic} onChange={e => setAiGenTopic(e.target.value)} placeholder="e.g. Parts of a Plant, Solar System, Fractions..."
+                  className="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-violet-500 outline-none" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Subject</label>
+                  <input value={aiGenSubject} onChange={e => setAiGenSubject(e.target.value)} placeholder="e.g. Science, Maths"
+                    className="w-full border border-slate-200 rounded-xl p-2.5 text-sm outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Class</label>
+                  <select value={aiGenClass} onChange={e => setAiGenClass(e.target.value)} className="w-full border border-slate-200 rounded-xl p-2.5 text-sm outline-none">
+                    {Array.from({length:12},(_,i)=>i+1).map(c => <option key={c} value={c}>Class {c}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Questions</label>
+                  <select value={aiGenCount} onChange={e => setAiGenCount(parseInt(e.target.value))} className="w-full border border-slate-200 rounded-xl p-2.5 text-sm outline-none">
+                    {[3,5,8,10,15].map(n => <option key={n} value={n}>{n} questions</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Difficulty</label>
+                  <select value={aiGenDifficulty} onChange={e => setAiGenDifficulty(e.target.value)} className="w-full border border-slate-200 rounded-xl p-2.5 text-sm outline-none">
+                    <option value="easy">🟢 Easy</option>
+                    <option value="medium">🟡 Medium</option>
+                    <option value="hard">🔴 Hard</option>
+                  </select>
+                </div>
+              </div>
+              <button onClick={generateAIQuestions} disabled={aiGenLoading || !aiGenTopic.trim()}
+                className="w-full py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                {aiGenLoading ? <><Loader2 size={16} className="animate-spin" /> Generating with AI...</> : <><Sparkles size={16} /> Generate Questions</>}
+              </button>
+            </div>
+          </div>
+
+          {aiGenError && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+              <AlertCircle size={18} className="text-red-500 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-red-700">{aiGenError}</p>
+            </div>
+          )}
+
+          {aiGenResults && aiGenResults.questions && aiGenResults.questions.length > 0 && (
+            <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-slate-800 flex items-center gap-2"><Sparkles size={16} className="text-violet-500" /> {aiGenResults.generated} Questions Generated</h3>
+              </div>
+
+              {/* Save controls */}
+              <div className="bg-violet-50 border border-violet-100 rounded-2xl p-4 mb-4">
+                <p className="text-sm font-bold text-violet-700 mb-2">💾 Save to Chapter</p>
+                <div className="grid grid-cols-2 gap-2 mb-2">
+                  <select value={aiGenTargetSubject} onChange={async (e) => {
+                    setAiGenTargetSubject(e.target.value);
+                    if (e.target.value) {
+                      const h = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+                      const res = await axios.get(`/api/principal/chapters?subject_id=${e.target.value}&class_name=${aiGenClass}`, { headers: h }).catch(() => ({ data: [] }));
+                      setChapters(res.data);
+                    }
+                  }} className="border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                    <option value="">Select Subject...</option>
+                    {schoolSubjects.filter(s => s.class_name === aiGenClass).map(s => {
+                      const sub = allSubjects.find(a => a.id === s.subject_id);
+                      return sub ? <option key={sub.id} value={sub.id}>{sub.icon} {sub.name}</option> : null;
+                    })}
+                  </select>
+                  <select value={aiGenTargetChapter} onChange={e => setAiGenTargetChapter(e.target.value)} className="border border-slate-200 rounded-lg p-2 text-sm bg-white">
+                    <option value="">Select Chapter...</option>
+                    {chapters.map(ch => <option key={ch.id} value={ch.id}>Ch. {ch.chapter_number}: {ch.chapter_title}</option>)}
+                  </select>
+                </div>
+                <button onClick={saveGeneratedQuestions} disabled={aiGenSaving || !aiGenTargetChapter || !aiGenTargetSubject}
+                  className="w-full py-2.5 bg-violet-600 text-white rounded-xl font-bold text-sm hover:bg-violet-700 disabled:opacity-40 transition-all flex items-center justify-center gap-2">
+                  {aiGenSaving ? <><Loader2 size={14} className="animate-spin" /> Saving...</> : <><Check size={14} /> Save All {aiGenResults.generated} Questions</>}
+                </button>
+              </div>
+
+              {/* Preview */}
+              <div className="space-y-3">
+                {aiGenResults.questions.map((q, qi) => (
+                  <div key={qi} className="rounded-2xl border border-slate-200 p-4">
+                    <p className="text-sm font-bold text-slate-800 mb-2">{qi + 1}. {q.question_text}</p>
+                    <div className="grid grid-cols-2 gap-1.5 mb-2">
+                      {q.options.map((opt, oi) => (
+                        <span key={oi} className={`text-[11px] px-2.5 py-1 rounded-lg ${String(oi) === String(q.correct_answer) ? 'bg-emerald-100 text-emerald-700 font-bold' : 'bg-slate-50 text-slate-600'}`}>
+                          {String.fromCharCode(65 + oi)}. {opt}
+                        </span>
+                      ))}
+                    </div>
+                    {q.explanation && <p className="text-[10px] text-slate-400">💡 {q.explanation}</p>}
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold inline-block mt-1 ${q.difficulty === 'easy' ? 'bg-green-100 text-green-700' : q.difficulty === 'hard' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>{q.difficulty}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>)}
+
+        {/* ---- PREDICTIVE ANALYTICS TAB ---- */}
+        {activeTab === 'analytics' && (<>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">📈 Predictive Analytics</h2>
+          <p className="text-sm text-slate-500 mb-6">AI-powered early warning system to identify at-risk students</p>
+
+          {riskLoading && (
+            <div className="bg-white rounded-3xl p-8 text-center shadow-sm border border-slate-100">
+              <Loader2 size={32} className="animate-spin mx-auto mb-3 text-violet-500" />
+              <p className="text-slate-500 font-bold">Analyzing student performance...</p>
+            </div>
+          )}
+
+          {riskData && (
+            <>
+              {/* Summary Cards */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-red-100 text-center">
+                  <p className="text-3xl font-black text-red-500">{riskData.summary.at_risk}</p>
+                  <p className="text-xs text-red-600 font-bold">At Risk</p>
+                </div>
+                <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-yellow-100 text-center">
+                  <p className="text-3xl font-black text-yellow-500">{riskData.summary.needs_attention}</p>
+                  <p className="text-xs text-yellow-600 font-bold">Needs Attention</p>
+                </div>
+                <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-emerald-100 text-center">
+                  <p className="text-3xl font-black text-emerald-500">{riskData.summary.on_track}</p>
+                  <p className="text-xs text-emerald-600 font-bold">On Track</p>
+                </div>
+              </div>
+
+              {/* Student List */}
+              <div className="space-y-3">
+                {riskData.students.map((s, i) => (
+                  <div key={i} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-sm" style={{background: s.risk_color}}>
+                          {s.student_name?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-800 text-sm">{s.student_name}</p>
+                          <p className="text-[10px] text-slate-400">Class {s.class_name}{s.section_name ? `-${s.section_name}` : ''} • {s.xp} XP • {s.streak}🔥</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs font-bold px-2 py-1 rounded-full" style={{background: s.risk_color + '20', color: s.risk_color}}>{s.risk_label}</span>
+                        {s.overall_accuracy !== null && <p className="text-[10px] text-slate-500 mt-1">{s.overall_accuracy}% accuracy</p>}
+                      </div>
+                    </div>
+                    {s.risk_factors.length > 0 && (
+                      <div className="mt-2 space-y-1">
+                        {s.risk_factors.map((f, fi) => (
+                          <div key={fi} className="flex items-start gap-2">
+                            <span className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${f.severity === 'high' ? 'bg-red-400' : 'bg-yellow-400'}`} />
+                            <p className="text-[11px] text-slate-600"><span className="font-bold">{f.factor}:</span> {f.detail}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <button onClick={() => { setRiskData(null); setRiskLoading(true); const h = { Authorization: `Bearer ${localStorage.getItem('token')}` }; axios.get('/api/principal/at-risk-students', { headers: h }).then(r => { setRiskData(r.data); setRiskLoading(false); }).catch(() => setRiskLoading(false)); }}
+                className="w-full mt-4 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all flex items-center justify-center gap-2">
+                <Brain size={16} /> Refresh Analysis
+              </button>
+            </>
           )}
         </>)}
 

@@ -528,4 +528,66 @@ body {
 .al-table tr:last-child td { border-bottom: none; }
 .al-table tr:hover td { background: #f8fafc; }
 
+/* ==================== AI TUTOR & VOICE ==================== */
+.al-voice-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ede9fe, #f5f3ff);
+  color: #7c3aed;
+  border: 1.5px solid #ddd6fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.al-voice-btn:hover {
+  background: linear-gradient(135deg, #ddd6fe, #ede9fe);
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.2);
+}
+.al-voice-btn:active {
+  transform: scale(0.95);
+}
+
+.al-voice-btn-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(124, 58, 237, 0.08);
+  color: #7c3aed;
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.al-voice-btn-sm:hover {
+  background: rgba(124, 58, 237, 0.18);
+  transform: scale(1.1);
+}
+.al-voice-btn-sm:active {
+  transform: scale(0.9);
+}
+
+.al-pulse-ring {
+  animation: pulseRingAi 1.5s infinite;
+}
+@keyframes pulseRingAi {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.al-fab-pulse {
+  animation: fabPulse 3s ease-in-out infinite;
+}
+@keyframes fabPulse {
+  0%, 100% { box-shadow: 0 8px 25px rgba(124, 58, 237, 0.35); }
+  50% { box-shadow: 0 8px 35px rgba(124, 58, 237, 0.55), 0 0 0 8px rgba(124, 58, 237, 0.1); }
+}
 
